@@ -1,0 +1,34 @@
+<template name="ProcDescList">
+  <div class="proc-desc-list">
+    <h1>Verfahrensbeschreibungen</h1>
+    <table class="table table-hover">
+      <thead>
+        <tr>
+          <th>Dienstbezeichung</th>
+          <th>Ersteller</th>
+          <th>Erstellungsdatum</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+
+        {{#each proc_descs}}
+        <tr>
+          <td>{{serviceShortTitle}}</td>
+          <td>{{createdBy}}</td>
+          <td>{{creationDateFormatted}} Uhr</td>
+          <td>
+            {{#linkTo route='editProcDesc'}}
+            <i class="fa fa-pencil-square-o"></i>
+            {{/linkTo}}
+            <a href="#" class="delete">
+              <i class="fa fa-trash-o"></i>
+            </a>
+          </td>
+        </tr>
+        {{/each}}
+
+      </tbody>
+    </table>
+  </div>
+</template>
