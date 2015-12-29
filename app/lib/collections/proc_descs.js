@@ -1,6 +1,19 @@
 ProcDescs = new Mongo.Collection('proc_descs').vermongo({timestamps: true, userId: 'modifierId', ignoreFields: []});
 ProcDescsVermongo = ProcDescs.getVersionCollection();
 
+ProcDescs.before.insert(function (userId, doc) {
+  ProcDescContentSchema.clean(doc.content);
+  var hash = CryptoJS.SHA512(JSON.stringify(doc.content)).toString();
+  doc.documentHash = hash;
+});
+
+ProcDescs.after.update(function (userId, doc, fieldNames, modifier, options) {
+  var hash = CryptoJS.SHA512(JSON.stringify(doc.content)).toString();
+  if (Meteor.isServer) {
+    ProcDescs.direct.update({_id: doc._id}, {$set: {documentHash: hash}});
+  }
+});
+
 BoolValue = new SimpleSchema({
   defaultValue: {
     type: Boolean,
@@ -16,7 +29,7 @@ BoolValue = new SimpleSchema({
   }
 });
 
-ProcDescs.attachSchema(new SimpleSchema({
+ProcDescContentSchema = new SimpleSchema({
   serviceShortTitle: {
     type: String,
     label: "Dienstkurzbezeichnung",
@@ -49,7 +62,7 @@ ProcDescs.attachSchema(new SimpleSchema({
     autoValue: function() {
       if (this.unSet && this.field('version').value == 1) {
         return creationDate;
-      } else if (this.isSet && !this.field('documentPurpose2').value) {
+      } else if (this.isSet && !this.siblingField('documentPurpose2').value) {
         this.unset();
       }
     },
@@ -62,12 +75,6 @@ ProcDescs.attachSchema(new SimpleSchema({
       }
     },
     optional: true
-  },
-  createdBy: {
-    type: String,
-    autoValue: function() {
-      return this.field('creatorSurname').value + ", " + this.field('creatorName').value;
-    }
   },
   creatorName: {
     type: String,
@@ -84,6 +91,12 @@ ProcDescs.attachSchema(new SimpleSchema({
       return Meteor.user().profile.lastName;
     },
     max: 200
+  },
+  createdBy: {
+    type: String,
+    autoValue: function() {
+      return this.siblingField('creatorSurname').value + ", " + this.siblingField('creatorName').value;
+    }
   },
   creationDate: {
     type: Date,
@@ -147,7 +160,15 @@ ProcDescs.attachSchema(new SimpleSchema({
   deletionDeadline3: {
     type: Boolean,
     label: "Es gelten folgende Sonderregelungen:",
-    defaultValue: true
+    defaultValue: false,
+    autoValue: function() {
+      var depField = this.siblingField("deletionDeadlineSonstige").value;
+      if (depField && (depField.length == 0 || !depField.$.label)) {
+        return false;
+      } else {
+        return true;
+      }
+    }
   },
   deletionDeadlineSonstige: {
     type: [BoolValue],
@@ -211,7 +232,22 @@ ProcDescs.attachSchema(new SimpleSchema({
     defaultValue: "Hier folgen (auf das Wesentliche reduziert) Aussagen zu Zutritts- und Zugangskontrollkonzepten; Protokollierung von Eingaben; relevante Richtlinien und Arbeitsanweisungen; Maßnahmen zur Absicherung gegen unbefugten Zugriff Dritter; Sicherung der Vertraulichkeit beim Transport oder bei der Übermittlung von Daten etc.\n Typische Aussage: Der Betrieb erfolgt im zutrittsgeschützen LRZ-Rechnergebäude gemäß den aktuellen LRZ-Leitlinien zur Informationssicherheit. Die Zugangskontrolle erfolgt über eine Kopplung mit der LRZ-Benutzerverwaltung; insbesondere ist ein administrativer Zugriff nur von dedizierten Managementgateways aus möglich.",
     max: 1000
   }
-}));
+});
+
+ProcDescSchema = new SimpleSchema({
+  documentHash: {
+    type: String,
+    label: "Hash-value of document",
+    max: 200,
+    optional: true
+  },
+  content: {
+    type: ProcDescContentSchema,
+    label: "Inhalt der Verfahrensbeschreibung"
+  }
+});
+
+ProcDescs.attachSchema(ProcDescSchema);
 
 if (Meteor.isServer) {
   ProcDescs.allow({

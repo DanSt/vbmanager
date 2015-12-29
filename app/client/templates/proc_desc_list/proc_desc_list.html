@@ -5,8 +5,8 @@
       <thead>
         <tr>
           <th>Dienstbezeichung</th>
-          <th>Ersteller</th>
-          <th>Erstellungsdatum</th>
+          <th>Bearbeiter</th>
+          <th>Zeitstempel</th>
           <th></th>
         </tr>
       </thead>
@@ -14,9 +14,9 @@
 
         {{#each proc_descs}}
         <tr>
-          <td>{{serviceShortTitle}}</td>
-          <td>{{createdBy}}</td>
-          <td>{{creationDateFormatted}} Uhr</td>
+          <td>{{content.serviceShortTitle}}</td>
+          <td>{{modifierName}}</td>
+          <td>{{modificationDateFormatted}} Uhr</td>
           <td>
             {{#linkTo route='editProcDesc'}}
             <i class="fa fa-pencil-square-o"></i>

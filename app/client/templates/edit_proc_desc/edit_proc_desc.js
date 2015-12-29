@@ -24,6 +24,13 @@ Template.EditProcDesc.helpers({
         Router.go('procDescList');
       }
     };
+  },
+  isVerified: function () {
+    if (CryptoJS.SHA512(JSON.stringify(this.content)).toString() == this.documentHash) {
+      return "unmodifiziert";
+    } else {
+      return "wurde modifiziert";
+    }
   }
 });
 

@@ -1,27 +1,17 @@
 /*****************************************************************************/
-/* ProcDescList: Event Handlers */
+/* Id: Event Handlers */
 /*****************************************************************************/
-Template.ProcDescList.events({
-  "click .delete": function () {
-    var doc = ProcDescs.findOne(this._id);
-    if (confirm('Wollen Sie wirklich die Verfahrensbeschreibung für "' + doc.serviceShortTitle + '" löschen?')) {
-      ProcDescs.remove(this._id);
-    }
-  }
+Template.ViewProcDescVersion.events({
+  'click .return': function(event){
+    var originalDocument = this.ref;
+    Router.go('/proc_desc/'+originalDocument);
+  },
 });
 
 /*****************************************************************************/
-/* ProcDescList: Helpers */
+/* Id: Helpers */
 /*****************************************************************************/
-Template.ProcDescList.helpers({
-  proc_descs: function () {
-    return ProcDescs.find();
-  },
-
-  modificationDateFormatted: function () {
-    return moment(this.content.creationDate).format("DD.MM.YYYY HH:mm");
-  },
-
+Template.ViewProcDescVersion.helpers({
   beforeRemove: function () {
     return function (collection, id) {
       var doc = collection.findOne(id);
@@ -31,6 +21,15 @@ Template.ProcDescList.helpers({
       }
     };
   },
+  procDesc: function() {
+    return function (collection, id) {
+      var doc = collection.findOne(id);
+      return doc;
+    };
+  },
+  modificationDateFormatted: function () {
+    return moment(this.modifiedAt).format("DD.MM.YYYY HH:mm");
+  },
   modifierName: function () {
     var user = Meteor.users.findOne(this.modifierId);
     return user.profile.lastName + ", " + user.profile.firstName;
@@ -38,13 +37,13 @@ Template.ProcDescList.helpers({
 });
 
 /*****************************************************************************/
-/* ProcDescList: Lifecycle Hooks */
+/* Id: Lifecycle Hooks */
 /*****************************************************************************/
-Template.ProcDescList.onCreated(function () {
+Template.ViewProcDescVersion.onCreated(function () {
 });
 
-Template.ProcDescList.onRendered(function () {
+Template.ViewProcDescVersion.onRendered(function () {
 });
 
-Template.ProcDescList.onDestroyed(function () {
+Template.ViewProcDescVersion.onDestroyed(function () {
 });

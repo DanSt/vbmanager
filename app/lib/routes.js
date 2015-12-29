@@ -39,6 +39,13 @@ Router.route('/profile_edit', {
   where: 'client'
 });
 
+Router.route('/proc_desc_version/:_id', {
+  name: 'viewProcDescVersion',
+  controller: 'ProcedureDescriptionVersionController',
+  action: 'view',
+  where: 'client'
+});
+
 Router.onBeforeAction(function() {
   if (!Meteor.user()) {
     this.render('Home');

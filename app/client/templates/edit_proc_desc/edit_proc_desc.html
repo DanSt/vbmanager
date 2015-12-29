@@ -4,7 +4,7 @@
     {{#autoForm collection="ProcDescs" doc=this id="updateProcDescForm" type="update"}}
       <fieldset>
         <!--<legend>Verfahrensbeschreibung bearbeiten</legend>-->
-        <h3>Verfahrensbeschreibung {{> afQuickField name='serviceShortTitle' label-style="display: none"}}</h3>
+        <h3>Verfahrensbeschreibung {{> afQuickField name="content.serviceShortTitle" label-style="display: none"}}</h3>
         <p>Art. 27 des Bayerischen Datenschutzgesetzes (BayDSG) bestimmt, dass die behördlichen
           Datenschutzbeauftragten ein Verzeichnis der bei der öffentlichen Stelle eingesetzten und
           datenschutzrechtlichen freigegebenen automatisierten Verfahren, mit denen personenbezogene Daten
@@ -32,22 +32,22 @@
           anzupassen.</p>
         <h4>A.1 Gegenstand</h4>
         <p>Diese Beschreibung dient</p>
-        {{> afQuickField name='documentPurpose1'}}
-        {{> afQuickField name='documentPurpose2'}} {{> afQuickField name='documentPurposeOriginalDate' label-style="display: none" type="bootstrap-datepicker"}}
-        {{> afQuickField name='documentPurpose3'}}
+        {{> afQuickField name="content.documentPurpose1" value=false}}
+        {{> afQuickField name="content.documentPurpose2" value=true}} {{> afQuickField value=content.creationDate name="content.documentPurposeOriginalDate" label-style="display: none" type="bootstrap-datepicker"}}
+        {{> afQuickField name="content.documentPurpose3"}}
         <h4>A.2 Autor bzw. Hauptansprechpartner für den Datenschutzbeauftragten</h4>
-        <p>Die Beschreibung wurde von {{> afQuickField name='creatorName' label-style="display: none"}} {{> afQuickField name='creatorSurname' label-style="display: none"}} am {{> afQuickField name="creationDate" label-style="display: none" type="bootstrap-datepicker"}} erstellt.</p>
+        <p>Die Beschreibung wurde von {{> afQuickField name="content.creatorName" label-style="display: none"}} {{> afQuickField name="content.creatorSurname" label-style="display: none"}} am {{> afQuickField name="content.creationDate" label-style="display: none" type="bootstrap-datepicker"}} erstellt.</p>
 
         <h4>B.1 Bezeichnung des Verfahrens</h4>
         <table class="table">
           <tbody>
             <tr>
               <td>Bezeichnung des Verfahrens:</td>
-              <td>{{> afQuickField name='serviceName' style="width: 400px" label-style="display: none"}}</td>
+              <td>{{> afQuickField name="content.serviceName" style="width: 400px" label-style="display: none"}}</td>
             </tr>
             <tr>
               <td>Dienstbeschreibung unter:</td>
-              <td>{{> afQuickField name='serviceDescLoc' style="width: 400px" rows=3 label-style="display: none"}}</td>
+              <td>{{> afQuickField name="content.serviceDescLoc" style="width: 400px" rows=3 label-style="display: none"}}</td>
             </tr>
             <tr>
               <td>Nähere Auskünfte erteilt:</td>
@@ -60,29 +60,29 @@
         <h4>B.2 Zweck und Rechtsgundlagen der Erhebung, Verarbeitung oder Nutzung</h4>
         <p>Personenbezogene Daten werden zur Erfüllung der folgenden Aufgaben erhoben, verarbeitet oder
           genutzt:</p>
-        {{> afQuickField name="purpose" style="width: 100%" rows=4 label-style="display: none"}}
+        {{> afQuickField name="content.purpose" style="width: 100%" rows=4 label-style="display: none"}}
 
         <h4>B.3 Art der gespeicherten Daten</h4>
         <p>Im Folgenden sind alle Arten von personenbezogenen Daten mit ihrem individuellen
           Verwendungszweck aufgeführt, die von diesem Verfahren erhoben, gespeichert oder genutzt werden:</p>
-        {{> afQuickField name="typeOfStoredData" rows=4 label-style="display: none" style="width: 80%"}}
+        {{> afQuickField name="content.typeOfStoredData" rows=4 label-style="display: none" style="width: 80%"}}
 
         <h4>B.4 Kreis der Betroffenen</h4>
         <p>Von dem Verfahren sind alle LRZ-Benutzer betroffen, die eine LRZ-Kennung it Berechtigung für
-          den Dienst {{> afQuickField name="circleAffected" label-style="display: none"}} haben.</p>
+          den Dienst {{> afQuickField name="content.circleAffected" label-style="display: none"}} haben.</p>
         <h4>B.5 Art der regelmäßig zu übermittelnden Daten und deren Empfänger</h4>
-        {{> afQuickField name="typeOfTransmittedData" label-style="display: none" style="width: 100%"}}
+        {{> afQuickField name="content.typeOfTransmittedData" label-style="display: none" style="width: 100%"}}
         <h4>B.6 Regelfristen für die Löschung der Daten oder die Prüfung der Löschung</h4>
-        {{> afQuickField name="deletionDeadline1"}}
-        {{> afQuickField name="deletionDeadline2"}}
-        {{> afQuickField name="deletionDeadline3"}}
-        {{> afQuickField name="deletionDeadlineSonstige"}}
+        {{> afQuickField name="content.deletionDeadline1"}}
+        {{> afQuickField name="content.deletionDeadline2"}}
+        {{> afQuickField name="content.deletionDeadline3"}}
+        {{> afQuickField name="content.deletionDeadlineSonstige" initialCount=0}}
         <h4>B.7 Verarbeitungs- und nutzungsberechtigte Personengruppen</h4>
-        {{> afQuickField name="permittedUserGroup1"}}
-        {{> afQuickField name="permittedUserGroup2"}}
-        {{> afQuickField name="permittedUserGroup3"}}
-        {{> afQuickField name="permittedUserGroup4"}}
-        {{> afQuickField name="permittedUserGroupSonstige"}}
+        {{> afQuickField name="content.permittedUserGroup1"}}
+        {{> afQuickField name="content.permittedUserGroup2"}}
+        {{> afQuickField name="content.permittedUserGroup3"}}
+        {{> afQuickField name="content.permittedUserGroup4"}}
+        {{> afQuickField name="content.permittedUserGroupSonstige" initialCount=0}}
 
         <h4>B.8 Ergänzende Hinweise</h4>
         <ul>
@@ -98,15 +98,15 @@
           <tbody>
             <tr>
               <td>Bezeichnung und Standort der Anlage:</td>
-              <td>{{> afQuickField name='titleAndLocationOfSystem' style="width: 400px" label-style="display: none"}}</td>
+              <td>{{> afQuickField name="content.titleAndLocationOfSystem" style="width: 400px" label-style="display: none"}}</td>
             </tr>
             <tr>
               <td>Eingesetztes Betriebssystem:</td>
-              <td>{{> afQuickField name='operatingSystem' style="width: 400px" rows=3 label-style="display: none"}}</td>
+              <td>{{> afQuickField name="content.operatingSystem" style="width: 400px" rows=3 label-style="display: none"}}</td>
             </tr>
             <tr>
               <td>Eingesetzte Software:</td>
-              <td>{{> afQuickField name='usedSoftware' style="width: 400px" rows=3 label-style="display: none"}}</td>
+              <td>{{> afQuickField name="content.usedSoftware" style="width: 400px" rows=3 label-style="display: none"}}</td>
             </tr>
 
           </tbody>
@@ -114,11 +114,11 @@
 
         <h4>C.2 Maßnahmen zur Sicherstellung der Verfügbarkeit der Daten</h4>
         <p>Zur Sicherstellung der Verfügbarkeit der Daten werden die folgenden Maßnahmen ergriffen:</p>
-        <p>{{> afQuickField name="measuresForAvailability" rows=4 style="width: 100%" label-style="display: none"}}</p>
+        <p>{{> afQuickField name="content.measuresForAvailability" rows=4 style="width: 100%" label-style="display: none"}}</p>
 
         <h4>C.3 Weitere Maßnahmen nach Art. 7 und 8 BayDSG</h4>
         <p>Es werden die folgenden weiteren technischen und organisatorischen Maßnahmen ergriffen:</p>
-        <p>{{> afQuickField name="measuresBayDSG" rows=8 style="width: 100%" label-style="display: none"}}</p>
+        <p>{{> afQuickField name="content.measuresBayDSG" rows=8 style="width: 100%" label-style="display: none"}}</p>
       </fieldset>
     <button type="submit" class="btn btn-primary">Speichern</button> &#160;<button type="button" class="btn btn-default cancel">Abbrechen</button>
     {{/autoForm}}
@@ -126,9 +126,11 @@
     <br>
     <p>
       <h5>Änderungshistorie:</h5>
-      <li>{{serviceShortTitle}} - {{modifiedAt}} - version: {{_version}} (aktuell)</li>
+      <li>{{content.serviceShortTitle}} - {{modifiedAt}} - version: {{_version}} (aktuell) - {{isVerified}}</li>
       {{#each versions}}
-        <li>{{serviceShortTitle}} - {{modifiedAt}} - version: {{_version}}</li>
+      {{#linkTo route='viewProcDescVersion'}}
+        <li>{{content.serviceShortTitle}} - {{modifiedAt}} - version: {{_version}} - {{isVerified}}</li>
+      {{/linkTo}}
       {{/each}}
     </p>
   </div>
