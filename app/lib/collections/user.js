@@ -5,6 +5,36 @@
   lastName: user.lastName
 });*/
 
+Meteor.users.after.update(function (userId, doc, fieldNames, modifier) {
+  if (doc.profile && doc.username && fieldNames["username"]) {
+    var newUsername = doc.profile.firstName.toUpperCase().charAt(0) + doc.profile.lastName;
+
+    if (newUsername !== doc.username) {
+      var counter = 0;
+      var baseUsername = newUsername;
+      while (Meteor.users.find({username: baseUsername}).count() > 0) {
+        counter = counter + 1;
+        newUsername = baseUsername + counter;
+      }
+      if (Meteor.isServer) {
+        Meteor.users.direct.update({_id: doc._id}, {$set: {username: newUsername}});
+      }
+    }
+  }
+});
+
+// Meteor.users.before.insert(function (userId, doc) {
+//   var newUsername = doc.profile.firstName.toUpperCase().charAt(0) + doc.profile.lastName;
+//
+//   var counter = 0;
+//   var baseUsername = newUsername;
+//   while (Meteor.users.find({username: username}).count() > 0) {
+//     counter = counter + 1;
+//     newUsername = baseName + counter;
+//   }
+//   doc.username = newUsername;
+// });
+
 UserProfileSchema = new SimpleSchema({
   firstName: {
     type: String,
@@ -29,7 +59,8 @@ UserSchema = new SimpleSchema({
   },
   username: {
     type: String,
-    regEx: /^[a-z0-9A-Z_]{3,15}$/
+    regEx: /^[a-z0-9A-Z_]{3,15}$/,
+    optional: true
   },
   emails: {
     type: [Object],
@@ -58,14 +89,32 @@ UserSchema = new SimpleSchema({
 
 Meteor.users.attachSchema(UserSchema);
 
-Meteor.users.allow({
-  insert: function () {
-    return true;
-  },
-  update: function () {
-    return true;
-  },
-  remove: function () {
-    return false;
-  }
-});
+if (Meteor.isServer) {
+  Meteor.users.allow({
+    insert: function (userId, doc) {
+      return true;
+    },
+    update: function (userId, doc) {
+      console.log(userId && Meteor.user()._id == userId);
+      return (userId && Meteor.user()._id == userId);
+    },
+    remove: function (userId, doc) {
+      return false;
+    }
+  });
+
+  Accounts.onCreateUser(function(options, user) {
+    var newUsername = options.profile.firstName.toUpperCase().charAt(0) + options.profile.lastName;
+
+    var counter = 0;
+    var baseUsername = newUsername;
+    while (Meteor.users.find({username: newUsername}).count() > 0) {
+      counter = counter + 1;
+      newUsername = baseUsername + counter;
+    }
+    user.username = newUsername;
+    user.profile = options.profile;
+
+    return user;
+  });
+}

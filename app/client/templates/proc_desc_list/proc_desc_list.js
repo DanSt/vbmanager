@@ -19,7 +19,7 @@ Template.ProcDescList.helpers({
   },
 
   modificationDateFormatted: function () {
-    return moment(this.content.creationDate).format("DD.MM.YYYY HH:mm");
+    return moment(this.modifiedAt).format("DD.MM.YYYY HH:mm");
   },
 
   beforeRemove: function () {
@@ -33,7 +33,7 @@ Template.ProcDescList.helpers({
   },
   modifierName: function () {
     var user = Meteor.users.findOne(this.modifierId);
-    return user.profile.lastName + ", " + user.profile.firstName;
+    return user && user.profile.lastName + ", " + user.profile.firstName;
   }
 });
 

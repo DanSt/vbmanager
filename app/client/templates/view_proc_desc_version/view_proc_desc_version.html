@@ -1,122 +1,135 @@
 <template name="ViewProcDescVersion">
   <div class="view_proc_desc_version">
-    Erstellt: {{modificationDateFormatted}} - Ersteller: {{modifierName}} - Version: {{_version}}
-        <!--<legend>Verfahrensbeschreibung bearbeiten</legend>-->
-        <h3>Verfahrensbeschreibung {{content.serviceShortTitle}}</h3>
-        <p>Art. 27 des Bayerischen Datenschutzgesetzes (BayDSG) bestimmt, dass die behördlichen
-          Datenschutzbeauftragten ein Verzeichnis der bei der öffentlichen Stelle eingesetzten und
-          datenschutzrechtlichen freigegebenen automatisierten Verfahren, mit denen personenbezogene Daten
-          verarbeitet werden, zu führen haben (Verfahrensverzeichnis). Dieses Formular dient gemäß Art. 26
-          Abs. 3 Satz 1 BayDSG sowohl der erforderlichen Verfahrensbeschreibung als auch der
-          erforderlichen allgemeinen Beschreibung der Art der für das Verfahren eingesetzten
-          Datenverarbeitungsanlagen und der technischen und organisatorischen Maßnahmen nach Art. 7 und
-          Art. 8. Ferner weisen wir darauf hin, dass evtl. vor Einsatz des Verfahrens der zuständige Personalrat
-          durch die Dienststelle nach Art. 75 a bzw. Art. 76 Abs. 2 Nr. 1 und Nr. 2 BayPVG beteiligt werden
-          muss.</p>
-        <p>Zum Aufbau</p>
-        <p>
-          <ul>
-            <li>Die Abschnitte A.1 und A.2 enthalten interne Informationen für den
-              Datenschutzbeauftragten. Sie werden nicht veröffentlicht.</li>
-            <li>Die Abschnitte B.1 bis B.8 umfassen die erforderlichen Angaben gemäß Art. 26 Abs. 2
-              BayDSG und stellen die von jedem einsehbare Verfahrensbeschreibung dar.</li>
-            <li>Die Abschnitte C.1 bis C.3 umfassen Angaben zu technischen und organisatorischen
-              Maßnahmen gemäß Art. 7 und 8 BayDSG; sie ergänzen die Verfahrensbeschreibung und
-              werden für die Erteilung der datenschutzrechtlichen Freigabe durch den
-              Datenschutzbeauftragten benötigt. Sie werden nicht veröffentlicht.</li>
-          </ul>
-        </p>
-        <p>Zum Ausfüllen des Formulars sind <red>alle Angaben in roter Schrift</red> dem jeweiligen Verfahren
-          anzupassen.</p>
-        <h4>A.1 Gegenstand</h4>
-        <p>Diese Beschreibung dient</p>
-        {{documentPurpose1}}
-        {{content.documentPurpose2}} {{content.documentPurposeOriginalDate}}
-        {{content.documentPurpose3}}
-        <h4>A.2 Autor bzw. Hauptansprechpartner für den Datenschutzbeauftragten</h4>
-        <p>Die Beschreibung wurde von {{content.creatorName}} {{content.creatorSurname}} am {{content.creationDate}} erstellt.</p>
+    <p>
+      Erstellt: {{modificationDateFormatted}} - Bearbeiter: {{modifierName}} - Version: {{_version}}
+    </p>
+    <p>
+      <img src="/images/lrzLogo.png" alt="LRZ Logo">
+    </p>
+    <h3>Verfahrensbeschreibung für den Dienst {{content.serviceShortTitle}}</h3>
+    <p>Art. 27 des Bayerischen Datenschutzgesetzes (BayDSG) bestimmt, dass die behördlichen
+      Datenschutzbeauftragten ein Verzeichnis der bei der öffentlichen Stelle eingesetzten und
+      datenschutzrechtlichen freigegebenen automatisierten Verfahren, mit denen personenbezogene Daten
+      verarbeitet werden, zu führen haben (Verfahrensverzeichnis). Dieses Formular dient gemäß Art. 26
+      Abs. 3 Satz 1 BayDSG sowohl der erforderlichen Verfahrensbeschreibung als auch der
+      erforderlichen allgemeinen Beschreibung der Art der für das Verfahren eingesetzten
+      Datenverarbeitungsanlagen und der technischen und organisatorischen Maßnahmen nach Art. 7 und
+      Art. 8. Ferner weisen wir darauf hin, dass evtl. vor Einsatz des Verfahrens der zuständige Personalrat
+      durch die Dienststelle nach Art. 75 a bzw. Art. 76 Abs. 2 Nr. 1 und Nr. 2 BayPVG beteiligt werden
+      muss.</p>
+    <p>Zum Aufbau:</p>
+    <p>
+      <ul>
+        <li>Die Abschnitte A.1 und A.2 enthalten interne Informationen für den
+          Datenschutzbeauftragten. Sie werden nicht veröffentlicht.</li>
+        <li>Die Abschnitte B.1 bis B.8 umfassen die erforderlichen Angaben gemäß Art. 26 Abs. 2
+          BayDSG und stellen die von jedem einsehbare Verfahrensbeschreibung dar.</li>
+        <li>Die Abschnitte C.1 bis C.3 umfassen Angaben zu technischen und organisatorischen
+          Maßnahmen gemäß Art. 7 und 8 BayDSG; sie ergänzen die Verfahrensbeschreibung und
+          werden für die Erteilung der datenschutzrechtlichen Freigabe durch den
+          Datenschutzbeauftragten benötigt. Sie werden nicht veröffentlicht.</li>
+      </ul>
+    </p>
+    <p>Zum Ausfüllen des Formulars sind <red>alle Angaben in roter Schrift</red> dem jeweiligen Verfahren
+      anzupassen.</p>
 
-        <h4>B.1 Bezeichnung des Verfahrens</h4>
-        <table class="table">
-          <tbody>
-            <tr>
-              <td>Bezeichnung des Verfahrens:</td>
-              <td>{{content.serviceName}}</td>
-            </tr>
-            <tr>
-              <td>Dienstbeschreibung unter:</td>
-              <td>{{content.serviceDescLoc}}</td>
-            </tr>
-            <tr>
-              <td>Nähere Auskünfte erteilt:</td>
-              <td><p>Service-Desk des Leibniz-Rechenzentrums</p><p>https://servicedesk.lrz.de</p></td>
-            </tr>
+    <h4>A.1 Gegenstand</h4>
+    <p>Diese Beschreibung dient</p>
+    <p>
+      {{#if content.documentPurpose1}}<i class="fa fa-check-square-o"></i> {{else}}<i class="fa fa-square-o"></i>{{/if}} {{content.documentPurpose1Text}}
+    </p>
+    <p>
+      {{#if content.documentPurpose2}}<i class="fa fa-check-square-o"></i> {{else}}<i class="fa fa-square-o"></i>{{/if}} {{content.documentPurpose2Text}} {{content.documentPurposeOriginalDate}}
+    </p>
+    <p>
+      {{#if content.documentPurpose3}}<i class="fa fa-check-square-o"></i> {{else}}<i class="fa fa-square-o"></i>{{/if}} {{content.documentPurpose3Text}}
+    </p>
+    <h4>A.2 Autor bzw. Hauptansprechpartner für den Datenschutzbeauftragten</h4>
+    <p>Die Beschreibung wurde von {{content.creatorName}} {{content.creatorSurname}} am {{content.creationDate}} erstellt.</p>
 
-          </tbody>
-        </table>
+    <h4>B.1 Bezeichnung des Verfahrens</h4>
+    <table class="table">
+      <tbody>
+        <tr>
+          <td>Bezeichnung des Verfahrens:</td>
+          <td>{{content.serviceName}}</td>
+        </tr>
+        <tr>
+          <td>Dienstbeschreibung unter:</td>
+          <td>{{content.serviceDescLoc}}</td>
+        </tr>
+        <tr>
+          <td>Nähere Auskünfte erteilt:</td>
+          <td><p>Service-Desk des Leibniz-Rechenzentrums</p><p>https://servicedesk.lrz.de</p></td>
+        </tr>
 
-        <h4>B.2 Zweck und Rechtsgundlagen der Erhebung, Verarbeitung oder Nutzung</h4>
-        <p>Personenbezogene Daten werden zur Erfüllung der folgenden Aufgaben erhoben, verarbeitet oder
-          genutzt:</p>
-        {{content.purpose}}
+      </tbody>
+    </table>
 
-        <h4>B.3 Art der gespeicherten Daten</h4>
-        <p>Im Folgenden sind alle Arten von personenbezogenen Daten mit ihrem individuellen
-          Verwendungszweck aufgeführt, die von diesem Verfahren erhoben, gespeichert oder genutzt werden:</p>
-        {{content.typeOfStoredData}}
+    <h4>B.2 Zweck und Rechtsgundlagen der Erhebung, Verarbeitung oder Nutzung</h4>
+    <p>Personenbezogene Daten werden zur Erfüllung der folgenden Aufgaben erhoben, verarbeitet oder
+      genutzt:</p>
+    {{content.purpose}}
 
-        <h4>B.4 Kreis der Betroffenen</h4>
-        <p>Von dem Verfahren sind alle LRZ-Benutzer betroffen, die eine LRZ-Kennung it Berechtigung für
-          den Dienst {{content.circleAffected}} haben.</p>
-        <h4>B.5 Art der regelmäßig zu übermittelnden Daten und deren Empfänger</h4>
-        {{> afQuickField name="typeOfTransmittedData" label-style="display: none" style="width: 100%"}}
-        <h4>B.6 Regelfristen für die Löschung der Daten oder die Prüfung der Löschung</h4>
-        {{content.deletionDeadline1}}
-        {{content.deletionDeadline2}}
-        {{content.deletionDeadline3}}
-        {{content.deletionDeadlineSonstige}}
-        <h4>B.7 Verarbeitungs- und nutzungsberechtigte Personengruppen</h4>
-        {{content.permittedUserGroup1}}
-        {{content.permittedUserGroup2}}
-        {{content.permittedUserGroup3}}
-        {{content.permittedUserGroup4}}
-        {{content.permittedUserGroupSonstige}}
+    <h4>B.3 Art der gespeicherten Daten</h4>
+    <p>Im Folgenden sind alle Arten von personenbezogenen Daten mit ihrem individuellen
+      Verwendungszweck aufgeführt, die von diesem Verfahren erhoben, gespeichert oder genutzt werden:</p>
+    {{content.typeOfStoredData}}
 
-        <h4>B.8 Ergänzende Hinweise</h4>
-        <ul>
-          <li>Die Erbringung des Dienstes erfolgt durch das LRZ. Es findet somit keine
-            Auftragsdatenverarbeitung statt, an denen Dritte gemäß Art. 6 Abs. 1 bis 3 BayDSG als
-            Auftragnehmer beteiligt sind.</li>
-          <li>Es werden keine personenbezogenen Daten regelmäßig an Empfänger in Drittlöndern
-            übermittelt.</li>
-        </ul>
+    <h4>B.4 Kreis der Betroffenen</h4>
+    <p>Von dem Verfahren sind alle LRZ-Benutzer betroffen, die eine LRZ-Kennung it Berechtigung für
+      den Dienst {{content.circleAffected}} haben.</p>
+    <h4>B.5 Art der regelmäßig zu übermittelnden Daten und deren Empfänger</h4>
+    {{typeOfTransmittedData}}
+    <h4>B.6 Regelfristen für die Löschung der Daten oder die Prüfung der Löschung</h4>
+    {{#if content.deletionDeadline1}}<i class="fa fa-check-square-o"></i> {{else}}<i class="fa fa-square-o"></i>{{/if}} {{content.deletionDeadline1Text}}
+    {{#if content.deletionDeadline2}}<i class="fa fa-check-square-o"></i> {{else}}<i class="fa fa-square-o"></i>{{/if}} {{content.deletionDeadline2Text}}
+    {{#if content.deletionDeadline3}}<i class="fa fa-check-square-o"></i> {{else}}<i class="fa fa-square-o"></i>{{/if}} {{content.deletionDeadline3Text}}
+    {{#each content.deletionDeadlineSonstige}}
+      {{#if value}}<i class="fa fa-check-square-o"></i> {{else}}<i class="fa fa-square-o"></i>{{/if}} {{label}}
+    {{/each}}
+    <h4>B.7 Verarbeitungs- und nutzungsberechtigte Personengruppen</h4>
+    {{content.permittedUserGroup1}}
+    {{content.permittedUserGroup2}}
+    {{content.permittedUserGroup3}}
+    {{content.permittedUserGroup4}}
+    {{content.permittedUserGroupSonstige}}
 
-        <h4>C.1 Eingesetzte Datenverarbeitungsanlagen und Programme</h4>
-        <table class="table">
-          <tbody>
-            <tr>
-              <td>Bezeichnung und Standort der Anlage:</td>
-              <td>{{content.titleAndLocationOfSystem}}</td>
-            </tr>
-            <tr>
-              <td>Eingesetztes Betriebssystem:</td>
-              <td>{{content.operatingSystem}}</td>
-            </tr>
-            <tr>
-              <td>Eingesetzte Software:</td>
-              <td>{{content.usedSoftware}}</td>
-            </tr>
+    <h4>B.8 Ergänzende Hinweise</h4>
+    <ul>
+      <li>Die Erbringung des Dienstes erfolgt durch das LRZ. Es findet somit keine
+        Auftragsdatenverarbeitung statt, an denen Dritte gemäß Art. 6 Abs. 1 bis 3 BayDSG als
+        Auftragnehmer beteiligt sind.</li>
+      <li>Es werden keine personenbezogenen Daten regelmäßig an Empfänger in Drittlöndern
+        übermittelt.</li>
+    </ul>
 
-          </tbody>
-        </table>
+    <h4>C.1 Eingesetzte Datenverarbeitungsanlagen und Programme</h4>
+    <table class="table">
+      <tbody>
+        <tr>
+          <td>Bezeichnung und Standort der Anlage:</td>
+          <td>{{content.titleAndLocationOfSystem}}</td>
+        </tr>
+        <tr>
+          <td>Eingesetztes Betriebssystem:</td>
+          <td>{{content.operatingSystem}}</td>
+        </tr>
+        <tr>
+          <td>Eingesetzte Software:</td>
+          <td>{{content.usedSoftware}}</td>
+        </tr>
 
-        <h4>C.2 Maßnahmen zur Sicherstellung der Verfügbarkeit der Daten</h4>
-        <p>Zur Sicherstellung der Verfügbarkeit der Daten werden die folgenden Maßnahmen ergriffen:</p>
-        <p>{{content.measuresForAvailability}}</p>
+      </tbody>
+    </table>
 
-        <h4>C.3 Weitere Maßnahmen nach Art. 7 und 8 BayDSG</h4>
-        <p>Es werden die folgenden weiteren technischen und organisatorischen Maßnahmen ergriffen:</p>
-        <p>{{content.measuresBayDSG}}</p>
-    <button type="button" class="btn btn-default return">Zurück</button>
+    <h4>C.2 Maßnahmen zur Sicherstellung der Verfügbarkeit der Daten</h4>
+    <p>Zur Sicherstellung der Verfügbarkeit der Daten werden die folgenden Maßnahmen ergriffen:</p>
+    <p>{{content.measuresForAvailability}}</p>
+
+    <h4>C.3 Weitere Maßnahmen nach Art. 7 und 8 BayDSG</h4>
+    <p>Es werden die folgenden weiteren technischen und organisatorischen Maßnahmen ergriffen:</p>
+    <p>{{content.measuresBayDSG}}</p>
+    <button type="button" class="btn btn-default return">Zurück</button> &#160;<button type="button" class="btn btn-default generate">Generieren</button>
   </div>
 </template>

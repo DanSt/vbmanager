@@ -1,11 +1,21 @@
-<template name="editUser">
+<template name="EditUser">
   {{#autoForm id="UserProfileEdit" collection="Meteor.users"  doc=currentUser type="update"}}
     <legend>Profil von {{currentUser.profile.lastName}}, {{currentUser.profile.firstName}}:</legend>
-    <p>Username: {{> afQuickField name="username" label-style="display: none"}}</p>
-    <p>Vorname: {{> afQuickField name="profile.firstName" label-style="display: none"}}</p>
-    <p>Nachname: {{> afQuickField name="profile.lastName" label-style="display: none"}}</p>
-    <div class="form-group">
-      <button type="submit" class="btn btn-primary" disabled="{{disableButtons}}">Submit</button>
-    </div>
+    <table class="table table-hover" width="50%">
+      <tbody>
+        <tr>
+          <td>Username:</td><td>{{currentUser.username}}</td>
+        </tr>
+        <tr>
+          <td>Vorname:</td><td>{{> afQuickField name="profile.firstName" label-style="display: none"}}</td>
+          <td>Nachname:</td><td>{{> afQuickField name="profile.lastName" label-style="display: none"}}</td>
+        </tr>
+      </tbody>
+    </table>
+    <center>
+      <div class="form-group">
+        <button type="submit" class="btn btn-primary" disabled="{{disableButtons}}">Speichern</button> &#160;<button type="button" class="btn btn-default cancel">Abbrechen</button>
+      </div>
+    </center>
   {{/autoForm}}
 </template>

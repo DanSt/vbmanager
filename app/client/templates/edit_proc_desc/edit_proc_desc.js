@@ -31,6 +31,16 @@ Template.EditProcDesc.helpers({
     } else {
       return "wurde modifiziert";
     }
+  },
+  modificationDateFormatted: function () {
+    return moment(this.modifiedAt).format("DD.MM.YYYY HH:mm");
+  },
+  modifierName: function () {
+    var user = Meteor.users.findOne(this.modifierId);
+    return user && user.profile.lastName + ", " + user.profile.firstName;
+  },
+  currentDate: function () {
+    return new Date();
   }
 });
 

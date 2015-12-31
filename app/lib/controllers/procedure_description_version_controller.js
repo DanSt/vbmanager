@@ -8,6 +8,7 @@ ProcedureDescriptionVersionController = RouteController.extend({
   subscriptions: function() {
     this.subscribe('proc_descs', Meteor.userId());
     this.subscribe('proc_descs.vermongo', Meteor.userId());
+    this.subscribe('allUsers', Meteor.userId());
   },
 
   // Subscriptions or other things we want to "wait" on. This also
