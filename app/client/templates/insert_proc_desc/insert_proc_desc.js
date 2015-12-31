@@ -19,7 +19,7 @@ Template.InsertProcDesc.helpers({
   currentDate: function() {
     var date = new Date();
     moment.locale('de');
-    return moment(date).format('DD.MM.YYYY');
+    return moment(date).format('YYYY-MM-DD');
   }
 });
 

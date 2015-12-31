@@ -70,14 +70,13 @@ ProcDescContentSchema = new SimpleSchema({
     denyUpdate: true
   },
   documentPurposeOriginalDate: {
-    type: Date,
+    type: String,
     label: "Original Erstellungsdatum",
     autoform: {
       type: "bootstrap-datepicker",
-      datePickerOptions: function() {
-        return {
-          format: "dd.mm.yyyy"
-        }
+      datePickerOptions: {
+        format: "yyyy-mm-dd",
+        language: 'de'
       }
     },
     optional: true
@@ -105,17 +104,16 @@ ProcDescContentSchema = new SimpleSchema({
     }
   },
   creationDate: {
-    type: Date,
+    type: String,
     label: "Erstellungsdatum",
     autoform: {
       type: "bootstrap-datepicker",
-      datePickerOptions: function() {
-        return {
-          format: "dd.mm.yyyy"
-        }
+      datePickerOptions: {
+        format: "yyyy-mm-dd",
+        language: 'de'
       }
     },
-    defaultValue: new Date()
+    defaultValue: moment.locale('de') && moment(new Date()).format('YYYY-MM-DD')
   },
   serviceName: {
     type: String,

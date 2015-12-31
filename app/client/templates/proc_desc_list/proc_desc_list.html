@@ -7,7 +7,7 @@
           <th>Dienstbezeichung</th>
           <th>Bearbeiter</th>
           <th>Zeitstempel</th>
-          <th></th>
+          <th>Optionen</th>
         </tr>
       </thead>
       <tbody>
@@ -19,8 +19,11 @@
           <td>{{modificationDateFormatted}} Uhr</td>
           <td>
             {{#linkTo route='editProcDesc'}}
-            <i class="fa fa-pencil-square-o"></i>
+              <i class="fa fa-pencil-square-o"></i>
             {{/linkTo}}
+            <a href="#" class="pdf">
+              <i class="fa fa-file-pdf-o"></i>
+            </a>
             <a href="#" class="delete">
               <i class="fa fa-trash-o"></i>
             </a>

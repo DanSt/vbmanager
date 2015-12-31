@@ -95,7 +95,6 @@ if (Meteor.isServer) {
       return true;
     },
     update: function (userId, doc) {
-      console.log(userId && Meteor.user()._id == userId);
       return (userId && Meteor.user()._id == userId);
     },
     remove: function (userId, doc) {

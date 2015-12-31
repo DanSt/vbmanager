@@ -56,10 +56,11 @@ Router.route('/proc_desc_view/:_id', {
 /**
 *   Reference from https://github.com/ryanswapp/meteor-pdf-tutorial
 */
-Router.route('/proc_desc_generate/:_doc', {
+Router.route('/proc_desc_pdf/:_id', {
   name: 'generatePDF',
   where: 'server',
   action: function() {
+
     var webshot = Meteor.npmRequire('webshot');
     var fs      = Npm.require('fs');
     var Future = Npm.require('fibers/future');
@@ -69,7 +70,7 @@ Router.route('/proc_desc_generate/:_doc', {
     var fileName = "verfahrensbeschreibung.pdf";
 
     // GENERATE HTML STRING
-    var css = Assets.getText('style.css') + Assets.getText('bootstrap.min.css') + Assets.getText('font-awesome.min.css');
+    var css = Assets.getText('style.css');
 
     SSR.compileTemplate('layout', Assets.getText('layout.html'));
 
@@ -82,7 +83,11 @@ Router.route('/proc_desc_generate/:_doc', {
     SSR.compileTemplate('proc_view', Assets.getText('procview.html'));
 
     // PREPARE DATA
-    var data = this.params._doc
+    var data = ProcDescs.findOne(this.params._id);
+    if (data == "undefined") {
+      data = ProcDescsVermongo.findOne(this.params._id);
+    }
+    // console.log(data._id);
 
     var html_string = SSR.render('layout', {
       css: css,
@@ -114,20 +119,31 @@ Router.route('/proc_desc_generate/:_doc', {
       });
     });
 
-    // var pdfData = fut.wait();
+    var pdfData = fut.wait();
+
+    /**
+    *   return base64:
+    */
     // var base64String = new Buffer(pdfData).toString('base64');
-    //
     // return base64String;
 
-    this.response.writeHead(200, {'Content-Type': 'application/pdf',"Content-Disposition": "attachment; filename=generated.pdf"});
-    this.response.end(fut.wait());
+    /**
+    *   return PDF for download
+    */
+    this.response.writeHead(200, {
+      'Content-Type': 'application/pdf',
+      'Content-Disposition': 'attachment; filename="verfahrensbeschreibung-'+data._id+'.pdf"',
+      'Content-Length': pdfData.length
+    });
+    this.response.write(pdfData);
+    this.response.end();
   }
 });
 
 Router.onBeforeAction(function() {
-  if (!Meteor.user()) {
+  if (!((Meteor.isClient) ? Meteor.userId() : this.userId)) {
     this.render('Home');
   } else {
     this.next();
   }
-}, {only: ['procDescList', 'insertProcDesc', 'profileEdit']});
+}, {only: ['procDescList', 'editProcDesc', 'insertProcDesc', 'profileEdit', 'viewProcDesc', 'viewProcDescVersion']});

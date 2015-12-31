@@ -1,3 +1,8 @@
+Template.EditProcDesc.rendered = function() {
+    $('#datepicker').datepicker({
+    language: 'de'
+  });
+}
 /*****************************************************************************/
 /* Id: Event Handlers */
 /*****************************************************************************/
@@ -33,7 +38,7 @@ Template.EditProcDesc.helpers({
     }
   },
   modificationDateFormatted: function () {
-    return moment(this.modifiedAt).format("DD.MM.YYYY HH:mm");
+    return moment(this.modifiedAt).format("YYYY-MM-DD HH:mm");
   },
   modifierName: function () {
     var user = Meteor.users.findOne(this.modifierId);

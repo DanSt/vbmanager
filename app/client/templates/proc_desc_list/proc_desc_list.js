@@ -2,11 +2,14 @@
 /* ProcDescList: Event Handlers */
 /*****************************************************************************/
 Template.ProcDescList.events({
-  "click .delete": function () {
+  'click .delete': function () {
     var doc = ProcDescs.findOne(this._id);
     if (confirm('Wollen Sie wirklich die Verfahrensbeschreibung für "' + doc.serviceShortTitle + '" löschen?')) {
       ProcDescs.remove(this._id);
     }
+  },
+  'click .pdf': function () {
+    window.open(Router.url('generatePDF', {_id: this._id}));
   }
 });
 

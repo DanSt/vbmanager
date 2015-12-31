@@ -22,3 +22,27 @@ red {
 .help-block {
   display: inline;
 }
+
+.fa-checkbox:before {
+  content: "\2610";
+}
+
+.fa-checkbox-checked:before {
+  content: "\2611";
+}
+
+.icon:before {
+  font: normal normal normal 14px/1 Arial,Verdana,Helvetica;
+}
+
+body {
+  font-size: Arial,Verdana,Helvetica;
+}
+
+h3 {
+  font-size: 24px;
+}
+
+h4 {
+  font-size: 18px;
+}

@@ -39,13 +39,13 @@
           {{> afQuickField name="content.documentPurpose1" value=false}}
         </p>
         <p>
-          {{> afQuickField name="content.documentPurpose2" value=true}} {{> afQuickField value=content.creationDate name="content.documentPurposeOriginalDate" label-style="display: none" type="bootstrap-datepicker"}}
+          {{> afQuickField name="content.documentPurpose2" value=true}} {{> afQuickField value=content.creationDate name="content.documentPurposeOriginalDate" style="display: none" label-style="display: none" type="bootstrap-datepicker"}}
         </p>
         <p>
           {{> afQuickField name="content.documentPurpose3"}}
         </p>
         <h4>A.2 Autor bzw. Hauptansprechpartner für den Datenschutzbeauftragten</h4>
-        <p>Die Beschreibung wurde von {{> afQuickField name="content.creatorName" value=currentUser.profile.firstName label-style="display: none"}} {{> afQuickField name="content.creatorSurname" value=currentUser.profile.lastName label-style="display: none"}} am {{> afQuickField name="content.creationDate" value=currentDate label-style="display: none" type="bootstrap-datepicker"}} erstellt.</p>
+        <p>Die Beschreibung wurde von {{> afQuickField name="content.creatorName" value=currentUser.profile.firstName label-style="display: none"}} {{> afQuickField name="content.creatorSurname" value=currentUser.profile.lastName label-style="display: none"}} am Datum {{> afQuickField name="content.creationDate" value=currentDate label-style="display: none"}} erstellt.</p>
 
         <h4>B.1 Bezeichnung des Verfahrens</h4>
         <table class="table">

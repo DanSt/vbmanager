@@ -9,25 +9,37 @@ Template.ViewProcDescVersion.events({
     }
     Router.go('/proc_desc/'+originalDocument);
   },
-  'click .generate': function(event) {
+  'click .pdf': function(event) {
     event.preventDefault();
 
-    alert('Das PDF wird generiert. Bitte haben Sie einen Moment Geduld..');
+    // alert('Das PDF wird generiert. Bitte haben Sie einen Moment Geduld..');
 
-    // Router.go('generatePDF', this);
-    Meteor.call('proc_desc_generate', this, function(err, res) {
-			if (err) {
-				console.error(err);
-			} else if (res) {
-				window.open("data:application/pdf;base64, " + res);
-        // this.response.writeHead(200, {
-        //   "Content-Type": "application/pdf",
-        //   "Content-Length": res.length
-        // });
-        // this.response.write(res);
-        // this.response.end();
-			}
-		})
+    window.open(Router.url('generatePDF', {_id: this._id}));
+    // Router.go('generatePDF', {_id: this._id});
+
+    // Meteor.call('proc_desc_pdf', {_id: this._id}, function(err, res) {
+		// 	if (err) {
+		// 		console.error(err);
+		// 	} else if (res) {
+		// 		// window.open("data:application/pdf;base64, " + res);
+    //     // var fs = Npm.require('fs');
+    //     // this.response.writeHead(200, {
+    //     //   "Content-Type": "application/pdf",
+    //     //   "Content-Length": res.length
+    //     // });
+    //     // this.response.write(res);
+    //     // this.response.end();
+		// 	}
+		// });
+  },
+  'click .xml': function() {
+    Meteor.call('proc_desc_xml', this.content, function(err, res) {
+      if (err) {
+        console.error(err);
+      } else if (res) {
+        console.log(res);
+      }
+    });
   }
 });
 

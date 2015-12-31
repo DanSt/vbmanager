@@ -1,3 +1,4 @@
+#
 # Meteor packages used by this project, one per line.
 # Check this file (and the other files in this directory) into your repository.
 #
@@ -16,7 +17,7 @@ natestrauser:font-awesome
 momentjs:moment
 iron:router
 aldeed:autoform-bs-datepicker
-rajit:bootstrap3-datepicker
+rajit:bootstrap3-datepicker-de
 mickaelfm:vermongo
 anti:i18n
 johnschult:crypto-sha512
