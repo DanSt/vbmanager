@@ -10,6 +10,16 @@ Template.ProcDescList.events({
   },
   'click .pdf': function () {
     window.open(Router.url('generatePDF', {_id: this._id}));
+  },
+  'click .xml': function() {
+    Meteor.call('proc_desc_xml', this.content, function(err, res) {
+      if (err) {
+        console.error(err);
+      } else if (res) {
+        var uriContent = "data:text/attachment;charset=UTF-8," + encodeURIComponent(res);
+        window.open(uriContent, 'testdocument.xml');
+      }
+    });
   }
 });
 
@@ -21,8 +31,8 @@ Template.ProcDescList.helpers({
     return ProcDescs.find();
   },
 
-  modificationDateFormatted: function () {
-    return moment(this.modifiedAt).format("DD.MM.YYYY HH:mm");
+  longDateFormatted: function (date) {
+    return moment(date).format("DD.MM.YYYY HH:mm");
   },
 
   beforeRemove: function () {
@@ -33,11 +43,11 @@ Template.ProcDescList.helpers({
         Router.go('procDescList');
       }
     };
-  },
-  modifierName: function () {
-    var user = Meteor.users.findOne(this.modifierId);
-    return user && user.profile.lastName + ", " + user.profile.firstName;
   }
+  // modifierName: function () {
+  //   var user = Meteor.users.findOne(this.modifierId);
+  //   return user && user.profile.lastName + ", " + user.profile.firstName;
+  // }
 });
 
 /*****************************************************************************/

@@ -21,7 +21,7 @@ Template.ViewProcDescVersion.events({
       if (err) {
         console.error(err);
       } else if (res) {
-        var uriContent = "data:text/plain;charset=UTF-8," + encodeURIComponent(res);
+        var uriContent = "data:text/attachment;charset=UTF-8," + encodeURIComponent(res);
         var myWindow = window.open(uriContent, 'testdocument.xml');
       }
     });
@@ -54,8 +54,8 @@ Template.ViewProcDescVersion.helpers({
       return doc;
     };
   },
-  modificationDateFormatted: function () {
-    return moment(this.modifiedAt).format("DD.MM.YYYY HH:mm");
+  longDateFormatted: function (date) {
+    return moment(date).format("DD.MM.YYYY HH:mm");
   },
   modifierName: function () {
     var user = Meteor.users.findOne(this.modifierId);

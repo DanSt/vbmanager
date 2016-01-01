@@ -15,10 +15,9 @@ ProcDescs.after.update(function (userId, doc, fieldNames, modifier, options) {
 });
 
 BoolValue = new SimpleSchema({
-  defaultValue: {
+  value: {
     type: Boolean,
     label: "Aktiv",
-    defaultValue: false,
     optional: true
   },
   label: {

@@ -5,8 +5,8 @@
       <thead>
         <tr>
           <th>Dienstbezeichung</th>
-          <th>Bearbeiter</th>
-          <th>Zeitstempel</th>
+          <th>Verantwortlicher</th>
+          <th>Erstellt</th>
           <th>Optionen</th>
         </tr>
       </thead>
@@ -19,20 +19,23 @@
               {{content.serviceShortTitle}}
             {{/linkTo}}
           </td>
-          <td>{{modifierName}}</td>
-          <td>{{modificationDateFormatted}} Uhr</td>
+          <td>{{content.sectionA.createdBy}}</td>
+          <td>{{longDateFormatted content.createdAt}} Uhr</td>
           <td>
             {{#linkTo route='viewProcDesc'}}
-              <i class="fa fa-file-text-o"></i>
-            {{/linkTo}}
+              <i class="fa fa-file-text-o" title="Ansehen"></i>
+            {{/linkTo}}&#160;
             {{#linkTo route='editProcDesc'}}
-              <i class="fa fa-pencil"></i>
-            {{/linkTo}}
+              <i class="fa fa-pencil" title="Editieren"></i>
+            {{/linkTo}}&#160;
             <a href="#" class="pdf">
-              <i class="fa fa-file-pdf-o"></i>
-            </a>
+              <i class="fa fa-file-pdf-o" title="PDF herunterladen"></i>
+            </a>&#160;
+            <a href="#" class="xml">
+              <i class="fa fa-file-code-o" title="XML herunterladen"></i>
+            </a>&#160;
             <a href="#" class="delete">
-              <i class="fa fa-trash-o"></i>
+              <i class="fa fa-trash-o" title="Löschen"></i>
             </a>
           </td>
         </tr>

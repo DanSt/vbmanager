@@ -1,7 +1,7 @@
 <template name="ViewProcDescVersion">
   <div class="view_proc_desc_version">
     <p>
-      Erstellt: {{modificationDateFormatted}} - Bearbeiter: {{modifierName}} - Version: {{_version}}
+      Erstellt: {{longDateFormatted modifiedAt}} - Bearbeiter: {{modifierName}} - Version: {{_version}}
     </p>
     <p><button type="button" class="btn btn-default return">Editieren</button> &#160;<button type="button" class="btn btn-default pdf">PDF</button> &#160;<button type="button" class="btn btn-default xml">XML</button></p>
     <p>
@@ -375,7 +375,7 @@ IIW7MImuJKkHUv5n5P8ATcohk4PSp9wAAAAASUVORK5CYII=" alt="LRZ Logo">
       {{#if content.sectionA.documentPurpose3}}<i class="icon fa-checkbox-checked"></i> {{else}}<i class="icon fa-checkbox"></i>{{/if}} {{content.sectionA.documentPurpose3Text}}
     </p>
     <h4>A.2 Autor bzw. Hauptansprechpartner für den Datenschutzbeauftragten</h4>
-    <p>Die Beschreibung wurde von {{content.sectionA.creatorName}} {{content.sectionA.creatorSurname}} am {{dateFormatted content.sectionA.creationDate}} erstellt.</p>
+    <p>Die Beschreibung wurde von {{content.sectionA.createdBy}} am {{dateFormatted content.sectionA.creationDate}} erstellt.</p>
 
     <div class="contactInfo">
       <p>&#160;</p>
@@ -503,12 +503,12 @@ IIW7MImuJKkHUv5n5P8ATcohk4PSp9wAAAAASUVORK5CYII=" alt="LRZ Logo">
     <br>
     <p>
       <h5>Änderungshistorie:</h5>
-      {{#linkTo route='viewProcDesc'}}
-        <li>{{getOriginal.content.serviceShortTitle}} - {{getOriginal.modifiedAt}} - version: {{getOriginal._version}} - {{isVerified getOriginal}}</li>
+      {{#linkTo route='viewProcDesc' data=getOriginal}}
+        <li>{{getOriginal.content.serviceShortTitle}} - Bearbeiter: {{modifierName}} - {{longDateFormatted getOriginal.modifiedAt}} - version: {{getOriginal._version}} - {{isVerified getOriginal}}</li>
       {{/linkTo}}
       {{#each getVersions}}
         {{#linkTo route='viewProcDescVersion'}}
-          <li>{{content.serviceShortTitle}} - {{modifiedAt}} - version: {{_version}} - {{isVerified this}}</li>
+          <li>{{content.serviceShortTitle}} - Bearbeiter: {{modifierName}} - {{longDateFormatted modifiedAt}} - version: {{_version}} - {{isVerified this}}</li>
         {{/linkTo}}
       {{/each}}
     </p>

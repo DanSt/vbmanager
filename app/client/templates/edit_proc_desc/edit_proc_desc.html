@@ -1,7 +1,7 @@
 <template name="EditProcDesc">
   <div class="edit_proc_desc">
     <p>
-      Erstellt: {{modificationDateFormatted}} - Bearbeiter: {{modifierName}} - Version: {{_version}}
+      Erstellt: {{longDateFormatted modifiedAt}} - Bearbeiter: {{modifierName}} - Version: {{_version}}
     </p>
     {{#autoForm collection="ProcDescs" doc=this id="updateProcDescForm" type="update"}}
       <fieldset>
@@ -155,11 +155,11 @@
     <p>
       <h5>Änderungshistorie:</h5>
       {{#linkTo route='viewProcDesc'}}
-        <li>{{content.serviceShortTitle}} - {{modifiedAt}} - version: {{_version}} (aktuell) - {{isVerified}}</li>
+        <li>{{content.serviceShortTitle}} - {{longDateFormatted modifiedAt}} - version: {{_version}} (aktuell) - {{isVerified}}</li>
       {{/linkTo}}
       {{#each versions}}
       {{#linkTo route='viewProcDescVersion'}}
-        <li>{{content.serviceShortTitle}} - {{modifiedAt}} - version: {{_version}} - {{isVerified}}</li>
+        <li>{{content.serviceShortTitle}} - {{longDateFormatted modifiedAt}} - version: {{_version}} - {{isVerified}}</li>
       {{/linkTo}}
       {{/each}}
     </p>

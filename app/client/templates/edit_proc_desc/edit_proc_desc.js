@@ -37,8 +37,8 @@ Template.EditProcDesc.helpers({
       return "wurde modifiziert";
     }
   },
-  modificationDateFormatted: function () {
-    return moment(this.modifiedAt).format("DD.MM.YYYY HH:mm");
+  longDateFormatted: function (date) {
+    return moment(date).format("DD.MM.YYYY HH:mm");
   },
   modifierName: function () {
     var user = Meteor.users.findOne(this.modifierId);

@@ -1,8 +1,11 @@
-/*Accounts.onCreateUser(function(options, user) {
-  user.username = options.username
-  user.firstName = options.firstName;
-  user.lastName = options.lastName;
-  user.isAdmin = false;
-  return user;
+/**
+*   Disable new user registration
+**/
+
+Accounts.config({
+  forbidClientAccountCreation : false
 });
-*/
+
+Accounts.validateNewUser(function (user) {
+  return true
+});
