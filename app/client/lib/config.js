@@ -32,6 +32,14 @@ Accounts.ui.config({
     }]
 });
 
+Accounts.config({
+  forbidClientAccountCreation : true
+});
+
+Accounts.validateNewUser(function (user) {
+  return false
+});
+
 /**
 *   Solution from http://stackoverflow.com/questions/27734110/authentication-on-server-side-routes-in-meteor
 **/

@@ -3,9 +3,9 @@
 **/
 
 Accounts.config({
-  forbidClientAccountCreation : false
+  forbidClientAccountCreation : true
 });
 
 Accounts.validateNewUser(function (user) {
-  return true
+  return false
 });
