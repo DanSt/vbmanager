@@ -15,39 +15,17 @@ Template.ViewProcDescVersion.events({
     // alert('Das PDF wird generiert. Bitte haben Sie einen Moment Geduld..');
 
     window.open(Router.url('generatePDF', {_id: this._id}));
-    // Router.go('generatePDF', {_id: this._id});
-
-    // Meteor.call('proc_desc_pdf', {_id: this._id}, function(err, res) {
-		// 	if (err) {
-		// 		console.error(err);
-		// 	} else if (res) {
-		// 		// window.open("data:application/pdf;base64, " + res);
-    //     // var fs = Npm.require('fs');
-    //     // this.response.writeHead(200, {
-    //     //   "Content-Type": "application/pdf",
-    //     //   "Content-Length": res.length
-    //     // });
-    //     // this.response.write(res);
-    //     // this.response.end();
-		// 	}
-		// });
   },
   'click .xml': function() {
     Meteor.call('proc_desc_xml', this.content, function(err, res) {
       if (err) {
         console.error(err);
       } else if (res) {
-        console.log(res);
+        var uriContent = "data:text/plain;charset=UTF-8," + encodeURIComponent(res);
+        var myWindow = window.open(uriContent, 'testdocument.xml');
       }
     });
   }
-});
-
-Template.ViewProcDescVersion.onRendered(function() {
-  if (_.isFunction(window.callPhantom))
-    Meteor.setTimeout(function() {
-      window.callPhantom('takeShot');
-    }, 500);
 });
 
 /*****************************************************************************/
@@ -63,8 +41,8 @@ Template.ViewProcDescVersion.helpers({
       }
     };
   },
-  isVerified: function () {
-    if (CryptoJS.SHA512(JSON.stringify(this.content)).toString() == this.documentHash) {
+  isVerified: function (doc) {
+    if (doc && CryptoJS.SHA512(JSON.stringify(doc.content)).toString() == doc.documentHash) {
       return "unmodifiziert";
     } else {
       return "wurde modifiziert";
@@ -82,6 +60,28 @@ Template.ViewProcDescVersion.helpers({
   modifierName: function () {
     var user = Meteor.users.findOne(this.modifierId);
     return user && user.profile.lastName + ", " + user.profile.firstName;
+  },
+  dateFormatted: function (date) {
+    return moment(date).format("DD.MM.YYYY");
+  },
+  contactInfo: function() {
+    var contactInfo = ContactInfos.findOne({isDefault: true});
+    return contactInfo && contactInfo.content;
+  },
+  getVersions: function() {
+    var originalId = this.ref;
+    if (!originalId) {
+      originalId = this._id;
+    }
+    var versions = ProcDescsVermongo.find({ref: originalId});
+    return versions;
+  },
+  getOriginal: function() {
+    var originalId = this.ref;
+    if (!originalId) {
+      originalId = this._id;
+    }
+    return ProcDescs.findOne({_id: originalId});
   }
 });
 

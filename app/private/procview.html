@@ -361,27 +361,51 @@ IIW7MImuJKkHUv5n5P8ATcohk4PSp9wAAAAASUVORK5CYII=" alt="LRZ Logo">
   <h4>A.1 Gegenstand</h4>
   <p>Diese Beschreibung dient</p>
   <p>
-    {{#if content.documentPurpose1}}<i class="icon fa-checkbox-checked"></i> {{else}}<i class="icon fa-checkbox"></i>{{/if}} {{content.documentPurpose1Text}}
+    {{#if content.sectionA.documentPurpose1}}<i class="icon fa-checkbox-checked"></i> {{else}}<i class="icon fa-checkbox"></i>{{/if}} {{content.sectionA.documentPurpose1Text}}
   </p>
   <p>
-    {{#if content.documentPurpose2}}<i class="icon fa-checkbox-checked"></i> {{else}}<i class="icon fa-checkbox"></i>{{/if}} {{content.documentPurpose2Text}} {{content.documentPurposeOriginalDate}}
+    {{#if content.sectionA.documentPurpose2}}<i class="icon fa-checkbox-checked"></i> {{else}}<i class="icon fa-checkbox"></i>{{/if}} {{content.sectionA.documentPurpose2Text}} {{dateFormatted content.sectionA.documentPurposeOriginalDate}}
   </p>
   <p>
-    {{#if content.documentPurpose3}}<i class="icon fa-checkbox-checked"></i> {{else}}<i class="icon fa-checkbox"></i>{{/if}} {{content.documentPurpose3Text}}
+    {{#if content.sectionA.documentPurpose3}}<i class="icon fa-checkbox-checked"></i> {{else}}<i class="icon fa-checkbox"></i>{{/if}} {{content.sectionA.documentPurpose3Text}}
   </p>
   <h4>A.2 Autor bzw. Hauptansprechpartner für den Datenschutzbeauftragten</h4>
-  <p>Die Beschreibung wurde von {{content.creatorName}} {{content.creatorSurname}} am Datum {{content.creationDate}} erstellt.</p>
+  <p>Die Beschreibung wurde von {{content.sectionA.creatorName}} {{content.sectionA.creatorSurname}} am {{dateFormatted content.sectionA.creationDate}} erstellt.</p>
+
+  <div class="contactInfo">
+    <p>&#160;</p>
+    <p>Direktorium<br>
+    {{#each contactInfo.direktorium}}
+      {{this}}<br>
+    {{/each}}</p>
+    <p>
+    {{#each contactInfo.address}}
+      {{this}}<br>
+    {{/each}}</p>
+    <p>{{contactInfo.ustid}}<br>
+    {{contactInfo.telephone}}<br>
+    {{contactInfo.telefax}}<br>
+    {{contactInfo.email}}<br>
+    {{contactInfo.internet}}</p>
+    <p>Öffentliche Verkehrsmittel<br>
+    {{#each contactInfo.publicTransport}}
+      {{this}}<br>
+    {{/each}}</p>
+  </div>
+  <p>&#160;</p>
+  <p>&#160;</p>
+  <p>&#160;</p>
 
   <h4>B.1 Bezeichnung des Verfahrens</h4>
   <table class="table">
     <tbody>
       <tr>
         <td>Bezeichnung des Verfahrens:</td>
-        <td>{{content.serviceName}}</td>
+        <td>{{content.sectionB.serviceName}}</td>
       </tr>
       <tr>
         <td>Dienstbeschreibung unter:</td>
-        <td>{{content.serviceDescLoc}}</td>
+        <td>{{content.sectionB.serviceDescLoc}}</td>
       </tr>
       <tr>
         <td>Nähere Auskünfte erteilt:</td>
@@ -394,47 +418,47 @@ IIW7MImuJKkHUv5n5P8ATcohk4PSp9wAAAAASUVORK5CYII=" alt="LRZ Logo">
   <h4>B.2 Zweck und Rechtsgundlagen der Erhebung, Verarbeitung oder Nutzung</h4>
   <p>Personenbezogene Daten werden zur Erfüllung der folgenden Aufgaben erhoben, verarbeitet oder
     genutzt:</p>
-  {{content.purpose}}
+  {{content.sectionB.purpose}}
 
   <h4>B.3 Art der gespeicherten Daten</h4>
   <p>Im Folgenden sind alle Arten von personenbezogenen Daten mit ihrem individuellen
     Verwendungszweck aufgeführt, die von diesem Verfahren erhoben, gespeichert oder genutzt werden:</p>
-  {{content.typeOfStoredData}}
+  {{content.sectionB.typeOfStoredData}}
 
   <h4>B.4 Kreis der Betroffenen</h4>
   <p>Von dem Verfahren sind alle LRZ-Benutzer betroffen, die eine LRZ-Kennung it Berechtigung für
-    den Dienst {{content.circleAffected}} haben.</p>
+    den Dienst {{content.sectionB.circleAffected}} haben.</p>
   <h4>B.5 Art der regelmäßig zu übermittelnden Daten und deren Empfänger</h4>
   {{content.typeOfTransmittedData}}
   <h4>B.6 Regelfristen für die Löschung der Daten oder die Prüfung der Löschung</h4>
   <p>
-    {{#if content.deletionDeadline1}}<i class="icon fa-checkbox-checked"></i> {{else}}<i class="icon fa-checkbox"></i>{{/if}} {{content.deletionDeadline1Text}}
+    {{#if content.sectionB.deletionDeadline1}}<i class="icon fa-checkbox-checked"></i> {{else}}<i class="icon fa-checkbox"></i>{{/if}} {{content.sectionB.deletionDeadline1Text}}
   </p>
   <p>
-    {{#if content.deletionDeadline2}}<i class="icon fa-checkbox-checked"></i> {{else}}<i class="icon fa-checkbox"></i>{{/if}} {{content.deletionDeadline2Text}}
+    {{#if content.sectionB.deletionDeadline2}}<i class="icon fa-checkbox-checked"></i> {{else}}<i class="icon fa-checkbox"></i>{{/if}} {{content.sectionB.deletionDeadline2Text}}
   </p>
   <p>
-    {{#if content.deletionDeadline3}}<i class="icon fa-checkbox-checked"></i> {{else}}<i class="icon fa-checkbox"></i>{{/if}} {{content.deletionDeadline3Text}}
+    {{#if content.sectionB.deletionDeadline3}}<i class="icon fa-checkbox-checked"></i> {{else}}<i class="icon fa-checkbox"></i>{{/if}} {{content.sectionB.deletionDeadline3Text}}
   </p>
-  {{#each content.deletionDeadlineSonstige}}
+  {{#each content.sectionB.deletionDeadlineSonstige}}
     <p>
       {{#if value}}<i class="icon fa-checkbox-checked"></i> {{else}}<i class="icon fa-checkbox"></i>{{/if}} {{label}}
     </p>
   {{/each}}
   <h4>B.7 Verarbeitungs- und nutzungsberechtigte Personengruppen</h4>
   <p>
-    {{#if content.permittedUserGroup1}}<i class="icon fa-checkbox-checked"></i> {{else}}<i class="icon fa-checkbox"></i>{{/if}} {{content.permittedUserGroup1Text}}
+    {{#if content.sectionB.permittedUserGroup1}}<i class="icon fa-checkbox-checked"></i> {{else}}<i class="icon fa-checkbox"></i>{{/if}} {{content.sectionB.permittedUserGroup1Text}}
   </p>
   <p>
-    {{#if content.permittedUserGroup2}}<i class="icon fa-checkbox-checked"></i> {{else}}<i class="icon fa-checkbox"></i>{{/if}} {{content.permittedUserGroup2Text}}
+    {{#if content.sectionB.permittedUserGroup2}}<i class="icon fa-checkbox-checked"></i> {{else}}<i class="icon fa-checkbox"></i>{{/if}} {{content.sectionB.permittedUserGroup2Text}}
   </p>
   <p>
-    {{#if content.permittedUserGroup3}}<i class="icon fa-checkbox-checked"></i> {{else}}<i class="icon fa-checkbox"></i>{{/if}} {{content.permittedUserGroup3Text}}
+    {{#if content.sectionB.permittedUserGroup3}}<i class="icon fa-checkbox-checked"></i> {{else}}<i class="icon fa-checkbox"></i>{{/if}} {{content.sectionB.permittedUserGroup3Text}}
   </p>
   <p>
-    {{#if content.permittedUserGroup4}}<i class="icon fa-checkbox-checked"></i> {{else}}<i class="icon fa-checkbox"></i>{{/if}} {{content.permittedUserGroup4Text}}
+    {{#if content.sectionB.permittedUserGroup4}}<i class="icon fa-checkbox-checked"></i> {{else}}<i class="icon fa-checkbox"></i>{{/if}} {{content.sectionB.permittedUserGroup4Text}}
   </p>
-  {{#each content.permittedUserGroupSonstige}}
+  {{#each content.sectionB.permittedUserGroupSonstige}}
     <p>
       {{#if value}}<i class="icon fa-checkbox-checked"></i> {{else}}<i class="icon fa-checkbox"></i>{{/if}} {{label}}
     </p>
@@ -442,11 +466,8 @@ IIW7MImuJKkHUv5n5P8ATcohk4PSp9wAAAAASUVORK5CYII=" alt="LRZ Logo">
 
   <h4>B.8 Ergänzende Hinweise</h4>
   <ul>
-    <li>Die Erbringung des Dienstes erfolgt durch das LRZ. Es findet somit keine
-      Auftragsdatenverarbeitung statt, an denen Dritte gemäß Art. 6 Abs. 1 bis 3 BayDSG als
-      Auftragnehmer beteiligt sind.</li>
-    <li>Es werden keine personenbezogenen Daten regelmäßig an Empfänger in Drittlöndern
-      übermittelt.</li>
+    <li>{{content.sectionB.additionalInfo1}}</li>
+    <li>{{content.sectionB.additionalInfo2}}</li>
   </ul>
 
   <h4>C.1 Eingesetzte Datenverarbeitungsanlagen und Programme</h4>
@@ -454,15 +475,15 @@ IIW7MImuJKkHUv5n5P8ATcohk4PSp9wAAAAASUVORK5CYII=" alt="LRZ Logo">
     <tbody>
       <tr>
         <td>Bezeichnung und Standort der Anlage:</td>
-        <td>{{content.titleAndLocationOfSystem}}</td>
+        <td>{{content.sectionC.titleAndLocationOfSystem}}</td>
       </tr>
       <tr>
         <td>Eingesetztes Betriebssystem:</td>
-        <td>{{content.operatingSystem}}</td>
+        <td>{{content.sectionC.operatingSystem}}</td>
       </tr>
       <tr>
         <td>Eingesetzte Software:</td>
-        <td>{{content.usedSoftware}}</td>
+        <td>{{content.sectionC.usedSoftware}}</td>
       </tr>
 
     </tbody>
@@ -470,9 +491,9 @@ IIW7MImuJKkHUv5n5P8ATcohk4PSp9wAAAAASUVORK5CYII=" alt="LRZ Logo">
 
   <h4>C.2 Maßnahmen zur Sicherstellung der Verfügbarkeit der Daten</h4>
   <p>Zur Sicherstellung der Verfügbarkeit der Daten werden die folgenden Maßnahmen ergriffen:</p>
-  <p>{{content.measuresForAvailability}}</p>
+  <p>{{content.sectionC.measuresForAvailability}}</p>
 
   <h4>C.3 Weitere Maßnahmen nach Art. 7 und 8 BayDSG</h4>
   <p>Es werden die folgenden weiteren technischen und organisatorischen Maßnahmen ergriffen:</p>
-  <p>{{content.measuresBayDSG}}</p>
+  <p>{{content.sectionC.measuresBayDSG}}</p>
 </div>

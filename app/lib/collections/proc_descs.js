@@ -29,13 +29,7 @@ BoolValue = new SimpleSchema({
   }
 });
 
-ProcDescContentSchema = new SimpleSchema({
-  serviceShortTitle: {
-    type: String,
-    label: "Dienstkurzbezeichnung",
-    defaultValue: "<Dienstkurzbezeichnung>",
-    max: 80
-  },
+ProcDescASchema = new SimpleSchema({
   documentPurpose1: {
     type: Boolean,
     label: "der erstmaligen Beschreibung des Verfahrens",
@@ -70,12 +64,12 @@ ProcDescContentSchema = new SimpleSchema({
     denyUpdate: true
   },
   documentPurposeOriginalDate: {
-    type: String,
+    type: Date,
     label: "Original Erstellungsdatum",
     autoform: {
       type: "bootstrap-datepicker",
       datePickerOptions: {
-        format: "yyyy-mm-dd",
+        format: "dd.mm.yyyy",
         language: 'de'
       }
     },
@@ -104,17 +98,25 @@ ProcDescContentSchema = new SimpleSchema({
     }
   },
   creationDate: {
-    type: String,
+    type: Date,
     label: "Erstellungsdatum",
     autoform: {
       type: "bootstrap-datepicker",
       datePickerOptions: {
-        format: "yyyy-mm-dd",
+        format: "dd.mm.yyyy",
         language: 'de'
       }
     },
-    defaultValue: moment.locale('de') && moment(new Date()).format('YYYY-MM-DD')
+    defaultValue: new Date()
   },
+  contactInfo: {
+    type: ContactInfoContentSchema,
+    label: "KontaktInformationen",
+    defaultValue: ContactInfos.findOne({isDefault: true})
+  }
+});
+
+ProcDescBSchema = new SimpleSchema({
   serviceName: {
     type: String,
     label: "Bezeichnung des Verfahrens",
@@ -160,7 +162,7 @@ ProcDescContentSchema = new SimpleSchema({
   purpose: {
     type: String,
     label: "Zweck und Rechtsgrundlagen der Erhebung, Verarbeitung oder Nutzung",
-    defaultValue: "Hier ist kurz allgemein anzugeben, warum personenbezogene Daten zum Betrieb des Dienstes erforderlich sind.\n Typische Angaben sind hier: Individuelle Authentifizierung jedes Benutzers; Kontkaktaufnahme bei Störungen oder Missbrauch.",
+    defaultValue: "Hier ist kurz allgemein anzugeben, warum personenbezogene Daten zum Betrieb des Dienstes erforderlich sind. Typische Angaben sind hier: Individuelle Authentifizierung jedes Benutzers; Kontkaktaufnahme bei Störungen oder Missbrauch.",
     max: 400
   },
   purposeText: {
@@ -172,7 +174,7 @@ ProcDescContentSchema = new SimpleSchema({
   typeOfStoredData: {
     type: String,
     label: "Art der gespeicherten Daten",
-    defaultValue: "1. LRZ-Kennung (individuelle Authentifizierung)\n2. E-Mail-Adresse (zur Kontaktaufnahme)\3. ...",
+    defaultValue: "1. LRZ-Kennung (individuelle Authentifizierung) 2. E-Mail-Adresse (zur Kontaktaufnahme). ...",
     max: 400
   },
   typeOfStoredDataText: {
@@ -231,14 +233,14 @@ ProcDescContentSchema = new SimpleSchema({
     type: Boolean,
     label: "Es gelten folgende Sonderregelungen:",
     defaultValue: false,
-    autoValue: function() {
-      var depField = this.siblingField("deletionDeadlineSonstige").value;
-      if (depField) {
-        return true;
-      } else {
-        return false;
-      }
-    }
+    // autoValue: function() {
+    //   var depField = this.siblingField("deletionDeadlineSonstige").value;
+    //   if (depField) {
+    //     return true;
+    //   } else {
+    //     return false;
+    //   }
+    // }
   },
   deletionDeadline3Text: {
     type: String,
@@ -289,14 +291,14 @@ ProcDescContentSchema = new SimpleSchema({
     type: Boolean,
     label: "Sonstige:",
     defaultValue: false,
-    autoValue: function() {
-      var depField = this.siblingField("permittedUserGroupSonstige").value;
-      if (depField) {
-        return true;
-      } else {
-        return false;
-      }
-    }
+    // autoValue: function() {
+    //   var depField = this.siblingField("permittedUserGroupSonstige").value;
+    //   if (depField) {
+    //     return true;
+    //   } else {
+    //     return false;
+    //   }
+    // }
   },
   permittedUserGroup4Text: {
     type: String,
@@ -310,6 +312,23 @@ ProcDescContentSchema = new SimpleSchema({
     optional: true,
     minCount: 0
   },
+  additionalInfo1: {
+    type: String,
+    label: "Ergänzende Hinweise 1",
+    defaultValue: "Die Erbringung des Dienstes erfolgt durch das LRZ. Es findet somit keine Auftragsdatenverarbeitung statt, an denen Dritte gemäß Art. 6 Abs. 1 bis 3 BayDSG als Auftragnehmer beteiligt sind.",
+    denyInsert: true,
+    denyUpdate: true
+  },
+  additionalInfo2: {
+    type: String,
+    label: "Ergänzende Hinweise 2",
+    defaultValue: "Es werden keine personenbezogenen Daten regelmäßig an Empfänger in Drittländern übermittelt.",
+    denyInsert: true,
+    denyUpdate: true
+  }
+});
+
+ProcDescCSchema = new SimpleSchema({
   titleAndLocationOfSystem: {
     type: String,
     label: "Bezeichnung und Standord der Anlage",
@@ -361,7 +380,7 @@ ProcDescContentSchema = new SimpleSchema({
   measuresBayDSG: {
     type: String,
     label: "Weitere Maßnahmen nach Art. 7 und 8 BayDSG",
-    defaultValue: "Hier folgen (auf das Wesentliche reduziert) Aussagen zu Zutritts- und Zugangskontrollkonzepten; Protokollierung von Eingaben; relevante Richtlinien und Arbeitsanweisungen; Maßnahmen zur Absicherung gegen unbefugten Zugriff Dritter; Sicherung der Vertraulichkeit beim Transport oder bei der Übermittlung von Daten etc.\n Typische Aussage: Der Betrieb erfolgt im zutrittsgeschützen LRZ-Rechnergebäude gemäß den aktuellen LRZ-Leitlinien zur Informationssicherheit. Die Zugangskontrolle erfolgt über eine Kopplung mit der LRZ-Benutzerverwaltung; insbesondere ist ein administrativer Zugriff nur von dedizierten Managementgateways aus möglich.",
+    defaultValue: "Hier folgen (auf das Wesentliche reduziert) Aussagen zu Zutritts- und Zugangskontrollkonzepten; Protokollierung von Eingaben; relevante Richtlinien und Arbeitsanweisungen; Maßnahmen zur Absicherung gegen unbefugten Zugriff Dritter; Sicherung der Vertraulichkeit beim Transport oder bei der Übermittlung von Daten etc. Typische Aussage: Der Betrieb erfolgt im zutrittsgeschützen LRZ-Rechnergebäude gemäß den aktuellen LRZ-Leitlinien zur Informationssicherheit. Die Zugangskontrolle erfolgt über eine Kopplung mit der LRZ-Benutzerverwaltung; insbesondere ist ein administrativer Zugriff nur von dedizierten Managementgateways aus möglich.",
     max: 1000
   },
   measuresBayDSGText: {
@@ -369,6 +388,27 @@ ProcDescContentSchema = new SimpleSchema({
     defaultValue: "Weitere Maßnahmen nach Art. 7 und 8 BayDSG",
     denyInsert: true,
     denyUpdate: true
+  }
+});
+
+ProcDescContentSchema = new SimpleSchema({
+  serviceShortTitle: {
+    type: String,
+    label: "Dienstkurzbezeichnung",
+    defaultValue: "Dienstkurzbezeichnung",
+    max: 80
+  },
+  sectionA: {
+    type: ProcDescASchema,
+    label: "Abschnitt 1"
+  },
+  sectionB: {
+    type: ProcDescBSchema,
+    label: "Abschnitt 2"
+  },
+  sectionC: {
+    type: ProcDescCSchema,
+    label: "Abschnitt 3"
   }
 });
 

@@ -38,7 +38,7 @@ Template.EditProcDesc.helpers({
     }
   },
   modificationDateFormatted: function () {
-    return moment(this.modifiedAt).format("YYYY-MM-DD HH:mm");
+    return moment(this.modifiedAt).format("DD.MM.YYYY HH:mm");
   },
   modifierName: function () {
     var user = Meteor.users.findOne(this.modifierId);
@@ -46,6 +46,10 @@ Template.EditProcDesc.helpers({
   },
   currentDate: function () {
     return new Date();
+  },
+  contactInfo: function() {
+    var contactInfo = ContactInfos.findOne({isDefault: true});
+    return contactInfo && contactInfo.content;
   }
 });
 

@@ -61,6 +61,27 @@ Router.route('/proc_desc_pdf/:_id', {
   where: 'server',
   action: function() {
 
+    /**
+    *   Solution from http://stackoverflow.com/questions/27734110/authentication-on-server-side-routes-in-meteor
+    **/
+    //Check the values in the cookies
+    var cookies = new Cookies( this.request ),
+      userId = cookies.get("meteor_user_id") || "",
+      token = cookies.get("meteor_token") || "";
+
+    //Check a valid user with this token exists
+    var user = Meteor.users.findOne({
+      _id: userId,
+      'services.resume.loginTokens.hashedToken' : Accounts._hashLoginToken(token)
+    });
+
+    //If they're not logged in tell them
+    if (!user) {
+      this.response.statusCode = 403;
+      return this.response.end('Zugriff Verboten!');
+    }
+    /** Solution end **/
+
     var webshot = Meteor.npmRequire('webshot');
     var fs      = Npm.require('fs');
     var Future = Npm.require('fibers/future');
@@ -82,9 +103,19 @@ Router.route('/proc_desc_pdf/:_id', {
 
     SSR.compileTemplate('proc_view', Assets.getText('procview.html'));
 
+    Template.proc_view.helpers({
+      dateFormatted: function (date) {
+        return moment(date).format("DD.MM.YYYY");
+      },
+      contactInfo: function() {
+        var contactInfo = ContactInfos.findOne({isDefault: true});
+        return contactInfo && contactInfo.content;
+      }
+    });
+
     // PREPARE DATA
     var data = ProcDescs.findOne(this.params._id);
-    if (data == "undefined") {
+    if (!data) {
       data = ProcDescsVermongo.findOne(this.params._id);
     }
     // console.log(data._id);

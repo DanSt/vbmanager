@@ -1,3 +1,5 @@
+accountsUIBootstrap3.setLanguage('de'); // for Germa
+
 Accounts.ui.config({
     requestPermissions: {},
     // passwordSignupFields: 'EMAIL_ONLY',
@@ -29,3 +31,13 @@ Accounts.ui.config({
         }
     }]
 });
+
+/**
+*   Solution from http://stackoverflow.com/questions/27734110/authentication-on-server-side-routes-in-meteor
+**/
+Tracker.autorun(function() {
+     //Update the cookie whenever they log in or out
+     Cookie.set("meteor_user_id", Meteor.userId());
+     Cookie.set("meteor_token", localStorage.getItem("Meteor.loginToken"));
+});
+/** Solution end **/

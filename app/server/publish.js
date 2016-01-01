@@ -16,3 +16,9 @@ Meteor.publish('allUsers', function (userId) {
        {fields: {'username': 1, 'emails': 1, 'profile': 1}});
   }
 });
+
+Meteor.publish('contact_infos', function (userId) {
+  if (typeof userId !== 'undefined') {
+    return ContactInfos.find();
+  }
+});

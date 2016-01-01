@@ -84,6 +84,10 @@ UserSchema = new SimpleSchema({
   profile: {
     type: UserProfileSchema,
     optional: true
+  },
+  heartbeat: {
+    type: Date,
+    optional: true
   }
 });
 

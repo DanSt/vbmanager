@@ -14,12 +14,19 @@
 
         {{#each proc_descs}}
         <tr>
-          <td>{{content.serviceShortTitle}}</td>
+          <td>
+            {{#linkTo route='viewProcDesc'}}
+              {{content.serviceShortTitle}}
+            {{/linkTo}}
+          </td>
           <td>{{modifierName}}</td>
           <td>{{modificationDateFormatted}} Uhr</td>
           <td>
+            {{#linkTo route='viewProcDesc'}}
+              <i class="fa fa-file-text-o"></i>
+            {{/linkTo}}
             {{#linkTo route='editProcDesc'}}
-              <i class="fa fa-pencil-square-o"></i>
+              <i class="fa fa-pencil"></i>
             {{/linkTo}}
             <a href="#" class="pdf">
               <i class="fa fa-file-pdf-o"></i>

@@ -17,9 +17,12 @@ Template.InsertProcDesc.events({
 /*****************************************************************************/
 Template.InsertProcDesc.helpers({
   currentDate: function() {
-    var date = new Date();
     moment.locale('de');
-    return moment(date).format('YYYY-MM-DD');
+    return moment(new Date()).format('DD.MM.YYYY');
+  },
+  contactInfo: function() {
+    var contactInfo = ContactInfos.findOne({isDefault: true});
+    return contactInfo && contactInfo.content;
   }
 });
 
