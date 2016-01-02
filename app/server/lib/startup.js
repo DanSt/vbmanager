@@ -45,8 +45,8 @@ Meteor.startup(function () {
         email: 'admin@pdmanager.net',
         password: 'nimda1234321',
         profile: {
-            first_name: 'Admin',
-            last_name: 'User'
+            firstName: 'Admin',
+            lastName: 'User'
         }
     });
   }
