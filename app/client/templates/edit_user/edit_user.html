@@ -1,15 +1,10 @@
 <template name="EditUser">
-  {{#autoForm id="UserProfileEdit" collection="Meteor.users"  doc=currentUser type="update"}}
+  {{#autoForm id="UserProfileEdit" collection="Meteor.users" doc=currentUser type="update"}}
     <legend>Profil von {{currentUser.profile.lastName}}, {{currentUser.profile.firstName}}:</legend>
     <table class="table table-hover" width="50%">
       <tbody>
         <tr>
-          <td>Username:</td><td>{{currentUser.username}}</td>
-          <td></td><td></td>
-        </tr>
-        <tr>
-          <td>E-Mail:</td><td>{{currentUser.emails.[0].address}}</td>
-          <td></td><td></td>
+          <td>Username:</td><td colspan=3>{{currentUser.username}}</td>
         </tr>
         <tr>
           <td>Vorname:</td><td>{{> afQuickField name="profile.firstName" label-style="display: none"}}</td>

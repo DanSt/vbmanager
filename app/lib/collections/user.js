@@ -1,28 +1,3 @@
-/*Accounts.createUser({
-  email: user.email,
-  password: user.password,
-  firstName: user.firstName,
-  lastName: user.lastName
-});*/
-
-Meteor.users.after.update(function (userId, doc, fieldNames, modifier) {
-  if (doc.profile && doc.username && fieldNames["username"]) {
-    var newUsername = doc.profile.firstName.toUpperCase().charAt(0) + doc.profile.lastName;
-
-    if (newUsername !== doc.username) {
-      var counter = 0;
-      var baseUsername = newUsername;
-      while (Meteor.users.find({username: baseUsername}).count() > 0) {
-        counter = counter + 1;
-        newUsername = baseUsername + counter;
-      }
-      if (Meteor.isServer) {
-        Meteor.users.direct.update({_id: doc._id}, {$set: {username: newUsername}});
-      }
-    }
-  }
-});
-
 // Meteor.users.before.insert(function (userId, doc) {
 //   var newUsername = doc.profile.firstName.toUpperCase().charAt(0) + doc.profile.lastName;
 //
@@ -64,14 +39,19 @@ UserSchema = new SimpleSchema({
   },
   emails: {
     type: [Object],
-    optional: true
+    // label: "E-Mails",
+    optional: false,
+    minCount: 1,
+    maxCount: 1
   },
   "emails.$.address": {
     type: String,
-    regEx: SimpleSchema.RegEx.Email
+    label: "Adresse",
+    regEx: /^[a-z0-9_\\.\\-]+@lrz\.de$/
   },
   "emails.$.verified": {
-    type: Boolean
+    type: Boolean,
+    label: "ist verifiziert"
   },
   createdAt: {
     type: Date
@@ -119,5 +99,23 @@ if (Meteor.isServer) {
     user.profile = options.profile;
 
     return user;
+  });
+
+  Meteor.users.after.update(function (userId, doc, fieldNames, modifier) {
+    if (doc.profile && doc.username && fieldNames["username"]) {
+      var newUsername = doc.profile.firstName.toUpperCase().charAt(0) + doc.profile.lastName;
+
+      if (newUsername !== doc.username) {
+        var counter = 0;
+        var baseUsername = newUsername;
+        while (Meteor.users.find({username: baseUsername}).count() > 0) {
+          counter = counter + 1;
+          newUsername = baseUsername + counter;
+        }
+        if (Meteor.isServer) {
+          Meteor.users.direct.update({_id: doc._id}, {$set: {username: newUsername}});
+        }
+      }
+    }
   });
 }
