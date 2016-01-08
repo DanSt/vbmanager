@@ -6,6 +6,6 @@ Accounts.config({
   forbidClientAccountCreation : true
 });
 
-Accounts.validateNewUser(function (user) {
-  return false
-});
+// Accounts.validateNewUser(function (user) {
+//   return false
+// });

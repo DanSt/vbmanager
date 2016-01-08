@@ -1,7 +1,10 @@
 Router.configure({
   layoutTemplate: 'MasterLayout',
   loadingTemplate: 'Loading',
-  notFoundTemplate: 'NotFound'
+  notFoundTemplate: 'NotFound',
+  onAfterAction: function() {
+    window.scrollTo(0, 0);
+  }
 });
 
 Router.route('/', {

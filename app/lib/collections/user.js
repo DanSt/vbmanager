@@ -40,7 +40,7 @@ UserSchema = new SimpleSchema({
   emails: {
     type: [Object],
     // label: "E-Mails",
-    optional: false,
+    optional: true,
     minCount: 1,
     maxCount: 1
   },
@@ -97,6 +97,7 @@ if (Meteor.isServer) {
     }
     user.username = newUsername;
     user.profile = options.profile;
+    user.emails = options.emails;
 
     return user;
   });

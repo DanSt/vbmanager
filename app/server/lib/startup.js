@@ -42,11 +42,14 @@ Meteor.startup(function () {
   if ( Meteor.users.find().count() === 0 ) {
     Accounts.createUser({
         username: 'admin',
-        email: 'admin@pdmanager.net',
+        emails: [{
+          address: 'admin@lrz.de',
+          verified: true
+        }],
         password: 'nimda1234321',
         profile: {
-            firstName: 'Admin',
-            lastName: 'User'
+          firstName: 'Admin',
+          lastName: 'User'
         }
     });
   }
