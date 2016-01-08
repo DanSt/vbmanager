@@ -73,7 +73,7 @@ Template.ViewProcDescVersion.helpers({
     if (!originalId) {
       originalId = this._id;
     }
-    var versions = ProcDescsVermongo.find({ref: originalId});
+    var versions = ProcDescsVermongo.find({ref: originalId}, {sort: {_version: -1});
     return versions;
   },
   getOriginal: function() {
