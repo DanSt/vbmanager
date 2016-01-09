@@ -174,7 +174,7 @@ ProcDescBSchema = new SimpleSchema({
     type: String,
     label: "Art der gespeicherten Daten",
     defaultValue: "1. LRZ-Kennung (individuelle Authentifizierung) 2. E-Mail-Adresse (zur Kontaktaufnahme). ...",
-    max: 400
+    max: 2000
   },
   typeOfStoredDataText: {
     type: String,
@@ -185,8 +185,8 @@ ProcDescBSchema = new SimpleSchema({
   circleAffected: {
     type: String,
     label: "Kreis der Betroffenen",
-    defaultValue: "SIM-Platformname",
-    max: 100
+    defaultValue: "Von dem Verfahren sind alle LRZ-Benutzer betroffen, die eine LRZ-Kennung mit Berechtigung für den Dienst SIM-Plattformname haben.",
+    max: 2000
   },
   circleAffectedText: {
     type: String,
@@ -344,7 +344,7 @@ ProcDescCSchema = new SimpleSchema({
     type: String,
     label: "Eingesetztes Betriebssystem",
     defaultValue: "Z.B. SLES oder Windows Server mit Versionsangabe",
-    max: 100
+    max: 200
   },
   operatingSystemText: {
     type: String,
@@ -356,7 +356,7 @@ ProcDescCSchema = new SimpleSchema({
     type: String,
     label: "Eingesetzte Software",
     defaultValue: "Bezeichnung der Software",
-    max: 200
+    max: 2000
   },
   usedSoftwareText: {
     type: String,
@@ -368,7 +368,7 @@ ProcDescCSchema = new SimpleSchema({
     type: String,
     label: "Maßnahmen zur Sicherstellung der Verfügbarkeit der Daten",
     defaultValue: "Hier sollte, falls personenbezogene Daten lokal vorgehalten werden, z.B. auf Backup, Hardware-Redundanz, Virenbekämpfung, Wiederanlaufverfahren, Notfallkonzepte etc. eingegangen werden. Ansonsten reicht ein Verweis darauf, dass die personenbezogenen Daten z.B. aus SIM übernommen werden.",
-    max: 400
+    max: 2000
   },
   measuresForAvailabilityText: {
     type: String,
@@ -380,7 +380,7 @@ ProcDescCSchema = new SimpleSchema({
     type: String,
     label: "Weitere Maßnahmen nach Art. 7 und 8 BayDSG",
     defaultValue: "Hier folgen (auf das Wesentliche reduziert) Aussagen zu Zutritts- und Zugangskontrollkonzepten; Protokollierung von Eingaben; relevante Richtlinien und Arbeitsanweisungen; Maßnahmen zur Absicherung gegen unbefugten Zugriff Dritter; Sicherung der Vertraulichkeit beim Transport oder bei der Übermittlung von Daten etc. Typische Aussage: Der Betrieb erfolgt im zutrittsgeschützen LRZ-Rechnergebäude gemäß den aktuellen LRZ-Leitlinien zur Informationssicherheit. Die Zugangskontrolle erfolgt über eine Kopplung mit der LRZ-Benutzerverwaltung; insbesondere ist ein administrativer Zugriff nur von dedizierten Managementgateways aus möglich.",
-    max: 1000
+    max: 2000
   },
   measuresBayDSGText: {
     type: String,
