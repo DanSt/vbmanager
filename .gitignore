@@ -3,3 +3,4 @@ build
 config
 bin
 app/.meteor/local
+app/packages/npm-container/.npm

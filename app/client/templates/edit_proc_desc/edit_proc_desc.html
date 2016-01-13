@@ -99,9 +99,9 @@
         {{> afQuickField name="content.sectionB.typeOfStoredData" rows=4 label-style="display: none" style="width: 80%"}}
 
         <h4>B.4 Kreis der Betroffenen</h4>
-        <p>{{> afQuickField name="content.sectionB.circleAffected" label-style="display: none" style="width: 100%"}}</p>
+        <p>{{> afQuickField name="content.sectionB.circleAffected" rows=4 label-style="display: none" style="width: 100%"}}</p>
         <h4>B.5 Art der regelmäßig zu übermittelnden Daten und deren Empfänger</h4>
-        {{> afQuickField name="content.sectionB.typeOfTransmittedData" label-style="display: none" style="width: 100%"}}
+        {{> afQuickField name="content.sectionB.typeOfTransmittedData" rows=4 label-style="display: none" style="width: 100%"}}
         <h4>B.6 Regelfristen für die Löschung der Daten oder die Prüfung der Löschung</h4>
         {{> afQuickField name="content.sectionB.deletionDeadline1"}}
         {{> afQuickField name="content.sectionB.deletionDeadline2"}}
@@ -153,9 +153,9 @@
     <br>
     <p>
       <h5>Änderungshistorie:</h5>
-      {{#linkTo route='viewProcDesc'}}
+      <!-- {{#linkTo route='viewProcDesc'}}
         <li>{{content.serviceShortTitle}} - {{longDateFormatted modifiedAt}} - version: {{_version}} (aktuell) - {{isVerified}}</li>
-      {{/linkTo}}
+      {{/linkTo}} -->
       {{#each versions}}
       {{#linkTo route='viewProcDescVersion'}}
         <li>{{content.serviceShortTitle}} - {{longDateFormatted modifiedAt}} - version: {{_version}} - {{isVerified}}</li>

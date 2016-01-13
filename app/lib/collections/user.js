@@ -97,7 +97,9 @@ if (Meteor.isServer) {
     }
     user.username = newUsername;
     user.profile = options.profile;
-    user.emails = options.emails;
+    if (options.emails) {
+      user.emails = options.emails;
+    }
 
     return user;
   });

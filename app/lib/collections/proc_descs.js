@@ -1,18 +1,18 @@
 ProcDescs = new Mongo.Collection('proc_descs').vermongo({timestamps: true, userId: 'modifierId', ignoreFields: []});
 ProcDescsVermongo = ProcDescs.getVersionCollection();
 
-ProcDescs.before.insert(function (userId, doc) {
-  ProcDescContentSchema.clean(doc.content);
-  var hash = CryptoJS.SHA512(JSON.stringify(doc.content)).toString();
-  doc.documentHash = hash;
-});
+// ProcDescs.before.insert(function (userId, doc) {
+//   ProcDescContentSchema.clean(doc.content);
+//   var hash = CryptoJS.SHA512(JSON.stringify(doc.content)).toString();
+//   doc.documentHash = hash;
+// });
 
-ProcDescs.after.update(function (userId, doc, fieldNames, modifier, options) {
-  var hash = CryptoJS.SHA512(JSON.stringify(doc.content)).toString();
-  if (Meteor.isServer) {
-    ProcDescs.direct.update({_id: doc._id}, {$set: {documentHash: hash}});
-  }
-});
+// ProcDescs.after.update(function (userId, doc, fieldNames, modifier, options) {
+//   var hash = CryptoJS.SHA512(JSON.stringify(doc.content)).toString();
+//   if (Meteor.isServer) {
+//     ProcDescs.direct.update({_id: doc._id}, {$set: {documentHash: hash}});
+//   }
+// });
 
 BoolValue = new SimpleSchema({
   value: {

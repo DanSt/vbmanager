@@ -502,9 +502,9 @@ IIW7MImuJKkHUv5n5P8ATcohk4PSp9wAAAAASUVORK5CYII=" alt="LRZ Logo">
     <br>
     <p>
       <h5>Änderungshistorie:</h5>
-      {{#linkTo route='viewProcDesc' data=getOriginal}}
+      <!-- {{#linkTo route='viewProcDesc' data=getOriginal}}
         <li>{{getOriginal.content.serviceShortTitle}} - Bearbeiter: {{modifierName}} - {{longDateFormatted getOriginal.modifiedAt}} - version: {{getOriginal._version}} - {{isVerified getOriginal}}</li>
-      {{/linkTo}}
+      {{/linkTo}} -->
       {{#each getVersions}}
         {{#linkTo route='viewProcDescVersion'}}
           <li>{{content.serviceShortTitle}} - Bearbeiter: {{modifierName}} - {{longDateFormatted modifiedAt}} - version: {{_version}} - {{isVerified this}}</li>
