@@ -14,12 +14,12 @@ UserProfileSchema = new SimpleSchema({
   firstName: {
     type: String,
     label: "Vorname",
-    regEx: /^[a-z0-9A-Z_]{2,25}$/
+    regEx: /^[a-z0-9A-Z_ ]{2,25}$/
   },
   lastName: {
     type: String,
     label: "Nachname",
-    regEx: /^[a-z0-9A-Z_]{2,25}$/
+    regEx: /^[a-z0-9A-Z_ ]{2,25}$/
   },
   birthday: {
     type: Date,
@@ -87,6 +87,7 @@ if (Meteor.isServer) {
   });
 
   Accounts.onCreateUser(function(options, user) {
+    var lastName = options.profile.lastName.replace(" ", "_");
     var newUsername = options.profile.firstName.toUpperCase().charAt(0) + options.profile.lastName;
 
     var counter = 0;
@@ -106,7 +107,8 @@ if (Meteor.isServer) {
 
   Meteor.users.after.update(function (userId, doc, fieldNames, modifier) {
     if (doc.profile && doc.username && fieldNames["username"]) {
-      var newUsername = doc.profile.firstName.toUpperCase().charAt(0) + doc.profile.lastName;
+      var lastName = doc.profile.lastName.replace(" ", "_");
+      var newUsername = doc.profile.firstName.toUpperCase().charAt(0) + lastName;
 
       if (newUsername !== doc.username) {
         var counter = 0;

@@ -1,10 +1,7 @@
 Router.configure({
   layoutTemplate: 'MasterLayout',
   loadingTemplate: 'Loading',
-  notFoundTemplate: 'NotFound',
-  onAfterAction: function() {
-    window.scrollTo(0, 0);
-  }
+  notFoundTemplate: 'NotFound'
 });
 
 Router.route('/', {
@@ -32,6 +29,9 @@ Router.route('/proc_desc/:_id', {
   name: 'editProcDesc',
   controller: 'ProcedureDescriptionsController',
   action: 'edit',
+  onAfterAction: function() {
+    window.scrollTo(0, 0);
+  },
   where: 'client'
 });
 
@@ -46,6 +46,9 @@ Router.route('/proc_desc_version/:_id', {
   name: 'viewProcDescVersion',
   controller: 'ProcedureDescriptionVersionController',
   action: 'view',
+  onAfterAction: function() {
+    window.scrollTo(0, 0);
+  },
   where: 'client'
 });
 
@@ -53,6 +56,9 @@ Router.route('/proc_desc_view/:_id', {
   name: 'viewProcDesc',
   controller: 'ProcedureDescriptionsController',
   action: 'view',
+  onAfterAction: function() {
+    window.scrollTo(0, 0);
+  },
   where: 'client'
 });
 
