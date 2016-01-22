@@ -8,6 +8,10 @@ Template.Home.events({
 /* Home: Helpers */
 /*****************************************************************************/
 Template.Home.helpers({
+
+  getSigReq: function doIt() {
+    return JSON.stringify(ReactiveMethod.call('sigReq', 'test'));
+  }
 });
 
 /*****************************************************************************/

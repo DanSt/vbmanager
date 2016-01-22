@@ -21,6 +21,7 @@ rajit:bootstrap3-datepicker-de
 mickaelfm:vermongo
 anti:i18n
 johnschult:crypto-sha512
+jparker:crypto-sha256
 matb33:collection-hooks
 meteorhacks:ssr
 meteorhacks:npm
@@ -29,3 +30,5 @@ npm-container
 zuuk:stale-session
 mrt:cookies
 thepumpinglemma:cookies
+simple:reactive-method
+http

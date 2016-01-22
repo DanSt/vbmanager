@@ -52,8 +52,8 @@ Meteor.Collection.prototype.vermongo = function(op) {
       if(Meteor.isServer) { // avoid duplicated insertion
         // copy doc to versions collection
         var savedDoc = _.extend({}, doc); // shallow copy
-        if(typeof(savedDoc._id) !== 'undefined') delete savedDoc._id;
-        savedDoc.ref = doc._id;
+        if(typeof(savedDoc._id) !== 'undefined' && !savedDoc._deleted) delete savedDoc._id;
+        if(!savedDoc_deleted) savedDoc.ref = doc._id;
 
         _versions_collection.insert(savedDoc);
       }
