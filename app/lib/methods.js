@@ -26,7 +26,6 @@ Meteor.methods({
       var Future = Npm.require('fibers/future');
       var fut = new Future();
       var httpreq = Meteor.npmRequire('httpreq');
-      var openssl = Meteor.npmRequire('openssl-wrapper');
 
       var hashValue = CryptoJS.SHA256(content).toString();
 
