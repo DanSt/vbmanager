@@ -60,8 +60,27 @@ Meteor.methods({
       // return binaryResult.toString('base64');
 
       var fut2 = new Future();
-      openssl.exec('ts', binaryResult.body, {reply: true, in: '/dev/stdin', text: true}, function(err, buffer) {
-        fut2.return(buffer.toString());
+      /**
+       *  Doesn't work in production environment because simple pipe of spawn does not work to pipe input.
+       *  Must be done manually like in example a bit lower with spawn.
+       */
+      // openssl.exec('ts', binaryResult.body, {reply: true, in: '/dev/stdin', text: true}, function(err, buffer) {
+      //   if (err) {
+      //     console.log(err);
+      //   }
+      //   fut2.return(buffer.toString());
+      // });
+
+      var spawn = Npm.require('child_process').spawn;
+
+      var command = spawn('/bin/sh', ['-c', 'echo ' + binaryResult.body.toString('base64') + ' | base64 --decode | openssl ts -reply -in /dev/stdin -text']);
+
+      command.stdout.on('data', function (data) {
+        fut2.return(data.toString());
+      });
+
+      command.stderr.on('data', function (data) {
+        console.log('stderr: ' + data);
       });
 
       var timestampInfo = fut2.wait();

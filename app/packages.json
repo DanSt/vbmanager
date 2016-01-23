@@ -2,6 +2,5 @@
  "webshot":"0.15.4",
  "simple-xml":"0.0.9",
  "jsrsasign":"5.0.5",
- "httpreq":"0.4.16",
- "openssl-wrapper":"0.2.3"
+ "httpreq":"0.4.16"
 }
