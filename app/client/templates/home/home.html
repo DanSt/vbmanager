@@ -14,8 +14,8 @@
     </p>
     <p>Um die Funktionalitäten dieses Tools zu verwenden, müssen Sie sich anmelden.</p>
     {{#if currentUser}}
-      <h3>Base64 encoded Timestamp Response from http://zeitstempel.dfn.de for string 'test':</h3>
-      <div style="width: 700px; word-wrap: break-word">{{getSigReq}}</div>
+      <h3>Timestamp Response from http://zeitstempel.dfn.de for string 'test':</h3>
+      <div class="ownblock"><pre>{{getSigReq}}</pre></div>
     {{/if}}
   </div>
 </template>

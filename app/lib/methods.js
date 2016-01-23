@@ -25,6 +25,8 @@ Meteor.methods({
       var fs      = Npm.require('fs');
       var Future = Npm.require('fibers/future');
       var fut = new Future();
+      var httpreq = Meteor.npmRequire('httpreq');
+      var openssl = Meteor.npmRequire('openssl-wrapper');
 
       var hashValue = CryptoJS.SHA256(content).toString();
 
@@ -42,15 +44,40 @@ Meteor.methods({
       pemBody = pemBody.replace(/\r\n$/, '');
 
       var b = new Buffer(pemBody, 'base64')
-      // var decodedString = b.toString();
 
-      HTTP.call("POST", "http://zeitstempel.dfn.de", {headers: {'Content-Type': 'application/timestamp-query'}, content: b}, function(error, result) {
-        fut.return(result);
+      httpreq.post('http://zeitstempel.dfn.de', {headers: {'Content-Type': 'application/timestamp-query'}, binary: true, body: b}, function (err, res) {
+        if (err) {
+          console.log(err);
+        } else {
+          fut.return(res);
+        }
       });
 
-      var result = fut.wait();
+      var binaryResult = fut.wait();
+      /**
+       *  return entire response as base64
+       */
+      // return binaryResult.toString('base64');
 
-      return new Buffer(result.content).toString('base64');
+      var fut2 = new Future();
+      openssl.exec('ts', binaryResult.body, {reply: true, in: '/dev/stdin', text: true}, function(err, buffer) {
+        fut2.return(buffer.toString());
+      });
+
+      var timestampInfo = fut2.wait();
+
+      /**
+       *  Convert into ASNstructure and base64
+       */
+      // // Convert from binary DER to hexadecimal DER
+      // var hexResult = binaryResult.body.toString('hex');
+      // // Convert from hexadecimally represented DER to ASN1
+      // var ASN1Result = jsrsasign.ASN1HEX.dump(hexResult);
+      // // Convert to Base64
+      // var buffer = new Buffer(ASN1Result);
+      // var base64Result = buffer.toString('base64');
+
+      return timestampInfo;
     }
   }
 });

@@ -10,7 +10,7 @@ Template.Home.events({
 Template.Home.helpers({
 
   getSigReq: function doIt() {
-    return JSON.stringify(ReactiveMethod.call('sigReq', 'test'));
+    return ReactiveMethod.call('sigReq', 'test');
   }
 });
 
