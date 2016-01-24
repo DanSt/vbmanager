@@ -8,9 +8,11 @@ Template.Home.events({
 /* Home: Helpers */
 /*****************************************************************************/
 Template.Home.helpers({
-
-  getSigReq: function doIt() {
+  getSigReq: function () {
     return ReactiveMethod.call('sigReq', 'test');
+  },
+  createMerkle: function () {
+    return ReactiveMethod.call('createMerkle');
   }
 });
 

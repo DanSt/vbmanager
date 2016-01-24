@@ -31,3 +31,4 @@ zuuk:stale-session
 mrt:cookies
 thepumpinglemma:cookies
 simple:reactive-method
+peerlibrary:assert

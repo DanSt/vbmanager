@@ -2,5 +2,7 @@
  "webshot":"0.15.4",
  "simple-xml":"0.0.9",
  "jsrsasign":"5.0.5",
- "httpreq":"0.4.16"
+ "httpreq":"0.4.16",
+ "merkle-tree":"0.0.14",
+ "merkle":"0.3.1"
 }

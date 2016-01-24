@@ -16,6 +16,10 @@
     {{#if currentUser}}
       <h3>Timestamp Response from http://zeitstempel.dfn.de for string 'test':</h3>
       <div class="ownblock"><pre>{{getSigReq}}</pre></div>
+      <h3>Merkle Tree of all versions of documents in system:</h3>
+      <div class="ownblock">
+        {{createMerkle}}
+      </div>
     {{/if}}
   </div>
 </template>
