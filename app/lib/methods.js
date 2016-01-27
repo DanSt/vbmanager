@@ -19,8 +19,38 @@ Meteor.methods({
       return xmlDocument;
     }
   },
-  'proc_desc_pdf': function(id) {
+  'proc_desc_pdf': function(userid, token, id) {
     if (Meteor.isServer) {
+
+      /**
+      *   Solution from http://stackoverflow.com/questions/27734110/authentication-on-server-side-routes-in-meteor
+      **/
+      //Check a valid user with this token exists
+      var user = Meteor.users.findOne({
+        _id: userid,
+        'services.resume.loginTokens.hashedToken' : Accounts._hashLoginToken(token)
+      });
+
+      //If they're not logged in tell them
+      if (!user) {
+        return "";
+      }
+
+      // PREPARE DATA
+      var data = ProcDescs.findOne(id);
+      var collection = ProcDescs;
+      if (!data) {
+        data = ProcDescsVermongo.findOne(id);
+        collection = ProcDescsVermongo;
+      }
+      // console.log(data._id);
+
+      var pdf = "";
+
+      if (data.archive && data.archive.files && data.archive.files.originalDocument) {
+        return data.archive.files.originalDocument;
+      }
+
       var webshot = Meteor.npmRequire('webshot');
       var fs      = Npm.require('fs');
       var Future = Npm.require('fibers/future');
@@ -51,13 +81,6 @@ Meteor.methods({
           return contactInfo && contactInfo.content;
         }
       });
-
-      // PREPARE DATA
-      var data = ProcDescs.findOne(id);
-      if (!data) {
-        data = ProcDescsVermongo.findOne(id);
-      }
-      // console.log(data._id);
 
       var html_string = SSR.render('layout', {
         css: css,
@@ -91,6 +114,8 @@ Meteor.methods({
 
       var pdfData = fut.wait();
       var base64Pdf = new Buffer(pdfData).toString('base64');
+
+      collection.direct.update({_id: this._id}, {$set: {"archive.files.originalDocument": base64Pdf}}, {getAutoValues: false, validate: false});
 
       return base64Pdf;
     }

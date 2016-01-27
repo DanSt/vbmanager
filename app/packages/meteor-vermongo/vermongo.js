@@ -131,7 +131,7 @@ Meteor.Collection.prototype.vermongo = function(op) {
 
       var hash = CryptoJS.SHA512(JSON.stringify(doc.content)).toString();
       if (Meteor.isServer) {
-        collection.direct.update({_id: doc._id}, {$set: {documentHash: hash}});
+        collection.direct.update({_id: doc._id}, {$set: {documentHash: hash}}, {validate: false, getAutoValues: false});
       }
 
       doc.documentHash = hash;

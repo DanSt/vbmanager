@@ -27,6 +27,14 @@ Template.ViewProcDescVersion.events({
     });
   },
   'click .approve': function() {
+    var user_id = Meteor.userId();
+    var token = localStorage.getItem("Meteor.loginToken");
+
+    var generatedPDF = Meteor.call('proc_desc_pdf', user_id, token, this._id);
+
+    if (this.archive && this.archive.files && !this.archive.files.OriginalDocument) {
+      this.archive.files.originalDocument = generatedPDF;
+    }
     Router.go('/approve_proc_desc');
   }
 });

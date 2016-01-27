@@ -81,28 +81,22 @@ Router.route('/proc_desc_pdf/:_id', {
     *   Solution from http://stackoverflow.com/questions/27734110/authentication-on-server-side-routes-in-meteor
     **/
     //Check the values in the cookies
-    var cookies = new Cookies( this.request ),
-      userId = cookies.get("meteor_user_id") || "",
-      token = cookies.get("meteor_token") || "";
-
-    //Check a valid user with this token exists
-    var user = Meteor.users.findOne({
-      _id: userId,
-      'services.resume.loginTokens.hashedToken' : Accounts._hashLoginToken(token)
-    });
-
-    //If they're not logged in tell them
-    if (!user) {
-      this.response.statusCode = 403;
-      return this.response.end('Zugriff Verboten!');
-    }
+    var cookies = new Cookies( this.request );
+    var userid = cookies.get("meteor_user_id") || "";
+    var token = cookies.get("meteor_token") || "";
     /** Solution end **/
 
-    console.log("inside");
-    // retrieve base64 data of pdf and convert it to binary
-    var res = Meteor.call('proc_desc_pdf', this.params._id);
+    var collection = ProcDescs;
+    var doc = ProcDescs.findOne({_id: this.params._id});
+    if (!doc) {
+      collection = ProcDescsVermongo;
+      doc = ProcDescsVermongo.findOne({_id: this.params._id});
+    }
 
-    var pdfData = new Buffer(res, 'base64');
+    // retrieve base64 data of pdf and convert it to binary
+    var pdf = Meteor.call('proc_desc_pdf', userid, token, this.params._id);;
+
+    var pdfData = new Buffer(pdf, 'base64');
 
     this.response.writeHead(200, {
       'Content-Type': 'application/pdf',

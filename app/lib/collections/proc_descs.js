@@ -411,16 +411,128 @@ ProcDescContentSchema = new SimpleSchema({
   }
 });
 
+ProcDescArchiveFilesSchema = new SimpleSchema({
+  originalDocument: {
+    type: String,
+    optional: true
+  },
+  signature: {
+    type: String,
+    optional: true
+  },
+  signatureCert: {
+    type: String,
+    optional: true
+  }
+});
+
+ProcDescArchiveMetaDataSchema = new SimpleSchema({
+  documentId: {
+    type: String,
+    max: 200,
+    optional: true
+  },
+  documentTitle: {
+    type: String,
+    max: 400,
+    optional: true
+  },
+  creator: {
+    type: String,
+    max: 300,
+    optional: true
+  },
+  creationDate: {
+    type: String,
+    optional: true
+  },
+  documentFileName: {
+    type: String,
+    max: 300,
+    optional: true
+  },
+  documentDigest: {
+    type: String,
+    max: 200,
+    optional: true
+  },
+  documentDigestAlgorithm: {
+    type: String,
+    max: 200,
+    defaultValue: "http://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.180-4.pdf",
+    optional: true
+  },
+  signatureDigestFileName: {
+    type: String,
+    max: 300,
+    optional: true
+  },
+  signatureDigest: {
+    type: String,
+    max: 200,
+    optional: true
+  },
+  signatureDigestAlgorithm: {
+    type: String,
+    max: 200,
+    defaultValue: "http://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.180-4.pdf",
+    optional: true
+  },
+  signatureCertDigestFileName: {
+    type: String,
+    max: 300,
+    optional: true,
+    optional: true
+  },
+  signatureCertDigest: {
+    type: String,
+    max: 200,
+    optional: true,
+    optional: true
+  },
+  signatureCertDigestAlgorithm: {
+    type: String,
+    max: 200,
+    optional: true,
+    defaultValue: "http://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.180-4.pdf",
+    optional: true
+  },
+  versionNumber: {
+    type: Number,
+    optional: true
+  }
+});
+
+ProcDescArchiveSchema = new SimpleSchema({
+  metaData: {
+    type: ProcDescArchiveMetaDataSchema,
+    optional: true
+  },
+  files: {
+    type: ProcDescArchiveFilesSchema,
+    optional: true
+  }
+});
+
 ProcDescSchema = new SimpleSchema({
   documentHash: {
     type: String,
-    label: "Hash-value of document",
+    label: "Hash des Inhalts",
     max: 200,
     optional: true
   },
   content: {
     type: ProcDescContentSchema,
     label: "Inhalt der Verfahrensbeschreibung"
+  },
+  archive: {
+    type: ProcDescArchiveSchema,
+    optional: true
+  },
+  approved: {
+    type: Boolean,
+    defaultValue: false,
+    optional: true
   }
 });
 
