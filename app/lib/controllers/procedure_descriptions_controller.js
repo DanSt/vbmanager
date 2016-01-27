@@ -21,6 +21,8 @@ ProcedureDescriptionsController = RouteController.extend({
     return ProcDescs.findOne({_id: this.params._id});
   },
 
+  // actions to be performed
+
   insert: function () {
     this.render('InsertProcDesc', {});
   },
@@ -35,6 +37,10 @@ ProcedureDescriptionsController = RouteController.extend({
 
   view: function () {
     this.render('ViewProcDescVersion', {});
+  },
+
+  approve: function() {
+    this.render('ApproveProcDesc', {});
   }
 
 });

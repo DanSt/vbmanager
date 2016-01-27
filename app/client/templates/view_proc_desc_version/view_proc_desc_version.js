@@ -25,6 +25,9 @@ Template.ViewProcDescVersion.events({
         var myWindow = window.open(uriContent, 'testdocument.xml');
       }
     });
+  },
+  'click .approve': function() {
+    Router.go('/approve_proc_desc');
   }
 });
 
