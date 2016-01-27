@@ -19,8 +19,8 @@ Meteor.methods({
       return xmlDocument;
     }
   },
-  'proc_desc_pdf': function(content) {
-    if (Meteor.userId() && Meteor.isServer) {
+  'proc_desc_pdf': function(id) {
+    if (Meteor.isServer) {
       var webshot = Meteor.npmRequire('webshot');
       var fs      = Npm.require('fs');
       var Future = Npm.require('fibers/future');
@@ -53,9 +53,9 @@ Meteor.methods({
       });
 
       // PREPARE DATA
-      var data = ProcDescs.findOne(this.params._id);
+      var data = ProcDescs.findOne(id);
       if (!data) {
-        data = ProcDescsVermongo.findOne(this.params._id);
+        data = ProcDescsVermongo.findOne(id);
       }
       // console.log(data._id);
 
@@ -90,8 +90,9 @@ Meteor.methods({
       });
 
       var pdfData = fut.wait();
+      var base64Pdf = new Buffer(pdfData).toString('base64');
 
-      return new Buffer(pdfData).toString('base64');
+      return base64Pdf;
     }
   },
   'sigReq': function(content) {

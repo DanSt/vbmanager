@@ -8,9 +8,9 @@ Template.ApproveProcDesc.events({
 /* ApproveProcDesc: Helpers */
 /*****************************************************************************/
 Template.ApproveProcDesc.helpers({
-  // getSigReq: function () {
-  //   return ReactiveMethod.call('sigReq', 'test');
-  // },
+  getSigReq: function () {
+    return ReactiveMethod.call('sigReq', 'test');
+  },
   // createMerkle: function () {
   //   return ReactiveMethod.call('createMerkle');
   // }

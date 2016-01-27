@@ -98,15 +98,15 @@ Router.route('/proc_desc_pdf/:_id', {
     }
     /** Solution end **/
 
+    console.log("inside");
+    // retrieve base64 data of pdf and convert it to binary
+    var res = Meteor.call('proc_desc_pdf', this.params._id);
 
+    var pdfData = new Buffer(res, 'base64');
 
-
-    /**
-    *   return PDF for download
-    */
     this.response.writeHead(200, {
       'Content-Type': 'application/pdf',
-      'Content-Disposition': 'attachment; filename="verfahrensbeschreibung-'+data._id+'.pdf"',
+      'Content-Disposition': 'attachment; filename="verfahrensbeschreibung-'+this.params._id+'.pdf"',
       'Content-Length': pdfData.length
     });
     this.response.write(pdfData);
