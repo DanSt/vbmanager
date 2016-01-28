@@ -70,6 +70,12 @@ Router.route('/proc_desc_view/:_id', {
   where: 'client'
 });
 
+Router.route('/receive', {
+  name: 'serverReceiver',
+  action: 'receiveSigned',
+  where: 'server'
+});
+
 /**
 *   Reference from https://github.com/ryanswapp/meteor-pdf-tutorial
 */
