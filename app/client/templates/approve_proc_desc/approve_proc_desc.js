@@ -15,17 +15,19 @@ Template.ApproveProcDesc.events({
 /*****************************************************************************/
 Template.ApproveProcDesc.helpers({
   getBase64Pdf: function () {
-    return context.states.get("originalDocument");
+    var pdf = context.states.get("originalDocument");
+    return pdf;
   },
   getReceiveToken: function() {
     return (Math.random()*1e32).toString(36);
   },
   getUserToken: function() {
-    var token = localStorage.getItem("Meteor.loginToken");
+    return localStorage.getItem("Meteor.loginToken");
+  },
+  getUrl: function() {
+    var url = Meteor.absoluteUrl();
+    return url;
   }
-  // createMerkle: function () {
-  //   return ReactiveMethod.call('createMerkle');
-  // }
 });
 
 /*****************************************************************************/

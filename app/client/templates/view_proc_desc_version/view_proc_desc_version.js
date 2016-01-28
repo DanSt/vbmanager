@@ -41,13 +41,14 @@ Template.ViewProcDescVersion.events({
         console.log(err);
       }
 
-      if (!context.states) {
-        context.states = new ReactiveDict();
+      if (res) {
+        if (!context.states) {
+          context.states = new ReactiveDict();
+        }
+        context.states.set('originalDocument', res);
+
+        Router.go('/approve_proc_desc');
       }
-      context.states.set('originalDocument', res);
-
-      Router.go('/approve_proc_desc');
-
     });
   }
 });

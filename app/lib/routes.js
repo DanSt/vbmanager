@@ -25,13 +25,13 @@ Router.route('/proc_desc_list', {
   where: 'client'
 });
 
-Router.route('/approve_proc_desc', function() {
-  // name: 'approveProcDesc',
-  this.render('ApproveProcDesc');
-  // controller: 'ProcedureDescriptionsController',
-  // action: 'approve',
-  // where: 'client'
+Router.route('/approve_proc_desc', {
+  name: 'approveProcDesc',
+  action: function() {
+    this.render('ApproveProcDesc');
+  }
 });
+
 
 Router.route('/proc_desc/:_id', {
   name: 'editProcDesc',
@@ -70,10 +70,13 @@ Router.route('/proc_desc_view/:_id', {
   where: 'client'
 });
 
-Router.route('/receive', {
-  name: 'serverReceiver',
-  action: 'receiveSigned',
-  where: 'server'
+Router.map(function() {
+  this.route('/receive', {
+    name: 'serverReceiver',
+    controller: 'ReceiveController',
+    action: 'receiveSigned',
+    where: 'server'
+  });
 });
 
 /**
@@ -121,4 +124,4 @@ Router.onBeforeAction(function() {
   } else {
     this.next();
   }
-}, {only: ['procDescList', 'editProcDesc', 'insertProcDesc', 'approveProcDesc', 'profileEdit', 'viewProcDesc', 'viewProcDescVersion']});
+}, {only: ['procDescList', 'editProcDesc', 'insertProcDesc', 'profileEdit', 'viewProcDesc', 'viewProcDescVersion']});
