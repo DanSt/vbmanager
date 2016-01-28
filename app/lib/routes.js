@@ -25,11 +25,12 @@ Router.route('/proc_desc_list', {
   where: 'client'
 });
 
-Router.route('/approve_proc_desc', {
-  name: 'approveProcDesc',
-  controller: 'ProcedureDescriptionsController',
-  action: 'approve',
-  where: 'client'
+Router.route('/approve_proc_desc', function() {
+  // name: 'approveProcDesc',
+  this.render('ApproveProcDesc');
+  // controller: 'ProcedureDescriptionsController',
+  // action: 'approve',
+  // where: 'client'
 });
 
 Router.route('/proc_desc/:_id', {

@@ -18,7 +18,8 @@ ProcedureDescriptionsController = RouteController.extend({
   // return Meteor.subscribe('post', this.params._id);
 
   data: function () {
-    return ProcDescs.findOne({_id: this.params._id});
+    var currentDoc = ProcDescs.findOne({_id: this.params._id});
+    return currentDoc;
   },
 
   // actions to be performed

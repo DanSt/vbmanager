@@ -19,7 +19,7 @@ Meteor.methods({
       return xmlDocument;
     }
   },
-  'proc_desc_pdf': function(userid, token, id) {
+  'proc_desc_pdf': function(userid, token, content) {
     if (Meteor.isServer) {
 
       /**
@@ -37,13 +37,16 @@ Meteor.methods({
       }
 
       // PREPARE DATA
-      var data = ProcDescs.findOne(id);
-      var collection = ProcDescs;
-      if (!data) {
-        data = ProcDescsVermongo.findOne(id);
-        collection = ProcDescsVermongo;
-      }
-      // console.log(data._id);
+      // var data = ProcDescs.findOne({_id: id});
+      // var collection = ProcDescs;
+      // if (data == "undefined") {
+      //   data = ProcDescsVermongo.findOne({_id: id});
+      //   collection = ProcDescsVermongo;
+      // }
+
+      var data = content;
+
+      // console.log(JSON.stringify(data.content));
 
       var pdf = "";
 
@@ -115,7 +118,7 @@ Meteor.methods({
       var pdfData = fut.wait();
       var base64Pdf = new Buffer(pdfData).toString('base64');
 
-      collection.direct.update({_id: this._id}, {$set: {"archive.files.originalDocument": base64Pdf}}, {getAutoValues: false, validate: false});
+      // collection.direct.update({_id: id}, {$set: {"archive.files.originalDocument": base64Pdf}}, {getAutoValues: false, validate: false});
 
       return base64Pdf;
     }

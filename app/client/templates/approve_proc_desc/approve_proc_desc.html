@@ -8,12 +8,12 @@
     <PARAM NAME="Init" VALUE="off">
 
     <!-- Specify an URL _OR_ the document to be signed _OR_ fileopen -->
-    <PARAM NAME="DocumentURL" VALUE="fileopen:*.*">
+    <!--<PARAM NAME="DocumentURL" VALUE="fileopen:*.*">-->
     <!-- <PARAM NAME="Document" VALUE="<html>Dies ist ein <b>Test</b>, der einen zu unterzeichnenden Text innerhalb eines HTML-Dokumentes enthaelt.</html>"> -->
-    <!-- <PARAM NAME="DocumentBase64" VALUE="PGh0bWw+RGllcyBpc3QgZWluIDxiPlRlc3Q8L2I+LCBkZXIgZWluZW4genUgdW50ZXJ6ZWljaG5lbmRlbiBUZXh0IGlubmVyaGFsYiBlaW5lcyBIVE1MLURva3VtZW50ZXMgZW50aGFlbHQuPC9odG1sPgo="> -->
+    <PARAM NAME="DocumentBase64" VALUE="{{getBase64Pdf}}">
 
     <!-- Optional: Specify a document type: text=0, HTML=1, binary=2, image=3, PDF=4, XML=12, RTF=13, ZIP=14, ZKS=15  (0-14 will be detected automatically) -->
-    <!-- <PARAM NAME="DocumentType" VALUE="0"> -->
+    <!--<PARAM NAME="DocumentType" VALUE="4">-->
 
     <!-- Optional: Specify a URL (OldSignatureURL) _OR_ the old signature (Base64OldSignature) -->
     <!-- <PARAM NAME="OldSignatureURL" VALUE="http://dev.seccommerce.de/signature.pkcs7 "> -->

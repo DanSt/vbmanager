@@ -1,4 +1,10 @@
 /*****************************************************************************/
+/* Id: Variables */
+/*****************************************************************************/
+
+var context = this;
+
+/*****************************************************************************/
 /* Id: Event Handlers */
 /*****************************************************************************/
 Template.ViewProcDescVersion.events({
@@ -30,12 +36,19 @@ Template.ViewProcDescVersion.events({
     var user_id = Meteor.userId();
     var token = localStorage.getItem("Meteor.loginToken");
 
-    var generatedPDF = Meteor.call('proc_desc_pdf', user_id, token, this._id);
+    Meteor.call('proc_desc_pdf', user_id, token, this, function(err, res) {
+      if (err) {
+        console.log(err);
+      }
 
-    if (this.archive && this.archive.files && !this.archive.files.OriginalDocument) {
-      this.archive.files.originalDocument = generatedPDF;
-    }
-    Router.go('/approve_proc_desc');
+      if (!context.states) {
+        context.states = new ReactiveDict();
+      }
+      context.states.set('originalDocument', res);
+
+      Router.go('/approve_proc_desc');
+
+    });
   }
 });
 
