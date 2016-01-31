@@ -4,7 +4,7 @@
 Template.ProcDescList.events({
   'click .delete': function () {
     var doc = ProcDescs.findOne(this._id);
-    if (confirm('Wollen Sie wirklich die Verfahrensbeschreibung für "' + doc.serviceShortTitle + '" löschen?')) {
+    if (confirm('Wollen Sie wirklich die Verfahrensbeschreibung für "' + doc.content.serviceShortTitle + '" löschen?')) {
       ProcDescs.remove(this._id);
     }
   },
@@ -28,7 +28,7 @@ Template.ProcDescList.events({
 /*****************************************************************************/
 Template.ProcDescList.helpers({
   proc_descs: function () {
-    return ProcDescs.find();
+    return ProcDescs.find({}, {sort: {modifiedAt: -1}});
   },
 
   longDateFormatted: function (date) {
@@ -38,16 +38,12 @@ Template.ProcDescList.helpers({
   beforeRemove: function () {
     return function (collection, id) {
       var doc = collection.findOne(id);
-      if (confirm('Wollen Sie wirklich die Verfahrensbeschreibung für "' + doc.serviceShortTitle + '" löschen?')) {
+      if (confirm('Wollen Sie wirklich die Verfahrensbeschreibung für "' + doc.content.serviceShortTitle + '" löschen?')) {
         this.remove();
         Router.go('procDescList');
       }
     };
   }
-  // modifierName: function () {
-  //   var user = Meteor.users.findOne(this.modifierId);
-  //   return user && user.profile.lastName + ", " + user.profile.firstName;
-  // }
 });
 
 /*****************************************************************************/

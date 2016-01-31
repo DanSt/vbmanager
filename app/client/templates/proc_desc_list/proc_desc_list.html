@@ -7,6 +7,7 @@
           <th>Dienstbezeichung</th>
           <th>Verantwortlicher</th>
           <th>Erstellt</th>
+          <th>Freigabe</th>
           <th>Optionen</th>
         </tr>
       </thead>
@@ -21,6 +22,11 @@
           </td>
           <td>{{content.sectionA.createdBy}}</td>
           <td>{{longDateFormatted content.sectionA.creationDate}} Uhr</td>
+          <td>
+            {{#if content.approved}}
+              {{longDateFormatted content.approvedAt}} Uhr&#160;<i class="fa fa-thumbs-up"></i>
+            {{/if}}
+          </td>
           <td>
             {{#linkTo route='viewProcDesc'}}
               <i class="fa fa-file-text-o" title="Ansehen"></i>

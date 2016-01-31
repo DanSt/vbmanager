@@ -82,6 +82,49 @@ Router.map(function() {
   });
 });
 
+Router.route('/get_signature/:_id', {
+  name: 'getSignature',
+  where: 'server',
+  action: function() {
+    /**
+    *   Solution from http://stackoverflow.com/questions/27734110/authentication-on-server-side-routes-in-meteor
+    **/
+    //Check the values in the cookies
+    var cookies = new Cookies( this.request );
+    var userid = cookies.get("meteor_user_id") || "";
+    var token = cookies.get("meteor_token") || "";
+    /** Solution end **/
+
+    //Check a valid user with this token exists
+    var user = Meteor.users.findOne({
+      _id: userid,
+      'services.resume.loginTokens.hashedToken' : Accounts._hashLoginToken(token)
+    });
+
+    //If they're not logged in tell them
+    if (!user) {
+      this.route('procDescList');
+    }
+
+    var collection = ProcDescs;
+    var doc = ProcDescs.findOne({_id: this.params._id});
+    if (!doc) {
+      collection = ProcDescsVermongo;
+      doc = ProcDescsVermongo.findOne({_id: this.params._id});
+    }
+
+    var signatur = new Buffer(doc.archive.files.signature, 'base64')
+
+    this.response.writeHead(200, {
+      'Content-Type': 'application/application',
+      'Content-Disposition': 'attachment; filename="verfahrensbeschreibung-'+this.params._id+'-signatur.pcs7"',
+      'Content-Length': signatur.length
+    });
+    this.response.write(signatur);
+    this.response.end();
+  }
+});
+
 /**
 *   Reference from https://github.com/ryanswapp/meteor-pdf-tutorial
 */
@@ -98,6 +141,17 @@ Router.route('/proc_desc_pdf/:_id', {
     var userid = cookies.get("meteor_user_id") || "";
     var token = cookies.get("meteor_token") || "";
     /** Solution end **/
+
+    //Check a valid user with this token exists
+    var user = Meteor.users.findOne({
+      _id: userid,
+      'services.resume.loginTokens.hashedToken' : Accounts._hashLoginToken(token)
+    });
+
+    //If they're not logged in tell them
+    if (!user) {
+      this.route('procDescList');
+    }
 
     var collection = ProcDescs;
     var doc = ProcDescs.findOne({_id: this.params._id});
@@ -127,4 +181,11 @@ Router.onBeforeAction(function() {
   } else {
     this.next();
   }
-}, {only: ['procDescList', 'editProcDesc', 'insertProcDesc', 'approveProcDesc', 'profileEdit', 'viewProcDesc', 'viewProcDescVersion']});
+}, {only: [ 'procDescList',
+            'editProcDesc',
+            'insertProcDesc',
+            'approveProcDesc',
+            'profileEdit',
+            'viewProcDesc',
+            'viewProcDescVersion'
+          ]});

@@ -402,6 +402,10 @@ ProcDescContentSchema = new SimpleSchema({
     defaultValue: false,
     optional: true
   },
+  approvedAt: {
+    type: Date,
+    optional: true
+  },
   sectionA: {
     type: ProcDescASchema,
     label: "Abschnitt 1"

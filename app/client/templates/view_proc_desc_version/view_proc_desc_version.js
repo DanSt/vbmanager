@@ -18,8 +18,6 @@ Template.ViewProcDescVersion.events({
   'click .pdf': function(event) {
     event.preventDefault();
 
-    // alert('Das PDF wird generiert. Bitte haben Sie einen Moment Geduld..');
-
     window.open(Router.url('generatePDF', {_id: this._id}));
   },
   'click .xml': function() {
@@ -42,24 +40,13 @@ Template.ViewProcDescVersion.events({
     Meteor.call('proc_desc_pdf', user_id, token, this._id, function(err, res) {
       if (err) {
         console.log(err);
-      }
-
-      // if (res) {
-      //   if (!context.states) {
-      //     context.states = new ReactiveDict();
-      //   }
-      //   context.states.set('originalDocument', res);
-      //   context.states.set('documentId', that._id);
-      //   context.states.set('version', that._version);
-      //   context.states.set('createdBy', that.createdBy);
-      //   context.states.set('serviceShortTitle', that.serviceShortTitle);
-      //
-      //   Router.go('/approve_proc_desc');
-      // }
-      if (res) {
+      } else if (res) {
         Router.go('/approve_proc_desc/' + that._id);
-      } 
+      }
     });
+  },
+  'click .load-signature': function() {
+    window.open(Router.url('getSignature', {_id: this._id}));
   }
 });
 
@@ -75,6 +62,9 @@ Template.ViewProcDescVersion.helpers({
         Router.go('procDescList');
       }
     };
+  },
+  isWorkingCopy: function() {
+    return typeof this.ref === 'undefined';
   },
   isVerified: function (doc) {
     if (doc && CryptoJS.SHA512(JSON.stringify(doc.content)).toString() == doc.documentHash) {

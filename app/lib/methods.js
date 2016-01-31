@@ -118,10 +118,17 @@ Meteor.methods({
 
       var pdfData = fut.wait();
       var base64Pdf = new Buffer(pdfData).toString('base64');
+      var updateSet = {
+        "archive.files.originalDocument": base64Pdf,
+        "archive.metaData.documentDigest": CryptoJS.SHA256(base64Pdf).toString(),
+        "archive.metaData.documentFileName": "verfahrensbeschreibung.pdf",
+        "archive.metaData.documentFormat": "base64",
+        "archive.metaData.documentDigestAlgorithm": "SHA256"
+      };
 
       var fut2 = new Future();
 
-      collection.direct.update({_id: id}, {$set: {"archive.files.originalDocument": base64Pdf}}, {getAutoValues: false, validate: false}, function(error, affectedDocs) {
+      collection.direct.update({_id: id}, {$set: updateSet}, {getAutoValues: false, validate: false}, function(error, affectedDocs) {
         if (error) {
           console.log(error.message);
         } else {

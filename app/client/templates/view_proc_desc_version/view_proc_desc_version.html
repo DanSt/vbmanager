@@ -2,8 +2,18 @@
   <div class="view_proc_desc_version">
     <p>
       Erstellt: {{longDateFormatted modifiedAt}} - Bearbeiter: {{modifierName}} - Version: {{_version}}
+      {{#if content.approved}}
+       - Freigegeben: <i class="fa fa-thumbs-up"></i>
+      {{/if}}
     </p>
-    <p><button type="button" class="btn btn-default return">Editieren</button> &#160;<button type="button" class="btn btn-default pdf">PDF</button> &#160;<button type="button" class="btn btn-default xml">XML</button> &#160;<button type="button" class="btn btn-default approve">Freigeben</button></p>
+    <p><button type="button" class="btn btn-default return">Editieren</button> &#160;<button type="button" class="btn btn-default pdf">PDF</button> &#160;<button type="button" class="btn btn-default xml">XML</button>&#160;
+      {{#if isWorkingCopy}}
+        <button type="button" class="btn btn-default approve">Freigeben</button>&#160;
+      {{/if}}
+      {{#if content.approved}}
+        <button type="button" class="btn btn-default load-signature">Signatur Laden</button>
+      {{/if}}
+    </p>
     <p>
       <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAWkAAABGCAIAAAH2k8LYAAAAGXRFWHRTb2Z0d2Fy
 ZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyJpVFh0WE1MOmNvbS5hZG9iZS54bXAA

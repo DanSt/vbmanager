@@ -12,7 +12,7 @@
     <PARAM NAME="DocumentBase64" VALUE="{{getBase64Pdf}}">
 
     <!-- Optional: Specify a document type: text=0, HTML=1, binary=2, image=3, PDF=4, XML=12, RTF=13, ZIP=14, ZKS=15  (0-14 will be detected automatically) -->
-    <!--<PARAM NAME="DocumentType" VALUE="4">-->
+    <PARAM NAME="DocumentType" VALUE="4">
 
     <!-- Optional: Specify a URL (OldSignatureURL) _OR_ the old signature (Base64OldSignature) -->
     <!-- <PARAM NAME="OldSignatureURL" VALUE="http://dev.seccommerce.de/signature.pkcs7 "> -->
@@ -59,7 +59,7 @@
     <PARAM NAME="PostFileName" VALUE="off">
 
     <!-- (optional) Post the certificates from the smart card: "on" or "off" -->
-    <PARAM NAME="PostCertificates" VALUE="on">
+    <PARAM NAME="PostCertificates" VALUE="off">
 
     <!-- (optional) additional params to post (custom specific, e.g. "id" and "caller") -->
     <PARAM NAME="PostParams" VALUE="userId,userToken,documentId,version,serviceShortTitle,createdBy">

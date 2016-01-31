@@ -16,7 +16,7 @@ Template.ApproveProcDesc.events({
 Template.ApproveProcDesc.helpers({
   getBase64Pdf: function () {
     var pdf = "";
-    if (typeof this.archive !== 'undefined' && typeof this.archive.files !== 'undefined' && typeof this.archive.files.originalDocument !== 'undefined') {
+    if (this.archive && this.archive.files && this.archive.files.originalDocument) {
       pdf = this.archive.files.originalDocument;
     } else {
       pdf = Meteor.call('proc_desc_pdf', Meteor.userId(), localStorage.getItem("Meteor.loginToken"), this._id);
