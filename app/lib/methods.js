@@ -245,7 +245,7 @@ Meteor.methods({
         output.push(tree.level(i));
       }
 
-      return JSON.stringify(output);
+      return output;
     }
   }
 });
