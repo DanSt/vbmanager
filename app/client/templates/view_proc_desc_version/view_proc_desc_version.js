@@ -35,20 +35,30 @@ Template.ViewProcDescVersion.events({
   'click .approve': function() {
     var user_id = Meteor.userId();
     var token = localStorage.getItem("Meteor.loginToken");
+    // var receiveToken = (Math.random()*1e32).toString(36);
 
-    Meteor.call('proc_desc_pdf', user_id, token, this, function(err, res) {
+    var that = this;
+
+    Meteor.call('proc_desc_pdf', user_id, token, this._id, function(err, res) {
       if (err) {
         console.log(err);
       }
 
+      // if (res) {
+      //   if (!context.states) {
+      //     context.states = new ReactiveDict();
+      //   }
+      //   context.states.set('originalDocument', res);
+      //   context.states.set('documentId', that._id);
+      //   context.states.set('version', that._version);
+      //   context.states.set('createdBy', that.createdBy);
+      //   context.states.set('serviceShortTitle', that.serviceShortTitle);
+      //
+      //   Router.go('/approve_proc_desc');
+      // }
       if (res) {
-        if (!context.states) {
-          context.states = new ReactiveDict();
-        }
-        context.states.set('originalDocument', res);
-
-        Router.go('/approve_proc_desc');
-      }
+        Router.go('/approve_proc_desc/' + that._id);
+      } 
     });
   }
 });

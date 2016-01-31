@@ -15,11 +15,19 @@ Template.ApproveProcDesc.events({
 /*****************************************************************************/
 Template.ApproveProcDesc.helpers({
   getBase64Pdf: function () {
-    var pdf = context.states.get("originalDocument");
+    var pdf = "";
+    if (typeof this.archive !== 'undefined' && typeof this.archive.files !== 'undefined' && typeof this.archive.files.originalDocument !== 'undefined') {
+      pdf = this.archive.files.originalDocument;
+    } else {
+      pdf = Meteor.call('proc_desc_pdf', Meteor.userId(), localStorage.getItem("Meteor.loginToken"), this._id);
+    }
+    // var pdf = context.states.get("originalDocument");
     return pdf;
   },
-  getReceiveToken: function() {
-    return (Math.random()*1e32).toString(36);
+  getDocumentId: function() {
+    var documentId = this._id;
+    // var documentId = context.states.get("documentId");
+    return documentId;
   },
   getUserToken: function() {
     return localStorage.getItem("Meteor.loginToken");
@@ -27,6 +35,18 @@ Template.ApproveProcDesc.helpers({
   getUrl: function() {
     var url = Meteor.absoluteUrl();
     return url;
+  },
+  getCreatedBy: function() {
+    // return context.states.get("createdBy");
+    return this.content.sectionA.createdBy;
+  },
+  getServiceShortTitle: function() {
+    // return context.states.get("serviceShortTitle");
+    return this.content.serviceShortTitle;
+  },
+  getVersion: function() {
+    // return context.states.get("version");
+    return this._version;
   }
 });
 

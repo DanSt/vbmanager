@@ -25,13 +25,16 @@ Router.route('/proc_desc_list', {
   where: 'client'
 });
 
-Router.route('/approve_proc_desc', {
+Router.route('/approve_proc_desc/:_id', {
   name: 'approveProcDesc',
-  action: function() {
-    this.render('ApproveProcDesc');
-  }
+  controller: 'ProcedureDescriptionsController',
+  waitOn: function(){
+    // waitOn makes sure that this publication is ready before rendering your template
+    return Meteor.subscribe("proc_descs", Meteor.userId());
+  },
+  action: 'approve',
+  where: 'client'
 });
-
 
 Router.route('/proc_desc/:_id', {
   name: 'editProcDesc',
@@ -124,4 +127,4 @@ Router.onBeforeAction(function() {
   } else {
     this.next();
   }
-}, {only: ['procDescList', 'editProcDesc', 'insertProcDesc', 'profileEdit', 'viewProcDesc', 'viewProcDescVersion']});
+}, {only: ['procDescList', 'editProcDesc', 'insertProcDesc', 'approveProcDesc', 'profileEdit', 'viewProcDesc', 'viewProcDescVersion']});

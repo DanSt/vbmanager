@@ -1,8 +1,7 @@
 <template name="ApproveProcDesc">
   <div class="approveProcDesc">
-  </div>
     <!-- Codebase and archives of SecSigner -->
-    <APPLET codebase="." CODE="seccommerce.secsigner.applet.SecSignerApplet" archive="SecSigner.jar,SecSignerExt.jar,secsigner.properties,secsigner.properties" WIDTH="100%" HEIGHT="100%" MAYSCRIPT>
+    <APPLET id="applet" codebase="{{getUrl}}applet" CODE="seccommerce.secsigner.applet.SecSignerApplet" archive="SecSigner.jar,SecSignerExt.jar" WIDTH="790" HEIGHT="496" MAYSCRIPT>
 
     <!-- Optional Init-Parameter. If this parameter is set with value 'on', no document will be signed, but the user's certificates will be posted to given 'PostURL' -->
     <PARAM NAME="Init" VALUE="off">
@@ -21,6 +20,8 @@
 
     <!-- ID of the desired signature format: 0 = PKCS#7, 3 = PDF, 4 = XML-DSig, 5 = embedded PKCS#7 -->
     <PARAM NAME="SignatureFormatType" VALUE="0">
+
+    <PARAM NAME="HashAlg" VALUE="SHA256">
 
     <!-- Only for XML-DSig: XPath to the XML node under which the signature node shall be inserted. If null then the
          signature node will be inserted directly below the root node. Value is Base64 encoded. Example "/descendant::*[local-name()='BGSERZLayer'][1]" -->
@@ -52,19 +53,22 @@
     <PARAM NAME="PostURL" VALUE="{{getUrl}}receive">
 
     <!-- (optional) Post signed data: "on" or "off" -->
-    <PARAM NAME="PostSignedData" VALUE="on">
+    <PARAM NAME="PostSignedData" VALUE="off">
 
     <!-- (optional) Post document file name: "on" or "off" -->
     <PARAM NAME="PostFileName" VALUE="off">
 
     <!-- (optional) Post the certificates from the smart card: "on" or "off" -->
-    <PARAM NAME="PostCertificates" VALUE="off">
+    <PARAM NAME="PostCertificates" VALUE="on">
 
     <!-- (optional) additional params to post (custom specific, e.g. "id" and "caller") -->
-    <PARAM NAME="PostParams" VALUE="userId,userToken,receiveToken">
+    <PARAM NAME="PostParams" VALUE="userId,userToken,documentId,version,serviceShortTitle,createdBy">
     <PARAM NAME="userId" VALUE="{{currentUser._id}}">
     <PARAM NAME="userToken" VALUE="{{getUserToken}}">
-    <PARAM NAME="receiveToken" VALUE="{{getReceiveToken}}">
+    <PARAM NAME="documentId" VALUE="{{_id}}">
+    <PARAM NAME="version" VALUE="{{_version}}">
+    <PARAM NAME="serviceShortTitle" VALUE="{{content.serviceShortTitle}}">
+    <PARAM NAME="createdBy" VALUE="{{content.sectionA.createdBy}}">
 
     <!-- (optional) call this URL after posting the signature -->
     <PARAM NAME="FinishURL" VALUE="/proc_desc_list">
@@ -86,4 +90,5 @@
 
     <font color=red><b>Ihr Browser unterst&uuml;tzt offenbar noch keine Java-Anwendungen. Bitte installieren Sie ein aktuelles <a href="http://www.java.com/de">Java-Runtime-Environment</a></b></font>
     </APPLET>
+  </div>
 </template>

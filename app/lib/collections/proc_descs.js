@@ -397,6 +397,11 @@ ProcDescContentSchema = new SimpleSchema({
     defaultValue: "Dienstkurzbezeichnung",
     max: 80
   },
+  approved: {
+    type: Boolean,
+    defaultValue: false,
+    optional: true
+  },
   sectionA: {
     type: ProcDescASchema,
     label: "Abschnitt 1"
@@ -451,6 +456,12 @@ ProcDescArchiveMetaDataSchema = new SimpleSchema({
     max: 300,
     optional: true
   },
+  documentFormat: {
+    type: String,
+    max: 20,
+    optional: true,
+    defaultValue: 'base64'
+  },
   documentDigest: {
     type: String,
     max: 200,
@@ -459,13 +470,19 @@ ProcDescArchiveMetaDataSchema = new SimpleSchema({
   documentDigestAlgorithm: {
     type: String,
     max: 200,
-    defaultValue: "http://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.180-4.pdf",
+    defaultValue: "SHA256",
     optional: true
   },
-  signatureDigestFileName: {
+  signatureFileName: {
     type: String,
     max: 300,
     optional: true
+  },
+  signatureFormat: {
+    type: String,
+    max: 20,
+    optional: true,
+    defaultValue: 'base64'
   },
   signatureDigest: {
     type: String,
@@ -475,27 +492,30 @@ ProcDescArchiveMetaDataSchema = new SimpleSchema({
   signatureDigestAlgorithm: {
     type: String,
     max: 200,
-    defaultValue: "http://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.180-4.pdf",
+    defaultValue: "SHA256",
     optional: true
   },
-  signatureCertDigestFileName: {
+  signatureCertFileName: {
     type: String,
     max: 300,
-    optional: true,
     optional: true
+  },
+  signatureCertFormat: {
+    type: String,
+    max: 20,
+    optional: true,
+    defaultValue: 'base64'
   },
   signatureCertDigest: {
     type: String,
     max: 200,
     optional: true,
-    optional: true
   },
   signatureCertDigestAlgorithm: {
     type: String,
     max: 200,
     optional: true,
-    defaultValue: "http://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.180-4.pdf",
-    optional: true
+    defaultValue: "SHA256"
   },
   versionNumber: {
     type: Number,
@@ -527,11 +547,6 @@ ProcDescSchema = new SimpleSchema({
   },
   archive: {
     type: ProcDescArchiveSchema,
-    optional: true
-  },
-  approved: {
-    type: Boolean,
-    defaultValue: false,
     optional: true
   }
 });

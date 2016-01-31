@@ -19,7 +19,7 @@ Meteor.methods({
       return xmlDocument;
     }
   },
-  'proc_desc_pdf': function(userid, token, content) {
+  'proc_desc_pdf': function(userid, token, id) {
     if (Meteor.isServer) {
 
       /**
@@ -33,18 +33,19 @@ Meteor.methods({
 
       //If they're not logged in tell them
       if (!user) {
+        console.log("User empty");
         return "";
       }
 
       // PREPARE DATA
-      // var data = ProcDescs.findOne({_id: id});
-      // var collection = ProcDescs;
-      // if (data == "undefined") {
-      //   data = ProcDescsVermongo.findOne({_id: id});
-      //   collection = ProcDescsVermongo;
-      // }
+      var data = ProcDescs.find(id).fetch()[0];
+      var collection = ProcDescs;
+      if (typeof data === 'undefined') {
+        data = ProcDescsVermongo.find({_id: id}).fetch()[0];
+        collection = ProcDescsVermongo;
+      }
 
-      var data = content;
+      // var data = content;
 
       // console.log(JSON.stringify(data.content));
 
@@ -118,7 +119,18 @@ Meteor.methods({
       var pdfData = fut.wait();
       var base64Pdf = new Buffer(pdfData).toString('base64');
 
-      // collection.direct.update({_id: id}, {$set: {"archive.files.originalDocument": base64Pdf}}, {getAutoValues: false, validate: false});
+      var fut2 = new Future();
+
+      collection.direct.update({_id: id}, {$set: {"archive.files.originalDocument": base64Pdf}}, {getAutoValues: false, validate: false}, function(error, affectedDocs) {
+        if (error) {
+          console.log(error.message);
+        } else {
+          console.log(JSON.stringify(affectedDocs));
+          fut2.return("Success");
+        }
+      });
+
+      var success = fut2.wait();
 
       return base64Pdf;
     }
@@ -146,7 +158,7 @@ Meteor.methods({
       var pemBody = b64.replace(/(.{64})/g, "$1\r\n");
       pemBody = pemBody.replace(/\r\n$/, '');
 
-      var b = new Buffer(pemBody, 'base64')
+      var b = new Buffer(pemBody, 'base64');
 
       httpreq.post('http://zeitstempel.dfn.de', {headers: {'Content-Type': 'application/timestamp-query'}, binary: true, body: b}, function (err, res) {
         if (err) {
