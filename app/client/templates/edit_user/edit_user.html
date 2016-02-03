@@ -7,8 +7,8 @@
           <td>Username:</td><td colspan=3>{{currentUser.username}}</td>
         </tr>
         <tr>
-          <td>Vorname:</td><td>{{> afQuickField name="profile.firstName" label-style="display: none"}}</td>
-          <td>Nachname:</td><td>{{> afQuickField name="profile.lastName" label-style="display: none"}}</td>
+          <td>Vorname:</td><td>{{currentUser.profile.firstName}}</td>
+          <td>Nachname:</td><td>{{currentUser.profile.lastName}}</td>
         </tr>
       </tbody>
     </table>

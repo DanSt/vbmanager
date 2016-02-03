@@ -29,7 +29,8 @@ Accounts.ui.config({
             return true;
           }
         }
-    }]
+    }],
+    passwordSignupFields: 'USERNAME_ONLY'
 });
 
 Accounts.config({

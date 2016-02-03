@@ -14,12 +14,20 @@ UserProfileSchema = new SimpleSchema({
   firstName: {
     type: String,
     label: "Vorname",
-    regEx: /^[a-z0-9A-Z_ ]{2,25}$/
+    regEx: /^[a-z0-9A-Z_ ]{2,25}$/,
+    optional: true
   },
   lastName: {
     type: String,
     label: "Nachname",
-    regEx: /^[a-z0-9A-Z_ ]{2,25}$/
+    regEx: /^[a-z0-9A-Z_ ]{2,25}$/,
+    optional: true
+  },
+  displayName: {
+    type: String,
+    label: "Displayname",
+    regEx: /^[a-z0-9A-Z_, ]{2,25}$/,
+    optional: true
   },
   birthday: {
     type: Date,
@@ -87,16 +95,16 @@ if (Meteor.isServer) {
   });
 
   Accounts.onCreateUser(function(options, user) {
-    var lastName = options.profile.lastName.replace(" ", "_");
-    var newUsername = options.profile.firstName.toUpperCase().charAt(0) + options.profile.lastName;
-
-    var counter = 0;
-    var baseUsername = newUsername;
-    while (Meteor.users.find({username: newUsername}).count() > 0) {
-      counter = counter + 1;
-      newUsername = baseUsername + counter;
-    }
-    user.username = newUsername;
+    // var lastName = options.profile.lastName.replace(" ", "_");
+    // var newUsername = options.profile.firstName.toUpperCase().charAt(0) + options.profile.lastName;
+    //
+    // var counter = 0;
+    // var baseUsername = newUsername;
+    // while (Meteor.users.find({username: newUsername}).count() > 0) {
+    //   counter = counter + 1;
+    //   newUsername = baseUsername + counter;
+    // }
+    // user.username = newUsername;
     user.profile = options.profile;
     if (options.emails) {
       user.emails = options.emails;
@@ -105,22 +113,22 @@ if (Meteor.isServer) {
     return user;
   });
 
-  Meteor.users.after.update(function (userId, doc, fieldNames, modifier) {
-    if (doc.profile && doc.username && fieldNames["username"]) {
-      var lastName = doc.profile.lastName.replace(" ", "_");
-      var newUsername = doc.profile.firstName.toUpperCase().charAt(0) + lastName;
-
-      if (newUsername !== doc.username) {
-        var counter = 0;
-        var baseUsername = newUsername;
-        while (Meteor.users.find({username: baseUsername}).count() > 0) {
-          counter = counter + 1;
-          newUsername = baseUsername + counter;
-        }
-        if (Meteor.isServer) {
-          Meteor.users.direct.update({_id: doc._id}, {$set: {username: newUsername}});
-        }
-      }
-    }
-  });
+  // Meteor.users.after.update(function (userId, doc, fieldNames, modifier) {
+  //   if (doc.profile && doc.username && fieldNames["username"]) {
+  //     var lastName = doc.profile.lastName.replace(" ", "_");
+  //     var newUsername = doc.profile.firstName.toUpperCase().charAt(0) + lastName;
+  //
+  //     if (newUsername !== doc.username) {
+  //       var counter = 0;
+  //       var baseUsername = newUsername;
+  //       while (Meteor.users.find({username: baseUsername}).count() > 0) {
+  //         counter = counter + 1;
+  //         newUsername = baseUsername + counter;
+  //       }
+  //       if (Meteor.isServer) {
+  //         Meteor.users.direct.update({_id: doc._id}, {$set: {username: newUsername}});
+  //       }
+  //     }
+  //   }
+  // });
 }

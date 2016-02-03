@@ -13,7 +13,8 @@ aldeed:collection2
 aldeed:autoform
 accounts-password
 ian:accounts-ui-bootstrap-3
-natestrauser:font-awesome
+#natestrauser:font-awesome
+fortawesome:fontawesome
 momentjs:moment
 iron:router
 aldeed:autoform-bs-datepicker
@@ -33,3 +34,5 @@ thepumpinglemma:cookies
 simple:reactive-method
 peerlibrary:assert
 reactive-dict
+alanning:roles
+typ:accounts-ldap

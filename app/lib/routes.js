@@ -46,12 +46,12 @@ Router.route('/proc_desc/:_id', {
   where: 'client'
 });
 
-Router.route('/profile_edit', {
-  name: 'profileEdit',
-  controller: 'UserProfileController',
-  action: 'edit',
-  where: 'client'
-});
+// Router.route('/profile_edit', {
+//   name: 'profileEdit',
+//   controller: 'UserProfileController',
+//   action: 'edit',
+//   where: 'client'
+// });
 
 Router.route('/proc_desc_version/:_id', {
   name: 'viewProcDescVersion',
@@ -185,7 +185,7 @@ Router.onBeforeAction(function() {
             'editProcDesc',
             'insertProcDesc',
             'approveProcDesc',
-            'profileEdit',
+            // 'profileEdit',
             'viewProcDesc',
             'viewProcDescVersion'
           ]});
