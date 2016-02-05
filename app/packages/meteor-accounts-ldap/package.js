@@ -6,13 +6,15 @@ Package.describe({
   documentation: 'README.md'
 });
 
+Npm.depends({
+  'dtrace-provider': '0.6.0'
+});
 
 Package.onUse(function(api) {
   api.versionsFrom('1.0.3.1');
 
   api.use(['templating'], 'client');
   api.use(['typ:ldapjs@0.7.3'], 'server');
-
 
   api.use('accounts-base', 'server');
   api.imply('accounts-base', ['client', 'server']);

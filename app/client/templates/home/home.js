@@ -10,7 +10,12 @@ Template.Home.events({
 Template.Home.helpers({
   getSigReq: function () {
     // return "";
-    return ReactiveMethod.call('sigReq', ReactiveMethod.call('createMerkle')[0][0]);
+    var merkle = ReactiveMethod.call('createMerkle');
+    if (merkle) {
+      return ReactiveMethod.call('sigReq', merkle && merkle[0][0]);
+    } else {
+      return "";
+    }
   },
   createMerkle: function () {
     return JSON.stringify(ReactiveMethod.call('createMerkle'));

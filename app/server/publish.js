@@ -1,24 +1,33 @@
-Meteor.publish('proc_descs', function (userId) {
-  if (typeof userId !== 'undefined') {
+Meteor.publish('proc_descs', function () {
+  if (!Roles.userIsInRole('datenschutzBeauftragter')) {
+    var roles = Roles.getRolesForUser(this.userId);
+    return ProcDescs.find({_id: {$in: roles }});
+  } else {
     return ProcDescs.find();
   }
+  // if (this.userId && Roles.userIsInRole(this.userId, ['datenschutzBeauftragter'])) {
+  //   return ProcDescs.find();
+  // } else if (this.userId) {
+  //   return ProcDescs.find({modifierId: this.userId});
+  // }
 });
 
-Meteor.publish('proc_descs.vermongo', function (userId) {
-  if (typeof userId !== 'undefined') {
+Meteor.publish('proc_descs.vermongo', function () {
+  if (!Roles.userIsInRole('datenschutzBeauftragter')) {
+    var roles = Roles.getRolesForUser(this.userId);
+    return ProcDescsVermongo.find({ref: {$in: roles }});
+  } else {
     return ProcDescsVermongo.find();
   }
+  // if (this.userId && Roles.userIsInRole(this.userId, ['datenschutzBeauftragter'])) {
+  //   return ProcDescsVermongo.find();
+  // } else if (this.userId) {
+  //   return ProcDescsVermongo.find({modifierId: this.userId});
+  // }
 });
 
-Meteor.publish('allUsers', function (userId) {
-  if (typeof userId !== 'undefined') {
-    return Meteor.users.find({},
-       {fields: {'profile': 1}});
-  }
-});
-
-Meteor.publish('contact_infos', function (userId) {
-  if (typeof userId !== 'undefined') {
+Meteor.publish('contact_infos', function () {
+  if (this.userId) {
     return ContactInfos.find();
   }
 });

@@ -5,7 +5,7 @@
 Meteor.methods({
 
   'proc_desc_xml': function(content) {
-    if (Meteor.userId() && Meteor.isServer) {
+    if (Meteor.userId() && Meteor.isServer && Roles.userIsInRole(Meteor.userId(), ['datenschutzBeauftragter'])) {
       var XML = Meteor.npmRequire('simple-xml');
       moment.locale('de');
 
@@ -31,11 +31,13 @@ Meteor.methods({
         'services.resume.loginTokens.hashedToken' : Accounts._hashLoginToken(token)
       });
 
+      console.log(4);
       //If they're not logged in tell them
-      if (!user) {
-        console.log("User empty");
+      if (!user || !Roles.userIsInRole(user._id, ['datenschutzBeauftragter'])) {
+        console.log("User is not allowed");
         return "";
       }
+      console.log(5);
 
       // PREPARE DATA
       var data = ProcDescs.find(id).fetch()[0];
@@ -227,8 +229,7 @@ Meteor.methods({
       var merkle_mod = Meteor.npmRequire('merkle-tree');
 
       // var proc_descs2 = ProcDescsVermongo.find({"modifiedAt" : { $lte : new Date("2016-01-23T20:15:31Z") }}, {sort: {'modifiedAt': -1}});
-
-      var proc_descs2 = ProcDescsVermongo.find({}, {sort: {'modifiedAt': -1}});
+      var proc_descs2 = ProcDescsVermongo.find({}, {sort: {'modifiedAt': -1}}).fetch();
 
       var arr = [];
 

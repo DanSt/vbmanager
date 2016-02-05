@@ -1,4 +1,4 @@
-ProcedureDescriptionVersionController = RouteController.extend({
+UserAdminController = RouteController.extend({
 
   // A place to put your subscriptions
   // this.subscribe('items');
@@ -6,9 +6,7 @@ ProcedureDescriptionVersionController = RouteController.extend({
   // this.subscribe('item', this.params._id).wait();
 
   subscriptions: function() {
-    this.subscribe('proc_descs');
-    this.subscribe('proc_descs.vermongo');
-    this.subscribe('contact_infos');
+    this.subscribe('allUsers');
   },
 
   // Subscriptions or other things we want to "wait" on. This also
@@ -17,11 +15,10 @@ ProcedureDescriptionVersionController = RouteController.extend({
   // return Meteor.subscribe('post', this.params._id);
 
   data: function () {
-    return ProcDescsVermongo.findOne({_id: this.params._id});
   },
 
-  view: function () {
-    this.render('ViewProcDescVersion', {});
+  adminUsers: function () {
+    this.render('AdminUsers', {});
   },
 
 });

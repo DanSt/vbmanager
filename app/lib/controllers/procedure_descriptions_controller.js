@@ -6,10 +6,9 @@ ProcedureDescriptionsController = RouteController.extend({
   // this.subscribe('item', this.params._id).wait();
 
   subscriptions: function() {
-    this.subscribe('proc_descs', Meteor.userId());
-    this.subscribe('proc_descs.vermongo', Meteor.userId());
-    this.subscribe('allUsers', Meteor.userId());
-    this.subscribe('contact_infos', Meteor.userId());
+    this.subscribe('proc_descs');
+    this.subscribe('proc_descs.vermongo');
+    this.subscribe('contact_infos');
   },
 
   // Subscriptions or other things we want to "wait" on. This also

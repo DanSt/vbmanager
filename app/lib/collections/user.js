@@ -1,15 +1,3 @@
-// Meteor.users.before.insert(function (userId, doc) {
-//   var newUsername = doc.profile.firstName.toUpperCase().charAt(0) + doc.profile.lastName;
-//
-//   var counter = 0;
-//   var baseUsername = newUsername;
-//   while (Meteor.users.find({username: username}).count() > 0) {
-//     counter = counter + 1;
-//     newUsername = baseName + counter;
-//   }
-//   doc.username = newUsername;
-// });
-
 UserProfileSchema = new SimpleSchema({
   firstName: {
     type: String,
@@ -23,9 +11,9 @@ UserProfileSchema = new SimpleSchema({
     regEx: /^[a-z0-9A-Z_ ]{2,25}$/,
     optional: true
   },
-  displayName: {
+  name: {
     type: String,
-    label: "Displayname",
+    label: "Anzeigename",
     regEx: /^[a-z0-9A-Z_, ]{2,25}$/,
     optional: true
   },
@@ -43,6 +31,10 @@ UserSchema = new SimpleSchema({
   username: {
     type: String,
     regEx: /^[a-z0-9A-Z_]{3,15}$/,
+    optional: true
+  },
+  roles: {
+    type: [String],
     optional: true
   },
   emails: {
@@ -83,13 +75,17 @@ Meteor.users.attachSchema(UserSchema);
 
 if (Meteor.isServer) {
   Meteor.users.allow({
-    insert: function (userId, doc) {
-      return true;
+    insert: function (userId) {
+      if (Meteor.user()) {
+        return true;
+      } else {
+        return false;
+      }
     },
-    update: function (userId, doc) {
-      return (userId && Meteor.user()._id == userId);
+    update: function (userId, user, fields, modifier) {
+      return (userId && Meteor.user()._id == userId || Roles.userIsInRole(Meteor.user()._id, 'admin'));
     },
-    remove: function (userId, doc) {
+    remove: function (userId) {
       return false;
     }
   });

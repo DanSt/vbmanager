@@ -1,9 +1,9 @@
 // [1,2,3,4,5,6].diff( [3,4,5] );  => [1, 2, 6]
-Array.prototype.diff = function(a) {
-  return this.filter(function(i) {
-    return a.indexOf(i) < 0;
-  });
-};
+// Array.prototype.diff = function(a) {
+//   return this.filter(function(i) {
+//     return a.indexOf(i) < 0;
+//   });
+// };
 
 // [1, 2, [3, 4]].equals([1, 2, [3, 2]]) === false;
 // attach the .equals method to Array's prototype to call it on any array
@@ -80,7 +80,7 @@ Meteor.Collection.prototype.vermongo = function(op) {
       if(!doc[options.userId] && options.userId && userId)
         doc[options.userId] = userId;
 
-      ProcDescContentSchema.clean(doc.content);
+      // ProcDescContentSchema.clean(doc.content);
       var hash = CryptoJS.SHA512(JSON.stringify(doc.content)).toString();
       doc.documentHash = hash;
 
@@ -98,7 +98,7 @@ Meteor.Collection.prototype.vermongo = function(op) {
         return;
       }
       // do nothing if only ignored fields are modified
-      if(fieldNames.diff(options.ignoredFields).equals([])) return;
+      // if(fieldNames.diff(options.ignoredFields).equals([])) return;
 
       // in case of doc not already versionned
       if(!doc._version) doc._version = 1;
@@ -124,7 +124,7 @@ Meteor.Collection.prototype.vermongo = function(op) {
         return;
       }
       // do nothing if only ignored fields are modified
-      if(fieldNames.diff(options.ignoredFields).equals([])) return;
+      // if(fieldNames.diff(options.ignoredFields).equals([])) return;
 
       // in case of doc not already versionned
       if(!doc._version) doc._version = 1;

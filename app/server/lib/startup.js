@@ -40,7 +40,7 @@ Meteor.startup(function () {
   *   Create default user account if none present
   **/
   if ( Meteor.users.find().count() === 0 ) {
-    Accounts.createUser({
+    var id = Accounts.createUser({
         username: 'admin',
         emails: [{
           address: 'admin@lrz.de',
@@ -49,10 +49,17 @@ Meteor.startup(function () {
         password: 'nimda1234321',
         profile: {
           firstName: 'Admin',
-          lastName: 'User'
+          lastName: 'User',
+          name: 'Admin'
         }
     });
+
+    Roles.addUsersToRoles(id, ['admin']);
   }
+
+  if (Meteor.roles.find({name: 'datenschutzBeauftragter'}).count() < 1 ) {
+		Roles.createRole('datenschutzBeauftragter');
+	}
 
   return i18n.setDefaultLanguage('de');
 });

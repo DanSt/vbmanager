@@ -11,7 +11,7 @@ Meteor.startup(function () {
     profileProperty: 'firstName'
   }, {
     resultKey: 'mwnAnzeigename',
-    profileProperty: 'displayName'
+    profileProperty: 'name'
   }];
   process.env.NODE_TLS_REJECT_UNAUTHORIZED=0;
 });

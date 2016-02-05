@@ -30,7 +30,14 @@ Router.route('/approve_proc_desc/:_id', {
   controller: 'ProcedureDescriptionsController',
   waitOn: function(){
     // waitOn makes sure that this publication is ready before rendering your template
-    return Meteor.subscribe("proc_descs", Meteor.userId());
+    return Meteor.subscribe("proc_descs");
+  },
+  onBeforeAction: function() {
+    if (!Roles.userIsInRole(Meteor.user(), ['datenschutzBeauftragter'])) {
+      this.redirect('home');
+    } else {
+      this.next();
+    }
   },
   action: 'approve',
   where: 'client'
@@ -82,6 +89,16 @@ Router.map(function() {
   });
 });
 
+Router.route('/admin_users', {
+  name: 'adminUsers',
+  where: 'client',
+  action: function() {
+    if (Roles.userIsInRole(Meteor.user(), ['admin'])) {
+      this.render('accountsAdmin');
+    }
+  }
+});
+
 Router.route('/get_signature/:_id', {
   name: 'getSignature',
   where: 'server',
@@ -102,15 +119,17 @@ Router.route('/get_signature/:_id', {
     });
 
     //If they're not logged in tell them
-    if (!user) {
-      this.route('procDescList');
-    }
 
     var collection = ProcDescs;
     var doc = ProcDescs.findOne({_id: this.params._id});
     if (!doc) {
       collection = ProcDescsVermongo;
       doc = ProcDescsVermongo.findOne({_id: this.params._id});
+    }
+
+    if (!user || !Roles.userIsInRole(user._id, ['datenschutzBeauftragter']) && doc.modifierId !== user._id) {
+      this.response.writeHead(401);
+      this.response.end();
     }
 
     var signatur = new Buffer(doc.archive.files.signature, 'base64')
@@ -148,11 +167,6 @@ Router.route('/proc_desc_pdf/:_id', {
       'services.resume.loginTokens.hashedToken' : Accounts._hashLoginToken(token)
     });
 
-    //If they're not logged in tell them
-    if (!user) {
-      this.route('procDescList');
-    }
-
     var collection = ProcDescs;
     var doc = ProcDescs.findOne({_id: this.params._id});
     if (!doc) {
@@ -160,6 +174,11 @@ Router.route('/proc_desc_pdf/:_id', {
       doc = ProcDescsVermongo.findOne({_id: this.params._id});
     }
 
+    if (!user || !Roles.userIsInRole(user._id, ['datenschutzBeauftragter']) && doc.modifierId !== user._id) {
+      this.response.writeHead(401);
+      this.response.end();
+      return;
+    }
     // retrieve base64 data of pdf and convert it to binary
     var pdf = Meteor.call('proc_desc_pdf', userid, token, this.params._id);;
 
@@ -170,6 +189,7 @@ Router.route('/proc_desc_pdf/:_id', {
       'Content-Disposition': 'attachment; filename="verfahrensbeschreibung-'+this.params._id+'.pdf"',
       'Content-Length': pdfData.length
     });
+
     this.response.write(pdfData);
     this.response.end();
   }
@@ -185,7 +205,7 @@ Router.onBeforeAction(function() {
             'editProcDesc',
             'insertProcDesc',
             'approveProcDesc',
-            // 'profileEdit',
+            'adminUsers',
             'viewProcDesc',
             'viewProcDescVersion'
           ]});

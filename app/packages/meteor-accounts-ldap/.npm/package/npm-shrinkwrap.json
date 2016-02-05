@@ -1,0 +1,12 @@
+{
+  "dependencies": {
+    "dtrace-provider": {
+      "version": "0.6.0",
+      "dependencies": {
+        "nan": {
+          "version": "2.2.0"
+        }
+      }
+    }
+  }
+}

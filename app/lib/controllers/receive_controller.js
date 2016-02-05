@@ -6,7 +6,7 @@
   // this.subscribe('item', this.params._id).wait();
 
   subscriptions: function() {
-    this.subscribe('proc_descs', Meteor.userId());
+    this.subscribe('proc_descs');
   },
 
   // Subscriptions or other things we want to "wait" on. This also

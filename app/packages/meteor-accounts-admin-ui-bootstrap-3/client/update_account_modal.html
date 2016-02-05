@@ -1,0 +1,51 @@
+<template name="updateAccountModal">
+	<div id="updateaccount" class="modal fade" tabindex="-1" data-width="760" style="display:none;">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				{{> updateAccountModalInner}}
+			</div>
+		</div>
+	</div>
+</template>
+
+<template name="updateAccountModalInner">
+	{{#with userInScope}}
+		<div class="modal-header">
+			<h4>{{profile.lastName}}, {{profile.firstName}} Verwalten</h4>
+		</div>
+		<div class="modal-body">
+			{{#if roles}}
+				<ul class="list-group">
+					{{#each roles}}
+						<li class="list-group-item" style="text-align: right">
+              <span class="pull-left">{{this}}</span>
+              &#160;
+              <!-- {{#if canRemove ../_id}} -->
+                <button data-user-id="{{../_id}}" class="btn btn-danger btn-xs remove-role" type="button">Löschen</button>
+              <!-- {{/if}} -->
+						</li>
+					{{/each}}
+				</ul>
+			{{else}}
+				Dieses Konto hat keine Rollen.
+			{{/if}}
+			{{#if unsetRoles}}
+			<div class="btn-group clearfix full-width">
+				<button type="button" class="btn btn-success dropdown-toggle pull-right" data-toggle="dropdown">
+					<span class="glyphicon glyphicon-plus"></span> Rolle Hinzufügen
+				</button>
+				<ul class="dropdown-menu pull-right" role="menu">
+					{{#each unsetRoles}}
+						<li><a href="#" class="add-role" data-user-id="{{../_id}}">{{this}}</a></li>
+					{{/each}}
+				</ul>
+			</div>
+			{{else}}
+			<em>Alle Rollen sind gesetzt.</em>
+			{{/if}}
+		</div>
+		<div class="modal-footer">
+			<button type="button" data-dismiss="modal" class="btn btn-primary">Fertig</button>
+		</div>
+	{{/with}}
+</template>

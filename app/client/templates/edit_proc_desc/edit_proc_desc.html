@@ -1,7 +1,7 @@
 <template name="EditProcDesc">
   <div class="edit_proc_desc">
     <p>
-      Erstellt: {{longDateFormatted modifiedAt}} - Bearbeiter: {{modifierName}} - Version: {{_version}}
+      ID: {{_id}} - Erstellt: {{longDateFormatted modifiedAt}} - Bearbeiter: {{modifierName}} - Version: {{_version}}
     </p>
     {{#autoForm collection="ProcDescs" doc=this id="updateProcDescForm" type="update"}}
       <fieldset>

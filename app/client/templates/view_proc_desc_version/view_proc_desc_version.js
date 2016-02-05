@@ -54,6 +54,13 @@ Template.ViewProcDescVersion.events({
 /* Id: Helpers */
 /*****************************************************************************/
 Template.ViewProcDescVersion.helpers({
+  getId: function() {
+    if (this.ref) {
+      return this.ref;
+    } else {
+      return this._id;
+    }
+  },
   beforeRemove: function () {
     return function (collection, id) {
       var doc = collection.findOne(id);
