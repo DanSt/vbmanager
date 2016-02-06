@@ -18,6 +18,7 @@
     var userToken = this.request.body.userToken;
     var userId = this.request.body.userId;
     var documentId = this.request.body.documentId;
+    var originalDocument = this.request.body.SignedData;
     var signature = this.request.body.Signature;
     var serviceShortTitle = this.request.body.serviceShortTitle;
     var createdBy = this.request.body.createdBy;
@@ -29,15 +30,27 @@
     });
 
     //If they're not logged in tell them
-    if (!user) {
-      this.go('procDescList');
+    if (!user || Roles.userIsInRole('datenschutzBeauftragter')) {
+      this.response.writeHead(401);
+      this.response.end();
     }
+
+    var archiveFiles = {
+      signature: signature,
+      originalDocument: originalDocument
+    };
+
+    var filesId = ProcDescArchiveFiles.insert(archiveFiles);
 
     var updateSet = {
       "content.approved": true,
       "content.approvedAt": new Date(),
       "archive.metaData.documentId": documentId,
       "archive.metaData.documentTitle": serviceShortTitle,
+      "archive.metaData.documentDigest": CryptoJS.SHA256(originalDocument).toString(),
+      "archive.metaData.documentFileName": "Verfahrensbeschreibung.pdf",
+      "archive.metaData.documentFormat": "base64",
+      "archive.metaData.documentDigestAlgorithm": "SHA256",
       "archive.metaData.creator": createdBy,
       "archive.metaData.creationDate": new Date(),
       "archive.metaData.signatureFileName": "Verfahrensbeschreibung-signatur.pkcs7",
@@ -49,7 +62,7 @@
       "archive.metaData.signatureCertDigest": "",
       "archive.metaData.signatureCertDigestAlgorithm": "SHA256",
       "archive.metaData.versionNumber": version,
-      "archive.files.signature": signature
+      "archive.files": filesId
     };
 
     ProcDescs.update({_id: documentId}, {$set: updateSet}, {getAutoValues: false});

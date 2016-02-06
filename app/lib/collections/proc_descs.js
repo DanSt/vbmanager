@@ -420,20 +420,20 @@ ProcDescContentSchema = new SimpleSchema({
   }
 });
 
-ProcDescArchiveFilesSchema = new SimpleSchema({
-  originalDocument: {
-    type: String,
-    optional: true
-  },
-  signature: {
-    type: String,
-    optional: true
-  },
-  signatureCert: {
-    type: String,
-    optional: true
-  }
-});
+// ProcDescArchiveFilesSchema = new SimpleSchema({
+//   originalDocument: {
+//     type: String,
+//     optional: true
+//   },
+//   signature: {
+//     type: String,
+//     optional: true
+//   },
+//   signatureCert: {
+//     type: String,
+//     optional: true
+//   }
+// });
 
 ProcDescArchiveMetaDataSchema = new SimpleSchema({
   documentId: {
@@ -533,7 +533,7 @@ ProcDescArchiveSchema = new SimpleSchema({
     optional: true
   },
   files: {
-    type: ProcDescArchiveFilesSchema,
+    type: String,
     optional: true
   }
 });

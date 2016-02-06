@@ -4,6 +4,13 @@ Router.configure({
   notFoundTemplate: 'NotFound'
 });
 
+Router.configureBodyParsers = function() {
+  Router.onBeforeAction(Iron.Router.bodyParser.urlencoded({
+    extended: true,
+    limit: '20mb'
+  }));
+};
+
 Router.route('/', {
   name: 'home',
   controller: 'HomeController',
@@ -27,7 +34,7 @@ Router.route('/proc_desc_list', {
 
 Router.route('/approve_proc_desc/:_id', {
   name: 'approveProcDesc',
-  controller: 'ProcedureDescriptionsController',
+  controller: 'ApproveController',
   waitOn: function(){
     // waitOn makes sure that this publication is ready before rendering your template
     return Meteor.subscribe("proc_descs");

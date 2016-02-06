@@ -26,6 +26,11 @@ Meteor.methods({
       *   Solution from http://stackoverflow.com/questions/27734110/authentication-on-server-side-routes-in-meteor
       **/
       //Check a valid user with this token exists
+
+      if (typeof id === 'undefined') {
+        return "";
+      }
+
       var user = Meteor.users.findOne({
         _id: userid,
         'services.resume.loginTokens.hashedToken' : Accounts._hashLoginToken(token)
@@ -47,8 +52,10 @@ Meteor.methods({
 
       var pdf = "";
 
-      if (data.archive && data.archive.files && data.archive.files.originalDocument) {
-        return data.archive.files.originalDocument;
+      var files = {};
+      if (data.archive && data.archive.files) {
+        files = ProcDescArchiveFiles.find({_id: data.archive.files}).fetch()[0];
+        return files.originalDocument;
       }
 
       var webshot = Meteor.npmRequire('webshot');
@@ -114,25 +121,6 @@ Meteor.methods({
 
       var pdfData = fut.wait();
       var base64Pdf = new Buffer(pdfData).toString('base64');
-      var updateSet = {
-        "archive.files.originalDocument": base64Pdf,
-        "archive.metaData.documentDigest": CryptoJS.SHA256(base64Pdf).toString(),
-        "archive.metaData.documentFileName": "Verfahrensbeschreibung.pdf",
-        "archive.metaData.documentFormat": "base64",
-        "archive.metaData.documentDigestAlgorithm": "SHA256"
-      };
-
-      var fut2 = new Future();
-
-      collection.direct.update({_id: id}, {$set: updateSet}, {getAutoValues: false, validate: false}, function(error, affectedDocs) {
-        if (error) {
-          console.log(error.message);
-        } else {
-          fut2.return("Success");
-        }
-      });
-
-      var success = fut2.wait();
 
       return base64Pdf;
     }
@@ -268,7 +256,7 @@ Meteor.methods({
       var merkle_mod = Meteor.npmRequire('merkle-tree');
 
       // var proc_descs2 = ProcDescsVermongo.find({"modifiedAt" : { $lte : new Date("2016-01-23T20:15:31Z") }}, {sort: {'modifiedAt': -1}});
-      var proc_descs2 = ProcDescsVermongo.find({}, {sort: {'modifiedAt': -1}}).fetch();
+      var proc_descs2 = ProcDescsVermongo.find({}, {fields: {'archive.files': 0}, sort: {'modifiedAt': -1}}).fetch();
 
       var arr = [];
 

@@ -1,4 +1,4 @@
-ProcedureDescriptionsController = RouteController.extend({
+ApproveController = RouteController.extend({
 
   // A place to put your subscriptions
   // this.subscribe('items');
@@ -7,8 +7,6 @@ ProcedureDescriptionsController = RouteController.extend({
 
   subscriptions: function() {
     this.subscribe('proc_descs');
-    this.subscribe('proc_descs.vermongo');
-    this.subscribe('contact_infos');
   },
 
   // Subscriptions or other things we want to "wait" on. This also
@@ -17,26 +15,22 @@ ProcedureDescriptionsController = RouteController.extend({
   // return Meteor.subscribe('post', this.params._id);
 
   data: function () {
-    var currentDoc = ProcDescs.findOne({_id: this.params._id});
-    return currentDoc;
+    return ProcDescs.findOne({_id: this.params._id});
   },
 
   // actions to be performed
 
-  insert: function () {
-    this.render('InsertProcDesc', {});
-  },
-
-  list: function () {
-    this.render('ProcDescList', {});
-  },
-
-  edit: function () {
-    this.render('EditProcDesc', {});
-  },
-
-  view: function () {
-    this.render('ViewProcDescVersion', {});
+  approve: function() {
+    var that = this;
+    Meteor.call('proc_desc_pdf', Meteor.userId(), localStorage.getItem("Meteor.loginToken"), this.params._id, function(err, res) {
+      if (res) {
+        if (!that.states) {
+          that.states = new ReactiveDict(null);
+        }
+        that.states.set('pdfData', res);
+        that.render('ApproveProcDesc', {});
+      }
+    });
   }
 
 });

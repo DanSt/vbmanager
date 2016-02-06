@@ -31,23 +31,23 @@ Template.ViewProcDescVersion.events({
     });
   },
   'click .approve': function() {
-    var user_id = Meteor.userId();
-    var token = localStorage.getItem("Meteor.loginToken");
+    // var user_id = Meteor.userId();
+    // var token = localStorage.getItem("Meteor.loginToken");
     // var receiveToken = (Math.random()*1e32).toString(36);
 
-    var that = this;
+    // var that = this;
 
-    Meteor.call('proc_desc_pdf', user_id, token, this._id, function(err, res) {
-      if (err) {
-        console.log(err);
-      } else if (res) {
-        Router.go('/approve_proc_desc/' + that._id);
-      }
-    });
+    // Meteor.call('proc_desc_pdf', user_id, token, this._id, function(err, res) {
+    //   if (err) {
+    //     console.log(err);
+    //   } else if (res) {
+    Router.go('/approve_proc_desc/' + this._id);
+      // }
+    // });
   },
   'click .load-signature': function(event) {
     event.preventDefault();
-    
+
     window.open(Router.url('getSignature', {_id: this._id}));
   },
   'click .load-archive': function(event) {

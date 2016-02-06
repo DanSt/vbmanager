@@ -2,8 +2,6 @@
 /* ApproveProcDesc: variables */
 /*****************************************************************************/
 
-var context = this;
-
 /*****************************************************************************/
 /* ApproveProcDesc: Event Handlers */
 /*****************************************************************************/
@@ -15,14 +13,8 @@ Template.ApproveProcDesc.events({
 /*****************************************************************************/
 Template.ApproveProcDesc.helpers({
   getBase64Pdf: function () {
-    var pdf = "";
-    if (this.archive && this.archive.files && this.archive.files.originalDocument) {
-      pdf = this.archive.files.originalDocument;
-    } else {
-      pdf = Meteor.call('proc_desc_pdf', Meteor.userId(), localStorage.getItem("Meteor.loginToken"), this._id);
-    }
-    // var pdf = context.states.get("originalDocument");
-    return pdf;
+    var controller = Iron.controller();
+    return controller.states.get('pdfData');
   },
   getDocumentId: function() {
     var documentId = this._id;
