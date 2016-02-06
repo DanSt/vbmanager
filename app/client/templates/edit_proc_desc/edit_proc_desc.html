@@ -2,6 +2,9 @@
   <div class="edit_proc_desc">
     <p>
       ID: {{_id}} - Erstellt: {{longDateFormatted modifiedAt}} - Bearbeiter: {{modifierName}} - Version: {{_version}}
+      {{#if content.approved}}
+       - Freigegeben: <i class="fa fa-check"></i>
+      {{/if}}
     </p>
     {{#autoForm id="editForm" collection="ProcDescs" doc=this id="updateProcDescForm" type="update"}}
       <fieldset>
@@ -158,7 +161,10 @@
       {{/linkTo}} -->
       {{#each versions}}
       {{#linkTo route='viewProcDescVersion'}}
-        <li>{{content.serviceShortTitle}} - {{longDateFormatted modifiedAt}} - version: {{_version}} - {{isVerified}}</li>
+        <li>{{content.serviceShortTitle}} - {{longDateFormatted modifiedAt}} - version: {{_version}} - {{isVerified}}
+          {{#if content.approved}}
+           - Freigegeben: <i class="fa fa-check"></i>
+          {{/if}}</li>
       {{/linkTo}}
       {{/each}}
     </p>

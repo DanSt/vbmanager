@@ -45,26 +45,43 @@
 
     var filesId = ProcDescArchiveFiles.insert(archiveFiles);
 
+    var hash_file = Meteor.npmRequire('hash_file');
+    var merkle = Meteor.npmRequire('merkle');
+    var merkle_mod = Meteor.npmRequire('merkle-tree');
+
+    var documentDigest = hash_file(new Buffer(originalDocument, 'base64'), 'sha256');
+    var signatureDigest = hash_file(new Buffer(signature, 'base64'), 'sha256');
+
+    var arr = [documentDigest, signatureDigest];
+    var tree = merkle('sha256').sync(arr);
+
+    var treeStructure = [];
+    for (var i=0; i<tree.levels(); i++) {
+      output.push(tree.level(i));
+    }
+
     var updateSet = {
       "content.approved": true,
       "content.approvedAt": new Date(),
       "archive.metaData.documentId": documentId,
       "archive.metaData.documentTitle": serviceShortTitle,
-      "archive.metaData.documentDigest": CryptoJS.SHA256(originalDocument).toString(),
+      "archive.metaData.documentDigest": documentDigest,
       "archive.metaData.documentFileName": "Verfahrensbeschreibung.pdf",
-      "archive.metaData.documentFormat": "base64",
+      "archive.metaData.documentFormat": "binary",
       "archive.metaData.documentDigestAlgorithm": "SHA256",
       "archive.metaData.creator": createdBy,
       "archive.metaData.creationDate": new Date(),
       "archive.metaData.signatureFileName": "Verfahrensbeschreibung-signatur.pkcs7",
-      "archive.metaData.signatureFormat": "base64",
-      "archive.metaData.signatureDigest": CryptoJS.SHA256(signature).toString(),
+      "archive.metaData.signatureFormat": "binary",
+      "archive.metaData.signatureDigest": signatureDigest,
       "archive.metaData.signatureDigestAlgorithm": "SHA256",
       "archive.metaData.signatureCertFileName": "",
       "archive.metaData.signatureCertFormat": "base64",
       "archive.metaData.signatureCertDigest": "",
       "archive.metaData.signatureCertDigestAlgorithm": "SHA256",
       "archive.metaData.versionNumber": version,
+      "archive.metaData.merkleTree": JSON.stringify(output),
+      "archive.metaData.merkleRootHash": ouput[0][0],
       "archive.files": filesId
     };
 

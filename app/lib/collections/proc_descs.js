@@ -524,6 +524,14 @@ ProcDescArchiveMetaDataSchema = new SimpleSchema({
   versionNumber: {
     type: Number,
     optional: true
+  },
+  merkleTree: {
+    type: String,
+    optional: true
+  },
+  merkleRootHash: {
+    type: String,
+    optional: true
   }
 });
 

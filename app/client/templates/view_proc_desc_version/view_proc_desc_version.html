@@ -520,7 +520,10 @@ IIW7MImuJKkHUv5n5P8ATcohk4PSp9wAAAAASUVORK5CYII=" alt="LRZ Logo">
       {{/linkTo}} -->
       {{#each getVersions}}
         {{#linkTo route='viewProcDescVersion'}}
-          <li>{{content.serviceShortTitle}} - Bearbeiter: {{modifierName}} - {{longDateFormatted modifiedAt}} - version: {{_version}} - {{isVerified this}}</li>
+          <li>{{content.serviceShortTitle}} - Bearbeiter: {{modifierName}} - {{longDateFormatted modifiedAt}} - version: {{_version}} - {{isVerified this}}
+          {{#if content.approved}}
+           - Freigegeben: <i class="fa fa-check"></i>
+          {{/if}}</li>
         {{/linkTo}}
       {{/each}}
     </p>
