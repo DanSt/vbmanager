@@ -5,5 +5,5 @@
  "httpreq":"0.4.16",
  "merkle-tree":"0.0.14",
  "merkle":"0.3.1",
- "adm-zip":"0.4.7"
+ "jszip":"2.5.0"
 }

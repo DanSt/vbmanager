@@ -37,7 +37,7 @@ Router.route('/approve_proc_desc/:_id', {
   controller: 'ApproveController',
   waitOn: function(){
     // waitOn makes sure that this publication is ready before rendering your template
-    return Meteor.subscribe("proc_descs");
+    return Meteor.subscribe('proc_descs');
   },
   onBeforeAction: function() {
     if (!Roles.userIsInRole(Meteor.user(), ['datenschutzBeauftragter'])) {
@@ -46,8 +46,6 @@ Router.route('/approve_proc_desc/:_id', {
       if (!this.states) {
         this.states = new ReactiveDict(null);
       }
-      var res = Meteor.call('proc_desc_pdf', Meteor.userId(), localStorage.getItem("Meteor.loginToken"), this.params._id);
-      this.states.set('pdfData', res);
       this.next();
     }
   },

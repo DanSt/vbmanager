@@ -150,24 +150,24 @@ Meteor.methods({
       return "";
     }
 
+    var files = ProcDescArchiveFiles.find({_id: doc.archive.files}).fetch()[0];
+
     var XML = Meteor.npmRequire('simple-xml');
     moment.locale('de');
 
     var xmlHeader = '<?xml version="1.0" encoding="UTF-8"?>'
     doc.archive.metaData.creationDate = moment(doc.archive.metaData.creationDate).format('DD.MM.YYYY');
 
-    var AdmZip = Meteor.npmRequire('adm-zip');
-    var zip = new AdmZip();
+    var JSZip = Meteor.npmRequire('jszip');
+    var zip = new JSZip();
 
-    var mainDoc = new Buffer(doc.archive.files.originalDocument, 'base64');
-    var signature = new Buffer(doc.archive.files.signature, 'base64');
-    var metaXML = new Buffer(xmlHeader + XML.stringify(doc.archive.metaData));
+    var metaXML = xmlHeader + XML.stringify(doc.archive.metaData);
 
-    zip.addFile(doc.archive.metaData.documentFileName, mainDoc);
-    zip.addFile(doc.archive.metaData.signatureFileName, signature);
-    zip.addFile('MetaDaten.xml', metaXML);
+    zip.file(doc.archive.metaData.documentFileName, files.originalDocument, {base64: true});
+    zip.file(doc.archive.metaData.signatureFileName, files.signature, {base64: true});
+    zip.file('MetaDaten.xml', metaXML);
 
-    var base64Zip = zip.toBuffer().toString('base64');
+    var base64Zip = zip.generate({type: 'base64'});
 
     return base64Zip;
   },
