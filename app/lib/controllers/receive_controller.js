@@ -81,7 +81,7 @@
       "archive.metaData.signatureCertDigestAlgorithm": "SHA256",
       "archive.metaData.versionNumber": version,
       "archive.metaData.merkleTree": JSON.stringify(treeStructure),
-      "archive.metaData.merkleRootHash": ouput[0][0],
+      "archive.metaData.merkleRootHash": treeStructure[0][0],
       "archive.files": filesId
     };
 
