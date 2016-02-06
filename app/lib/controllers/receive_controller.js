@@ -57,7 +57,7 @@
 
     var treeStructure = [];
     for (var i=0; i<tree.levels(); i++) {
-      output.push(tree.level(i));
+      treeStructure.push(tree.level(i));
     }
 
     var updateSet = {
@@ -80,7 +80,7 @@
       "archive.metaData.signatureCertDigest": "",
       "archive.metaData.signatureCertDigestAlgorithm": "SHA256",
       "archive.metaData.versionNumber": version,
-      "archive.metaData.merkleTree": JSON.stringify(output),
+      "archive.metaData.merkleTree": JSON.stringify(treeStructure),
       "archive.metaData.merkleRootHash": ouput[0][0],
       "archive.files": filesId
     };
