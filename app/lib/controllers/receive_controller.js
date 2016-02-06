@@ -40,7 +40,7 @@
       "archive.metaData.documentTitle": serviceShortTitle,
       "archive.metaData.creator": createdBy,
       "archive.metaData.creationDate": new Date(),
-      "archive.metaData.signatureFileName": "verfahrensbeschreibung-signatur.pkcs7",
+      "archive.metaData.signatureFileName": "Verfahrensbeschreibung-signatur.pkcs7",
       "archive.metaData.signatureFormat": "base64",
       "archive.metaData.signatureDigest": CryptoJS.SHA256(signature).toString(),
       "archive.metaData.signatureDigestAlgorithm": "SHA256",

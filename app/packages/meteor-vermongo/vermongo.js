@@ -100,11 +100,12 @@ Meteor.Collection.prototype.vermongo = function(op) {
       // do nothing if only ignored fields are modified
       // if(fieldNames.diff(options.ignoredFields).equals([])) return;
 
+      // incrementing version
+      modifier.$set = modifier.$set || {};
+
       // in case of doc not already versionned
       if(!doc._version) doc._version = 1;
 
-      // incrementing version
-      modifier.$set = modifier.$set || {};
       modifier.$set._version = doc._version + 1;
 
       if(options['timestamps'])

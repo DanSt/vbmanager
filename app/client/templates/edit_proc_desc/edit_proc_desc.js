@@ -7,11 +7,11 @@ Template.EditProcDesc.rendered = function() {
 /* Id: Event Handlers */
 /*****************************************************************************/
 Template.EditProcDesc.events({
-  'submit form': function(event){
+  'submit form': function(event) {
     /*alert('Die Verfahrensbeschreibung wurde gespeichert.');*/
     Router.go('procDescList');
   },
-  'click .cancel': function(event){
+  'click .cancel': function(event) {
     /*alert('Die Verfahrensbeschreibung wurde gespeichert.');*/
     Router.go('procDescList');
   },

@@ -161,36 +161,68 @@ Router.route('/proc_desc_pdf/:_id', {
     var token = cookies.get("meteor_token") || "";
     /** Solution end **/
 
-    //Check a valid user with this token exists
-    var user = Meteor.users.findOne({
-      _id: userid,
-      'services.resume.loginTokens.hashedToken' : Accounts._hashLoginToken(token)
-    });
+    // retrieve base64 data of pdf and convert it to binary
+    var pdf = Meteor.call('proc_desc_pdf', userid, token, this.params._id);
 
-    var collection = ProcDescs;
-    var doc = ProcDescs.findOne({_id: this.params._id});
-    if (!doc) {
-      collection = ProcDescsVermongo;
-      doc = ProcDescsVermongo.findOne({_id: this.params._id});
-    }
-
-    if (!user || !Roles.userIsInRole(user._id, ['datenschutzBeauftragter']) && doc.modifierId !== user._id) {
+    if (pdf == "") {
       this.response.writeHead(401);
       this.response.end();
       return;
     }
-    // retrieve base64 data of pdf and convert it to binary
-    var pdf = Meteor.call('proc_desc_pdf', userid, token, this.params._id);;
 
     var pdfData = new Buffer(pdf, 'base64');
 
+    moment.locale('de');
+    var currentDate = moment(new Date()).format('YYYY-MM-DD');
     this.response.writeHead(200, {
       'Content-Type': 'application/pdf',
-      'Content-Disposition': 'attachment; filename="verfahrensbeschreibung-'+this.params._id+'.pdf"',
+      'Content-Disposition': 'attachment; filename="vb-'+this.params._id+'-'+currentDate+'.pdf"',
       'Content-Length': pdfData.length
     });
 
     this.response.write(pdfData);
+    this.response.end();
+  }
+});
+
+Router.route('/proc_desc_archive/:_id', {
+  name: 'getArchive',
+  where: 'server',
+  action: function() {
+
+    /**
+    *   Solution from http://stackoverflow.com/questions/27734110/authentication-on-server-side-routes-in-meteor
+    **/
+    //Check the values in the cookies
+    var cookies = new Cookies( this.request );
+    var userid = cookies.get("meteor_user_id") || "";
+    var token = cookies.get("meteor_token") || "";
+    /** Solution end **/
+
+    // retrieve base64 data of pdf and convert it to binary
+    var archive = Meteor.call('proc_desc_archive', userid, token, this.params._id);
+
+    if (archive == "") {
+      this.response.writeHead(401);
+      this.response.end();
+      return;
+    }
+
+    var archiveData = new Buffer(archive, 'base64');
+
+    moment.locale('de');
+    var currentDate = moment(new Date()).format('YYYY-MM-DD');
+    this.response.writeHead(200, {
+      'Content-Type': 'application/zip',
+      'Pragma': 'public',
+      'Expires': '0',
+      'Cache-Control': 'private, must-revalidate, post-check=0, pre-check=0',
+      'Content-Transfer-Encoding': 'binary',
+      'Content-Disposition': 'attachment; filename="vba-'+this.params._id+'-'+currentDate+'.zip"',
+      'Content-Length': archiveData.length
+    });
+
+    this.response.write(archiveData);
     this.response.end();
   }
 });

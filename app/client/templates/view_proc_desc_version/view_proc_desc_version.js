@@ -45,8 +45,15 @@ Template.ViewProcDescVersion.events({
       }
     });
   },
-  'click .load-signature': function() {
+  'click .load-signature': function(event) {
+    event.preventDefault();
+    
     window.open(Router.url('getSignature', {_id: this._id}));
+  },
+  'click .load-archive': function(event) {
+    event.preventDefault();
+
+    window.open(Router.url('getArchive', {_id: this._id}));
   }
 });
 

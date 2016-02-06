@@ -3,7 +3,7 @@
     <p>
       ID: {{_id}} - Erstellt: {{longDateFormatted modifiedAt}} - Bearbeiter: {{modifierName}} - Version: {{_version}}
     </p>
-    {{#autoForm collection="ProcDescs" doc=this id="updateProcDescForm" type="update"}}
+    {{#autoForm id="editForm" collection="ProcDescs" doc=this id="updateProcDescForm" type="update"}}
       <fieldset>
         <!--<legend>Verfahrensbeschreibung bearbeiten</legend>-->
         <img src="/images/lrzLogo.png" alt="LRZ Logo">

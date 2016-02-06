@@ -31,25 +31,19 @@ Meteor.methods({
         'services.resume.loginTokens.hashedToken' : Accounts._hashLoginToken(token)
       });
 
-      console.log(4);
-      //If they're not logged in tell them
-      if (!user || !Roles.userIsInRole(user._id, ['datenschutzBeauftragter'])) {
-        console.log("User is not allowed");
-        return "";
-      }
-      console.log(5);
-
       // PREPARE DATA
-      var data = ProcDescs.find(id).fetch()[0];
+      var mainId = id;
+      var data = ProcDescs.find({_id: id}).fetch()[0];
       var collection = ProcDescs;
       if (typeof data === 'undefined') {
         data = ProcDescsVermongo.find({_id: id}).fetch()[0];
+        mainId = data.ref;
         collection = ProcDescsVermongo;
       }
 
-      // var data = content;
-
-      // console.log(JSON.stringify(data.content));
+      if (!user || !Roles.userIsInRole(user._id, ['datenschutzBeauftragter']) && !Roles.userIsInRole(user._id, mainId)) {
+        return "";
+      }
 
       var pdf = "";
 
@@ -123,7 +117,7 @@ Meteor.methods({
       var updateSet = {
         "archive.files.originalDocument": base64Pdf,
         "archive.metaData.documentDigest": CryptoJS.SHA256(base64Pdf).toString(),
-        "archive.metaData.documentFileName": "verfahrensbeschreibung.pdf",
+        "archive.metaData.documentFileName": "Verfahrensbeschreibung.pdf",
         "archive.metaData.documentFormat": "base64",
         "archive.metaData.documentDigestAlgorithm": "SHA256"
       };
@@ -134,7 +128,6 @@ Meteor.methods({
         if (error) {
           console.log(error.message);
         } else {
-          console.log(JSON.stringify(affectedDocs));
           fut2.return("Success");
         }
       });
@@ -144,8 +137,54 @@ Meteor.methods({
       return base64Pdf;
     }
   },
+  'proc_desc_archive': function(userid, token, id) {
+
+    /**
+    *   Solution from http://stackoverflow.com/questions/27734110/authentication-on-server-side-routes-in-meteor
+    **/
+    //Check a valid user with this token exists
+    var user = Meteor.users.findOne({
+      _id: userid,
+      'services.resume.loginTokens.hashedToken' : Accounts._hashLoginToken(token)
+    });
+
+    // PREPARE DATA
+    var mainId = id;
+    var doc = ProcDescs.find(id).fetch()[0];
+    var collection = ProcDescs;
+    if (typeof doc === 'undefined') {
+      doc = ProcDescsVermongo.find({_id: id}).fetch()[0];
+      mainId = doc.ref;
+      collection = ProcDescsVermongo;
+    }
+
+    if (!doc.content.approved || !user || !Roles.userIsInRole(user._id, ['datenschutzBeauftragter']) && !Roles.userIsInRole(user._id, mainId)) {
+      return "";
+    }
+
+    var XML = Meteor.npmRequire('simple-xml');
+    moment.locale('de');
+
+    var xmlHeader = '<?xml version="1.0" encoding="UTF-8"?>'
+    doc.archive.metaData.creationDate = moment(doc.archive.metaData.creationDate).format('DD.MM.YYYY');
+
+    var AdmZip = Meteor.npmRequire('adm-zip');
+    var zip = new AdmZip();
+
+    var mainDoc = new Buffer(doc.archive.files.originalDocument, 'base64');
+    var signature = new Buffer(doc.archive.files.signature, 'base64');
+    var metaXML = new Buffer(xmlHeader + XML.stringify(doc.archive.metaData));
+
+    zip.addFile(doc.archive.metaData.documentFileName, mainDoc);
+    zip.addFile(doc.archive.metaData.signatureFileName, signature);
+    zip.addFile('MetaDaten.xml', metaXML);
+
+    var base64Zip = zip.toBuffer().toString('base64');
+
+    return base64Zip;
+  },
   'sigReq': function(content) {
-    if (Meteor.userId() && Meteor.isServer) {
+    if (Meteor.userId() && Meteor.isServer && Roles.userIsInRole(Meteor.userId(), ['datenschutzBeauftragter'])) {
       var jsrsasign = Meteor.npmRequire('jsrsasign');
       var fs      = Npm.require('fs');
       var Future = Npm.require('fibers/future');
