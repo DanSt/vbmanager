@@ -33,6 +33,9 @@
     if (!user || Roles.userIsInRole('datenschutzBeauftragter')) {
       this.response.writeHead(401);
       this.response.end();
+    } else {
+      this.response.writeHead(200);
+      this.response.end();
     }
 
     var archiveFiles = {
@@ -66,9 +69,6 @@
     };
 
     ProcDescs.update({_id: documentId}, {$set: updateSet}, {getAutoValues: false});
-
-    this.response.writeHead(200);
-    this.response.end();
   }
 
 });

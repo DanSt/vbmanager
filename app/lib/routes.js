@@ -43,6 +43,11 @@ Router.route('/approve_proc_desc/:_id', {
     if (!Roles.userIsInRole(Meteor.user(), ['datenschutzBeauftragter'])) {
       this.redirect('home');
     } else {
+      if (!this.states) {
+        this.states = new ReactiveDict(null);
+      }
+      var res = Meteor.call('proc_desc_pdf', Meteor.userId(), localStorage.getItem("Meteor.loginToken"), this.params._id);
+      this.states.set('pdfData', res);
       this.next();
     }
   },

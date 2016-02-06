@@ -9,6 +9,8 @@ var context = this;
 /*****************************************************************************/
 Template.ViewProcDescVersion.events({
   'click .return': function(event){
+    event.preventDefault();
+    
     var originalDocument = this.ref;
     if (!originalDocument) {
       originalDocument = this._id;
@@ -22,28 +24,14 @@ Template.ViewProcDescVersion.events({
   },
   'click .xml': function() {
     Meteor.call('proc_desc_xml', this.content, function(err, res) {
-      if (err) {
-        console.error(err);
-      } else if (res) {
+      if (res) {
         var uriContent = "data:text/attachment;charset=UTF-8," + encodeURIComponent(res);
         var myWindow = window.open(uriContent, 'testdocument.xml');
       }
     });
   },
   'click .approve': function() {
-    // var user_id = Meteor.userId();
-    // var token = localStorage.getItem("Meteor.loginToken");
-    // var receiveToken = (Math.random()*1e32).toString(36);
-
-    // var that = this;
-
-    // Meteor.call('proc_desc_pdf', user_id, token, this._id, function(err, res) {
-    //   if (err) {
-    //     console.log(err);
-    //   } else if (res) {
     Router.go('/approve_proc_desc/' + this._id);
-      // }
-    // });
   },
   'click .load-signature': function(event) {
     event.preventDefault();

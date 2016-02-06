@@ -571,4 +571,12 @@ if (Meteor.isServer) {
       return true;
     }
   });
+
+  ProcDescs.before.update(function(userId, doc, fieldNames, modifier, hook_options) {
+    if (fieldNames.indexOf('content') > -1 && !modifier.$set['content.approved']) {
+      modifier.$set['content.approved'] = false;
+      modifier.$set['content.approvedAt'] = undefined;
+      modifier.$set['archive'] = undefined;
+    }
+  });
 }
