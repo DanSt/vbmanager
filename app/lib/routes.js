@@ -142,7 +142,8 @@ Router.route('/get_signature/:_id', {
       this.response.end();
     }
 
-    var signatur = new Buffer(doc.archive.files.signature, 'base64')
+    var files = ProcDescArchiveFiles.find({_id: doc.archive.files}).fetch()[0];
+    var signatur = new Buffer(files.signature, 'base64');
 
     this.response.writeHead(200, {
       'Content-Type': 'application/application',

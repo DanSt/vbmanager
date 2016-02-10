@@ -60,30 +60,34 @@
       treeStructure.push(tree.level(i));
     }
 
+    var archive = {
+      metaData: {
+        documentId: documentId,
+        documentTitle: serviceShortTitle,
+        documentDigest: documentDigest,
+        documentFileName: "Verfahrensbeschreibung.pdf",
+        documentFormat: "binary",
+        creator: createdBy,
+        creationDate: new Date(),
+        signatureFileName: "Verfahrensbeschreibung-signatur.pkcs7",
+        signatureFormat: "binary",
+        signatureDigest: signatureDigest,
+        signatureDigestAlgorithm: "SHA256",
+        signatureCertFileName: "",
+        signatureCertFormat: "base64",
+        signatureCertDigest: "",
+        signatureCertDigestAlgorithm: "SHA256",
+        versionNumber: version,
+        merkleTree: JSON.stringify(treeStructure),
+        merkleRootHash: treeStructure[0][0]
+      },
+      files: filesId
+    }
+
     var updateSet = {
       "content.approved": true,
       "content.approvedAt": new Date(),
-      "archive.metaData.documentId": documentId,
-      "archive.metaData.documentTitle": serviceShortTitle,
-      "archive.metaData.documentDigest": documentDigest,
-      "archive.metaData.documentFileName": "Verfahrensbeschreibung.pdf",
-      "archive.metaData.documentFormat": "binary",
-      "archive.metaData.documentDigestAlgorithm": "SHA256",
-      "archive.metaData.creator": createdBy,
-      "archive.metaData.creationDate": new Date(),
-      "archive.metaData.signatureFileName": "Verfahrensbeschreibung-signatur.pkcs7",
-      "archive.metaData.signatureFormat": "binary",
-      "archive.metaData.signatureDigest": signatureDigest,
-      "archive.metaData.signatureDigestAlgorithm": "SHA256",
-      "archive.metaData.signatureCertFileName": "",
-      "archive.metaData.signatureCertFormat": "base64",
-      "archive.metaData.signatureCertDigest": "",
-      "archive.metaData.signatureCertDigestAlgorithm": "SHA256",
-      "archive.metaData.versionNumber": version,
-      "archive.metaData.merkleTree": JSON.stringify(treeStructure),
-      "archive.metaData.merkleRootHash": treeStructure[0][0],
-      "archive.files": filesId
-    };
+    }
 
     ProcDescs.update({_id: documentId}, {$set: updateSet}, {getAutoValues: false});
   }
