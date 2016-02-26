@@ -87,6 +87,7 @@
     var updateSet = {
       "content.approved": true,
       "content.approvedAt": new Date(),
+      "archive": archive
     }
 
     ProcDescs.update({_id: documentId}, {$set: updateSet}, {getAutoValues: false});

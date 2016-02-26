@@ -17,7 +17,11 @@ ProcedureDescriptionVersionController = RouteController.extend({
   // return Meteor.subscribe('post', this.params._id);
 
   data: function () {
-    return ProcDescsVermongo.findOne({_id: this.params._id});
+    var proc_desc = ProcDescsVermongo.findOne({_id: this.params._id});
+    if (typeof proc_desc === 'undefined') {
+      proc_desc = ProcDescs.findOne({_id: this.params._id});
+    }
+    return proc_desc;
   },
 
   view: function () {

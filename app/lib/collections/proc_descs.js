@@ -219,7 +219,7 @@ ProcDescBSchema = new SimpleSchema({
   },
   deletionDeadline2: {
     type: Boolean,
-    label: "Die Daten werden dienstlokal vorgehalten, da die LRZ-Benutzerverwaltung genutzt wird.",
+    label: "Die Daten werden dienstlokal gespeichert und bei Erlöschen der Nutzungsberechtigung entfernt.",
     defaultValue: true
   },
   deletionDeadline2Text: {

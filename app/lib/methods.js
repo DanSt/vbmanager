@@ -14,7 +14,7 @@ Meteor.methods({
       if (content.sectionA.documentPurposeOriginalDate) {
         content.sectionA.documentPurposeOriginalDate = moment(content.sectionA.documentPurposeOriginalDate).format('DD.MM.YYYY');
       }
-      var xmlDocument = xmlHeader + XML.stringify(content);
+      var xmlDocument = xmlHeader + '<document>' + XML.stringify(content) + '</document>';
 
       return xmlDocument;
     }
@@ -161,7 +161,7 @@ Meteor.methods({
     var JSZip = Meteor.npmRequire('jszip');
     var zip = new JSZip();
 
-    var metaXML = xmlHeader + XML.stringify(doc.archive.metaData);
+    var metaXML = xmlHeader + '<metaData>' + XML.stringify(doc.archive.metaData) + '</metaData>';
 
     zip.file(doc.archive.metaData.documentFileName, files.originalDocument, {base64: true});
     zip.file(doc.archive.metaData.signatureFileName, files.signature, {base64: true});

@@ -1,6 +1,6 @@
 <template name="ProcDescList">
   <div class="proc-desc-list">
-    <h1>Verfahrensbeschreibungen</h1>
+    <h1>Alle Verfahrensbeschreibungen</h1>
     <table class="table table-hover">
       <thead>
         <tr>
@@ -14,40 +14,64 @@
       <tbody>
 
         {{#each proc_descs}}
+          {{> ProcDescListSingle}}
+        {{/each}}
+
+      </tbody>
+    </table>
+
+    <h1>Freigebene Verfahrensbeschreibungen</h1>
+    <table class="table table-hover">
+      <thead>
         <tr>
-          <td>
-            {{#linkTo route='viewProcDesc'}}
-              {{content.serviceShortTitle}}
-            {{/linkTo}}
-          </td>
-          <td>{{content.sectionA.createdBy}}</td>
-          <td>{{longDateFormatted content.sectionA.creationDate}} Uhr</td>
-          <td>
-            {{#if content.approved}}
-              {{longDateFormatted content.approvedAt}} Uhr&#160;<i class="fa fa-check"></i>
-            {{/if}}
-          </td>
-          <td>
-            {{#linkTo route='viewProcDesc'}}
-              <i class="fa fa-file-text-o" title="Ansehen"></i>
-            {{/linkTo}}&#160;
-            {{#linkTo route='editProcDesc'}}
-              <i class="fa fa-pencil" title="Editieren"></i>
-            {{/linkTo}}&#160;
-            <a href="#" class="pdf">
-              <i class="fa fa-file-pdf-o" title="PDF herunterladen"></i>
-            </a>&#160;
-            <a href="#" class="xml">
-              <i class="fa fa-file-code-o" title="XML herunterladen"></i>
-            </a>&#160;
-            <a href="#" class="delete">
-              <i class="fa fa-trash-o" title="Löschen"></i>
-            </a>
-          </td>
+          <th>Dienstbezeichnung</th>
+          <th>Verantwortlicher</th>
+          <th>Erstellt</th>
+          <th>Freigabe</th>
+          <th>Optionen</th>
         </tr>
+      </thead>
+      <tbody>
+
+        {{#each approved_proc_descs}}
+          {{> ProcDescListSingle}}
         {{/each}}
 
       </tbody>
     </table>
   </div>
+</template>
+
+<template name="ProcDescListSingle">
+  <tr>
+    <td>
+      {{#linkTo route='viewProcDescVersion'}}
+        {{content.serviceShortTitle}}
+      {{/linkTo}}
+    </td>
+    <td>{{content.sectionA.createdBy}}</td>
+    <td>{{longDateFormatted content.sectionA.creationDate}} Uhr</td>
+    <td>
+      {{#if content.approved}}
+        {{longDateFormatted content.approvedAt}} Uhr&#160;<i class="fa fa-check"></i>
+      {{/if}}
+    </td>
+    <td>
+      {{#linkTo route='viewProcDescVersion'}}
+        <i class="fa fa-file-text-o" title="Ansehen"></i>
+      {{/linkTo}}&#160;
+      {{#linkTo route='editProcDesc'}}
+        <i class="fa fa-pencil" title="Editieren"></i>
+      {{/linkTo}}&#160;
+      <a href="#" class="pdf">
+        <i class="fa fa-file-pdf-o" title="PDF herunterladen"></i>
+      </a>&#160;
+      <a href="#" class="xml">
+        <i class="fa fa-file-code-o" title="XML herunterladen"></i>
+      </a>&#160;
+      <a href="#" class="delete">
+        <i class="fa fa-trash-o" title="Löschen"></i>
+      </a>
+    </td>
+  </tr>
 </template>
