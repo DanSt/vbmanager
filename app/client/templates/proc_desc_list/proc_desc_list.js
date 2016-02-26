@@ -4,8 +4,13 @@
 Template.ProcDescListSingle.events({
   'click .delete': function () {
     var doc = ProcDescs.findOne(this._id);
+    var id = this._id
+    if (typeof doc === "undefined") {
+      doc = ProcDescsVermongo.findOne(this._id);
+      id = doc.ref;
+    }
     if (confirm('Wollen Sie wirklich die Verfahrensbeschreibung für "' + doc.content.serviceShortTitle + '" löschen?')) {
-      ProcDescs.remove(this._id);
+      ProcDescs.remove(id);
     }
   },
   'click .pdf': function () {
