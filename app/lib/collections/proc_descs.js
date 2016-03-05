@@ -560,6 +560,14 @@ ProcDescSchema = new SimpleSchema({
   archive: {
     type: ProcDescArchiveSchema,
     optional: true
+  },
+  waitingForApproval: {
+    type: Boolean,
+    defaultValue: false
+  },
+  modifierId: {
+    type: String,
+    max: 200
   }
 });
 

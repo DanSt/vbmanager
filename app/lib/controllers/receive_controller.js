@@ -33,6 +33,7 @@
     if (!user || Roles.userIsInRole('datenschutzBeauftragter')) {
       this.response.writeHead(401);
       this.response.end();
+      return;
     } else {
       this.response.writeHead(200);
       this.response.end();
@@ -87,10 +88,11 @@
     var updateSet = {
       "content.approved": true,
       "content.approvedAt": new Date(),
+      "modifierId": userId,
       "archive": archive
     }
 
-    ProcDescs.update({_id: documentId}, {$set: updateSet}, {getAutoValues: false});
+    ProcDescs.update({_id: documentId}, {$set: updateSet}, {getAutoValues: false, filter: false});
   }
 
 });

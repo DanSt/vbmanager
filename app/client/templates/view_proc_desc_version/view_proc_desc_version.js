@@ -10,7 +10,7 @@ var context = this;
 Template.ViewProcDescVersion.events({
   'click .return': function(event){
     event.preventDefault();
-    
+
     var originalDocument = this.ref;
     if (!originalDocument) {
       originalDocument = this._id;
