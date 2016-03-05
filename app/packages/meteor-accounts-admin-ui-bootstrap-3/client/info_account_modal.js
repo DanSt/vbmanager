@@ -32,7 +32,7 @@ Template.infoAccountModalInner.helpers({
 			if (role === '0') {
 				pairs.push({key: 'Roles', value: r});
 			} else {
-				pairs.push({key: '-', value: r});
+				pairs.push({key: '.', value: r});
 			}
 		}
 		return pairs;

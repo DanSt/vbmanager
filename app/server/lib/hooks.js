@@ -1,5 +1,6 @@
 if (Meteor.isServer) {
   ProcDescs.after.insert(function(userId, doc) {
+    Roles.createRole(doc._id);
     if (typeof userId !== 'undefined' && !Roles.userIsInRole(userId, 'datenschutzBeauftragter')) {
       Roles.addUsersToRoles(userId, doc._id);
     }
