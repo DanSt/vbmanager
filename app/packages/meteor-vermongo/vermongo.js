@@ -47,7 +47,7 @@ Meteor.Collection.prototype.vermongo = function(op) {
     // create a new collection if not already existing
     _versions_collection = new Meteor.Collection(name + '.vermongo');
 
-    // copy Doc in vermondo collection
+    // copy Doc in vermongo collection
     var copyDoc = function(doc) {
       if(Meteor.isServer) { // avoid duplicated insertion
         // copy doc to versions collection
@@ -105,6 +105,8 @@ Meteor.Collection.prototype.vermongo = function(op) {
 
       // in case of doc not already versionned
       if(!doc._version) doc._version = 1;
+
+      // copyDoc(doc);
 
       modifier.$set._version = doc._version + 1;
 
