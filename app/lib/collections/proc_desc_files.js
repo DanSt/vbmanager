@@ -12,6 +12,10 @@ ProcDescArchiveFilesSchema = new SimpleSchema({
   signatureCert: {
     type: String,
     optional: true
+  },
+  timestampResp: {
+    type: String,
+    optional: true
   }
 });
 

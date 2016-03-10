@@ -1,19 +1,6 @@
 ProcDescs = new Mongo.Collection('proc_descs').vermongo({timestamps: true, userId: 'modifierId', ignoreFields: []});
 ProcDescsVermongo = ProcDescs.getVersionCollection();
 
-// ProcDescs.before.insert(function (userId, doc) {
-//   ProcDescContentSchema.clean(doc.content);
-//   var hash = CryptoJS.SHA512(JSON.stringify(doc.content)).toString();
-//   doc.documentHash = hash;
-// });
-
-// ProcDescs.after.update(function (userId, doc, fieldNames, modifier, options) {
-//   var hash = CryptoJS.SHA512(JSON.stringify(doc.content)).toString();
-//   if (Meteor.isServer) {
-//     ProcDescs.direct.update({_id: doc._id}, {$set: {documentHash: hash}});
-//   }
-// });
-
 BoolValue = new SimpleSchema({
   value: {
     type: Boolean,
@@ -420,21 +407,6 @@ ProcDescContentSchema = new SimpleSchema({
   }
 });
 
-// ProcDescArchiveFilesSchema = new SimpleSchema({
-//   originalDocument: {
-//     type: String,
-//     optional: true
-//   },
-//   signature: {
-//     type: String,
-//     optional: true
-//   },
-//   signatureCert: {
-//     type: String,
-//     optional: true
-//   }
-// });
-
 ProcDescArchiveMetaDataSchema = new SimpleSchema({
   documentId: {
     type: String,
@@ -516,6 +488,28 @@ ProcDescArchiveMetaDataSchema = new SimpleSchema({
     optional: true,
   },
   signatureCertDigestAlgorithm: {
+    type: String,
+    max: 200,
+    optional: true,
+    defaultValue: "SHA256"
+  },
+  timestampFileName: {
+    type: String,
+    max: 300,
+    optional: true
+  },
+  timestampFormat: {
+    type: String,
+    max: 20,
+    optional: true,
+    defaultValue: 'base64'
+  },
+  timestampDigest: {
+    type: String,
+    max: 200,
+    optional: true,
+  },
+  timestampDigestAlgorithm: {
     type: String,
     max: 200,
     optional: true,

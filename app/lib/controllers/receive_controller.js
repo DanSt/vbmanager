@@ -39,13 +39,6 @@
       this.response.end();
     }
 
-    var archiveFiles = {
-      signature: signature,
-      originalDocument: originalDocument
-    };
-
-    var filesId = ProcDescArchiveFiles.insert(archiveFiles);
-
     var hash_file = Meteor.npmRequire('hash_file');
     var merkle = Meteor.npmRequire('merkle');
     var merkle_mod = Meteor.npmRequire('merkle-tree');
@@ -53,7 +46,18 @@
     var documentDigest = hash_file(new Buffer(originalDocument, 'base64'), 'sha256');
     var signatureDigest = hash_file(new Buffer(signature, 'base64'), 'sha256');
 
-    var arr = [documentDigest, signatureDigest];
+    var timestamp = Meteor.call('sigReq', documentDigest, userId, userToken);
+    var timestampDigest = hash_file(new Buffer(timestamp, 'base64'), 'sha256');
+
+    var archiveFiles = {
+      signature: signature,
+      originalDocument: originalDocument,
+      timestampResp: timestamp
+    };
+
+    var filesId = ProcDescArchiveFiles.insert(archiveFiles);
+
+    var arr = [documentDigest, signatureDigest, timestampDigest];
     var tree = merkle('sha256').sync(arr);
 
     var treeStructure = [];
@@ -75,9 +79,13 @@
         signatureDigest: signatureDigest,
         signatureDigestAlgorithm: "SHA256",
         signatureCertFileName: "",
-        signatureCertFormat: "base64",
+        signatureCertFormat: "binary",
         signatureCertDigest: "",
         signatureCertDigestAlgorithm: "SHA256",
+        timestampFileName: "Verfahrensbeschreibung-zeitstempel.tsr",
+        timestampFormat: "DER",
+        timestampDigest: timestampDigest,
+        timestampDigestAlgorithm: "SHA256",
         versionNumber: version,
         merkleTree: JSON.stringify(treeStructure),
         merkleRootHash: treeStructure[0][0]

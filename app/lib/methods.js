@@ -6,7 +6,7 @@ Meteor.methods({
 
   'proc_desc_xml': function(content) {
     if (Meteor.userId() && Meteor.isServer && Roles.userIsInRole(Meteor.userId(), ['datenschutzBeauftragter'])) {
-      var XML = Meteor.npmRequire('simple-xml');
+      var XML = Meteor.npmRequire('simplexml');
       moment.locale('de');
 
       var xmlHeader = '<?xml version="1.0" encoding="UTF-8"?>'
@@ -14,7 +14,8 @@ Meteor.methods({
       if (content.sectionA.documentPurposeOriginalDate) {
         content.sectionA.documentPurposeOriginalDate = moment(content.sectionA.documentPurposeOriginalDate).format('DD.MM.YYYY');
       }
-      var xmlDocument = xmlHeader + '<document>' + XML.stringify(content) + '</document>';
+      // var xmlDocument = xmlHeader + '<document>' + XML.stringify(content) + '</document>';
+      var xmlDocument = xmlHeader + '<document>\r\n' + XML.toXML(content) + '\r\n</document>';
 
       return xmlDocument;
     }
@@ -140,7 +141,7 @@ Meteor.methods({
 
     var files = ProcDescArchiveFiles.find({_id: doc.archive.files}).fetch()[0];
 
-    var XML = Meteor.npmRequire('simple-xml');
+    var XML = Meteor.npmRequire('simplexml');
     moment.locale('de');
 
     var xmlHeader = '<?xml version="1.0" encoding="UTF-8"?>'
@@ -149,18 +150,25 @@ Meteor.methods({
     var JSZip = Meteor.npmRequire('jszip');
     var zip = new JSZip();
 
-    var metaXML = xmlHeader + '<metaData>' + XML.stringify(doc.archive.metaData) + '</metaData>';
+    // var metaXML = xmlHeader + '<metaData>' + XML.stringify(doc.archive.metaData) + '</metaData>';
+    var metaXML = XML.toXML(doc.archive.metaData, {manifest: true, root: 'metaData'});
 
     zip.file(doc.archive.metaData.documentFileName, files.originalDocument, {base64: true});
     zip.file(doc.archive.metaData.signatureFileName, files.signature, {base64: true});
+    zip.file(doc.archive.metaData.timestampFileName, files.timestampResp, {base64: true});
     zip.file('MetaDaten.xml', metaXML);
 
     var base64Zip = zip.generate({type: 'base64'});
 
     return base64Zip;
   },
-  'sigReq': function(content) {
-    if (Meteor.userId() && Meteor.isServer && Roles.userIsInRole(Meteor.userId(), ['datenschutzBeauftragter'])) {
+  'sigReq': function(content, userId, token) {
+    var user = Meteor.users.findOne({
+      _id: userId,
+      'services.resume.loginTokens.hashedToken' : Accounts._hashLoginToken(token)
+    });
+
+    if (user && Meteor.isServer && Roles.userIsInRole(user._id, ['datenschutzBeauftragter'])) {
       var jsrsasign = Meteor.npmRequire('jsrsasign');
       var fs      = Npm.require('fs');
       var Future = Npm.require('fibers/future');
@@ -193,49 +201,50 @@ Meteor.methods({
       });
 
       var binaryResult = fut.wait();
+
       /**
        *  return entire response as base64
        */
-      // return binaryResult.toString('base64');
-
-      var fut2 = new Future();
-      /**
-       *  Doesn't work in production environment because simple pipe of spawn does not work to pipe input.
-       *  Must be done manually like in example a bit lower with spawn.
-       */
-      // openssl.exec('ts', binaryResult.body, {reply: true, in: '/dev/stdin', text: true}, function(err, buffer) {
-      //   if (err) {
-      //     console.log(err);
-      //   }
-      //   fut2.return(buffer.toString());
+      return binaryResult.body.toString('base64');
+      //
+      // var fut2 = new Future();
+      // /**
+      //  *  Doesn't work in production environment because simple pipe of spawn does not work to pipe input.
+      //  *  Must be done manually like in example a bit lower with spawn.
+      //  */
+      // // openssl.exec('ts', binaryResult.body, {reply: true, in: '/dev/stdin', text: true}, function(err, buffer) {
+      // //   if (err) {
+      // //     console.log(err);
+      // //   }
+      // //   fut2.return(buffer.toString());
+      // // });
+      //
+      // var spawn = Npm.require('child_process').spawn;
+      //
+      // var command = spawn('/bin/sh', ['-c', 'echo ' + binaryResult.body.toString('base64') + ' | base64 --decode | openssl ts -reply -in /dev/stdin -text']);
+      //
+      // command.stdout.on('data', function (data) {
+      //   fut2.return(data.toString());
       // });
-
-      var spawn = Npm.require('child_process').spawn;
-
-      var command = spawn('/bin/sh', ['-c', 'echo ' + binaryResult.body.toString('base64') + ' | base64 --decode | openssl ts -reply -in /dev/stdin -text']);
-
-      command.stdout.on('data', function (data) {
-        fut2.return(data.toString());
-      });
-
-      command.stderr.on('data', function (data) {
-        console.log('stderr: ' + data);
-      });
-
-      var timestampInfo = fut2.wait();
-
-      /**
-       *  Convert into ASNstructure and base64
-       */
-      // // Convert from binary DER to hexadecimal DER
-      // var hexResult = binaryResult.body.toString('hex');
-      // // Convert from hexadecimally represented DER to ASN1
-      // var ASN1Result = jsrsasign.ASN1HEX.dump(hexResult);
-      // // Convert to Base64
-      // var buffer = new Buffer(ASN1Result);
-      // var base64Result = buffer.toString('base64');
-
-      return timestampInfo;
+      //
+      // command.stderr.on('data', function (data) {
+      //   console.log('stderr: ' + data);
+      // });
+      //
+      // var timestampInfo = fut2.wait();
+      //
+      // /**
+      //  *  Convert into ASNstructure and base64
+      //  */
+      // // // Convert from binary DER to hexadecimal DER
+      // // var hexResult = binaryResult.body.toString('hex');
+      // // // Convert from hexadecimally represented DER to ASN1
+      // // var ASN1Result = jsrsasign.ASN1HEX.dump(hexResult);
+      // // // Convert to Base64
+      // // var buffer = new Buffer(ASN1Result);
+      // // var base64Result = buffer.toString('base64');
+      //
+      // return timestampInfo;
     }
   },
   'createMerkle': function() {

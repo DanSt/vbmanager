@@ -36,16 +36,15 @@ Router.route('/approve_proc_desc/:_id', {
   name: 'approveProcDesc',
   controller: 'ApproveController',
   waitOn: function(){
-    // waitOn makes sure that this publication is ready before rendering your template
     return Meteor.subscribe('proc_descs');
   },
   onBeforeAction: function() {
     if (!Roles.userIsInRole(Meteor.user(), ['datenschutzBeauftragter'])) {
       this.redirect('home');
     } else {
-      if (!this.states) {
-        this.states = new ReactiveDict(null);
-      }
+      // if (!this.states) {
+      //   this.states = new ReactiveDict(null);
+      // }
       this.next();
     }
   },
