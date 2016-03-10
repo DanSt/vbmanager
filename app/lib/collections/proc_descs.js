@@ -83,6 +83,12 @@ ProcDescASchema = new SimpleSchema({
       return this.siblingField('creatorSurname').value + ", " + this.siblingField('creatorName').value;
     }
   },
+  createdBySort: {
+    type: String,
+    autoValue: function() {
+      return this.siblingField('createdBy').value.toLowerCase();
+    }
+  },
   creationDate: {
     type: Date,
     label: "Erstellungsdatum",
@@ -383,6 +389,12 @@ ProcDescContentSchema = new SimpleSchema({
     label: "Dienstkurzbezeichnung",
     defaultValue: "Dienstkurzbezeichnung",
     max: 80
+  },
+  serviceShortTitleSort: {
+    type: String,
+    autoValue: function() {
+      return this.siblingField('serviceShortTitle').value.toLowerCase();
+    }
   },
   approved: {
     type: Boolean,

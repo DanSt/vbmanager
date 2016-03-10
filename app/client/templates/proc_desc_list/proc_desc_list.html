@@ -4,10 +4,10 @@
     <table class="table table-hover">
       <thead>
         <tr>
-          <th>Dienstbezeichnung</th>
-          <th>Verantwortlicher</th>
-          <th>Erstellt</th>
-          <th>Freigabe</th>
+          <th><a href="#" class="sortDescription">Dienstbezeichnung</a></th>
+          <th><a href="#" class="sortResponsible">Verantwortlicher</a></th>
+          <th><a href="#" class="sortEdited">Bearbeitet</a></th>
+          <th><a href="#" class="sortApproved">Freigabe</a></th>
           <th>Optionen</th>
         </tr>
       </thead>
@@ -24,10 +24,10 @@
     <table class="table table-hover">
       <thead>
         <tr>
-          <th>Dienstbezeichnung</th>
-          <th>Verantwortlicher</th>
-          <th>Erstellt</th>
-          <th>Freigabe</th>
+          <th><a href="#" class="sortDescriptionApproved">Dienstbezeichnung</a></th>
+          <th><a href="#" class="sortResponsibleApproved">Verantwortlicher</a></th>
+          <th><a href="#" class="sortEditedApproved">Bearbeitet</a></th>
+          <th><a href="#" class="sortApprovedApproved">Freigabe</a></th>
           <th>Optionen</th>
         </tr>
       </thead>
@@ -50,7 +50,7 @@
       {{/linkTo}}
     </td>
     <td>{{content.sectionA.createdBy}}</td>
-    <td>{{longDateFormatted content.sectionA.creationDate}} Uhr</td>
+    <td>{{longDateFormatted modifiedAt}} Uhr</td>
     <td>
       {{#if content.approved}}
         {{longDateFormatted content.approvedAt}} Uhr&#160;<i class="fa fa-check"></i>

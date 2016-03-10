@@ -15,7 +15,7 @@ Meteor.methods({
         content.sectionA.documentPurposeOriginalDate = moment(content.sectionA.documentPurposeOriginalDate).format('DD.MM.YYYY');
       }
       // var xmlDocument = xmlHeader + '<document>' + XML.stringify(content) + '</document>';
-      var xmlDocument = xmlHeader + '<document>\r\n' + XML.toXML(content) + '\r\n</document>';
+      var xmlDocument = XML.toXML(content, {manifest: true, root: 'document'});
 
       return xmlDocument;
     }
