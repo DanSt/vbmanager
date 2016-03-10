@@ -16,9 +16,9 @@ filteredUserQuery = function(userId, filter) {
 				{'profile.lastName': {$regex: filter, $options: 'i'}},
 				{'emails.address': {$regex: filter, $options: 'i'}}
 			]
-		}, {sort: {emails: 1}, limit: queryLimit, fields: {'profile': 1, 'roles': 1, '_id': 1, 'username': 1, 'emails': 1}});
+		}, {sort: {username: 1}, limit: queryLimit, fields: {'profile': 1, 'roles': 1, '_id': 1, 'username': 1, 'emails': 1}});
 	} else {
-		users = Meteor.users.find({}, {sort: {emails: 1}, limit: queryLimit, fields: {'profile': 1, 'roles': 1, '_id': 1, 'username': 1, 'emails': 1}});
+		users = Meteor.users.find({}, {sort: {username: 1}, limit: queryLimit, fields: {'profile': 1, 'roles': 1, '_id': 1, 'username': 1, 'emails': 1}});
 	}
 	return users;
 };
