@@ -82,7 +82,12 @@ Template.ProcDescList.helpers({
 
     var newValues = [];
     if (sortObject["sortField"].indexOf("content.") > -1) {
-      newValues = _.sortBy(values, function(o) { return o["content"][sortObject["sortField"].split('.')[1]]; });
+      var sections = sortObject["sortField"].split('.');
+      if (sections.length > 2) {
+        newValues = _.sortBy(values, function(o) { return o["content"][sections[1]][sections[2]]; });
+      } else {
+        newValues = _.sortBy(values, function(o) { return o["content"][sections[1]]; });
+      }
     } else {
       newValues = _.sortBy(values, sortObject["sortField"]);
     }
