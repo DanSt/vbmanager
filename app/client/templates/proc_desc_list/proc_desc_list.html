@@ -1,14 +1,22 @@
 <template name="ProcDescList">
   <div class="proc-desc-list">
+    <div class="search-box">
+        <div class="input-group">
+            <input type="text" class="form-control search-input-filter" value="{{searchFilter}}">
+            <span class="input-group-btn">
+                <button class="btn btn-default" type="button"><span class="glyphicon glyphicon-search start-search"></span></button>
+            </span>
+        </div>
+    </div>
     <h1>Alle Verfahrensbeschreibungen</h1>
     <table class="table table-hover">
       <thead>
         <tr>
-          <th><a href="#" class="sortDescription">Dienstbezeichnung</a></th>
-          <th><a href="#" class="sortResponsible">Verantwortlicher</a></th>
-          <th><a href="#" class="sortEdited">Bearbeitet</a></th>
-          <th><a href="#" class="sortApproved">Freigabe</a></th>
-          <th>Optionen</th>
+          <th class="col-md-4"><a href="#" class="sortDescription">Dienstbezeichnung</a></th>
+          <th class="col-md-2"><a href="#" class="sortResponsible">Verantwortlicher</a></th>
+          <th class="col-md-2"><a href="#" class="sortEdited">Bearbeitet</a></th>
+          <th class="col-md-2"><a href="#" class="sortApproved">Freigabe</a></th>
+          <th class="col-md-2">Optionen</th>
         </tr>
       </thead>
       <tbody>
@@ -24,11 +32,11 @@
     <table class="table table-hover">
       <thead>
         <tr>
-          <th><a href="#" class="sortDescriptionApproved">Dienstbezeichnung</a></th>
-          <th><a href="#" class="sortResponsibleApproved">Verantwortlicher</a></th>
-          <th><a href="#" class="sortEditedApproved">Bearbeitet</a></th>
-          <th><a href="#" class="sortApprovedApproved">Freigabe</a></th>
-          <th>Optionen</th>
+          <th class="col-md-4"><a href="#" class="sortDescriptionApproved">Dienstbezeichnung</a></th>
+          <th class="col-md-2"><a href="#" class="sortResponsibleApproved">Verantwortlicher</a></th>
+          <th class="col-md-2"><a href="#" class="sortEditedApproved">Bearbeitet</a></th>
+          <th class="col-md-2"><a href="#" class="sortApprovedApproved">Freigabe</a></th>
+          <th class="col-md-2">Optionen</th>
         </tr>
       </thead>
       <tbody>
@@ -54,6 +62,8 @@
     <td>
       {{#if content.approved}}
         {{longDateFormatted content.approvedAt}} Uhr&#160;<i class="fa fa-check"></i>
+      {{else}}
+        nicht freigegeben&#160;<i class="fa fa-ban"></i>
       {{/if}}
     </td>
     <td>

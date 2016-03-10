@@ -14,6 +14,9 @@ Meteor.methods({
       if (content.sectionA.documentPurposeOriginalDate) {
         content.sectionA.documentPurposeOriginalDate = moment(content.sectionA.documentPurposeOriginalDate).format('DD.MM.YYYY');
       }
+      if (content.approvedAt) {
+        content.approvedAt = moment(content.approvedAt).format('DD.MM.YYYY');
+      }
       // var xmlDocument = xmlHeader + '<document>' + XML.stringify(content) + '</document>';
       var xmlDocument = XML.toXML(content, {manifest: true, root: 'document'});
 

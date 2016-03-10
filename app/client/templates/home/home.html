@@ -7,21 +7,22 @@
       <ul>
         <li>zu erstellen</li>
         <li>zu bearbeiten</li>
-        <li>qualifiziert zu signieren</li>
+        <li>zu löschen</li>
+        <li>zu signieren und damit freizugeben</li>
+        <li>mit Zeitstempeln zu versehen</li>
+        <li>zu suchen, sortieren und verwalten</li>
+        <li>zu exportieren</li>
         <li>(zu archivieren)</li>
-        <li>(zu sortieren und verwalten)</li>
         <li>(in einem Workflow zu behandeln)</li>
       </ul>
     </p>
-    {{#if currentUser}}
-      <!-- <h3>Zeitstempel Antwort von http://zeitstempel.dfn.de für den Root Hash des Merkle Baums:</h3>
-      <div class="ownblock"><pre>{{getSigReq}}</pre></div>
-      <h3>Merkle Baum aller gespeicherten Versionen im System:</h3>
-      <div class="ownblock">
-        {{createMerkle}}
-      </div> -->
-    {{else}}
-      <p>Um die Funktionalitäten dieses Tools zu verwenden, müssen Sie sich anmelden.</p>
-    {{/if}}
+
+    <p>Die Führung und Verwaltung von Verfahrensbeschreibungen und des zugehörigen Verfahrensverzeichnis werden laut dem Bayerischen Datenschutzgesetzes (BayDSG)
+      verlangt und sind konkret in Artikel <a href="http://gesetze-bayern.de/Content/Document/BayDSG-26" target="_blank"><b>26</b></a> und
+      <a href="http://gesetze-bayern.de/Content/Document/BayDSG-27" target="_blank"><b>27</b></a> definiert.</p>
+
+    {{#unless currentUser}}
+      <p>Um die Funktionalitäten dieses Tools zu verwenden, müssen Sie sich mit Ihrem LRZ Active Directory Benutzer anmelden.</p>
+    {{/unless}}
   </div>
 </template>

@@ -1,3 +1,9 @@
+// search no more than 2 times per second
+var setFilter = _.throttle(function(template) {
+  var search = template.find(".search-input-filter").value;
+  Session.set("documentFilter", search);
+}, 500);
+
 Template.ProcDescList.events({
   'click .sortEdited': function() {
     var sortObject = Session.get( "Sort" );
@@ -24,6 +30,12 @@ Template.ProcDescList.events({
   },'click .sortDescriptionApproved': function() {
     var sortObject = Session.get( "SortApproved" );
     Session.set( "SortApproved", { "sortField": "content.serviceShortTitleSort", "sortOrder": sortObject["sortOrder"]*(-1)} );
+  },'keyup .search-input-filter': function(event, template) {
+    setFilter(template);
+    return false;
+  },'click .start-search': function(event, template) {
+    setFilter(template);
+    return false;
   }
 });
 /*****************************************************************************/
@@ -58,13 +70,14 @@ Template.ProcDescListSingle.events({
 
 Template.ProcDescList.helpers({
   approved_proc_descs: function () {
+    var searchQuery = Session.get("documentFilter");
     var sortObject = Session.get("SortApproved");
     if (typeof sortObject === "undefined") {
       sortObject = {"sortField": "modifiedAt", "sortOrder": -1}
       Session.set("SortApproved", sortObject);
     }
 
-    var ids = _.uniq(_.pluck(ProcDescs.find({}, {sort: {modifiedAt: -1}, fields: {_id: 1}}).fetch(), '_id'));
+    var ids = _.uniq(_.pluck(ProcDescs.find(searchQuery?search_query(searchQuery):{}, {sort: {modifiedAt: -1}, fields: {_id: 1}}).fetch(), '_id'));
     var values = [];
     for (var key in ids) {
       var value = ProcDescsVermongo.find({"content.approved": true, ref: ids[key]}, {sort: {"content.approvedAt": -1}, limit: 1}).fetch();
@@ -72,13 +85,6 @@ Template.ProcDescList.helpers({
         values.push(value[0]);
       }
     }
-
-    // taken from http://stackoverflow.com/questions/1129216/sort-array-of-objects-by-string-property-value-in-javascript#comment2298229_1129270
-    // var newValues = values.sort(function(a,b) {
-    //   return (a[sortObject["sortField"]] > b[sortObject["sortField"]]) ?
-    //     sortObject["sortOrder"] : ((b[sortObject["sortField"]] > a[sortObject["sortField"]]) ?
-    //       -1*sortObject["sortOrder"] : 0);
-    // });
 
     var newValues = [];
     if (sortObject["sortField"].indexOf("content.") > -1) {
@@ -99,6 +105,7 @@ Template.ProcDescList.helpers({
     return newValues;
   },
   proc_descs: function () {
+    var searchQuery = Session.get("documentFilter");
     var sortObject = Session.get("Sort");
     if (typeof sortObject === "undefined") {
       sortObject = {"sortField": "modifiedAt", "sortOrder": -1}
@@ -106,8 +113,11 @@ Template.ProcDescList.helpers({
     }
     var sortParameter = {}
     sortParameter[sortObject["sortField"]] = sortObject["sortOrder"];
-    return ProcDescs.find({}, {sort: sortParameter});
-  }
+    return ProcDescs.find(searchQuery?search_query(searchQuery):{}, {sort: sortParameter});
+  },
+  searchFilter: function() {
+		return Session.get("documentFilter");
+	},
 });
 /*****************************************************************************/
 /* ProcDescList: Helpers */
