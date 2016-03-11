@@ -111,7 +111,11 @@
       "archive": archive
     }
 
-    ProcDescs.update({_id: documentId}, {$set: updateSet}, {getAutoValues: false, filter: false});
+    ProcDescs.update({_id: documentId}, {$set: updateSet}, {getAutoValues: false, filter: false}, function(error) {
+      if (typeof error === "undefined") {
+        write_archive(doc);
+      }
+    });
   }
 
 });

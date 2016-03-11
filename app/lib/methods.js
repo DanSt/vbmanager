@@ -70,8 +70,6 @@ Meteor.methods({
       return "";
     }
 
-    write_archive(doc);
-
     return create_archive(doc);
   },
   'sigReq': function(content, userId, token) {

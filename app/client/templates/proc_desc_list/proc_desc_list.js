@@ -77,10 +77,13 @@ Template.ProcDescList.helpers({
       Session.set("SortApproved", sortObject);
     }
 
-    var ids = _.uniq(_.pluck(ProcDescs.find(searchQuery?search_query(searchQuery):{}, {sort: {modifiedAt: -1}, fields: {_id: 1}}).fetch(), '_id'));
+    var ids = _.uniq(_.pluck(ProcDescs.find({}, {sort: {modifiedAt: -1}, fields: {_id: 1}}).fetch(), '_id'));
     var values = [];
     for (var key in ids) {
-      var value = ProcDescsVermongo.find({"content.approved": true, ref: ids[key]}, {sort: {"content.approvedAt": -1}, limit: 1}).fetch();
+      var query = searchQuery?search_query(searchQuery):{};
+      query["content.approved"] = true;
+      query["ref"] = ids[key];
+      var value = ProcDescsVermongo.find(query, {sort: {"content.approvedAt": -1}, limit: 1}).fetch();
       if (value.length > 0) {
         values.push(value[0]);
       }
