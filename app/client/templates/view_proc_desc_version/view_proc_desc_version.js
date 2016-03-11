@@ -23,7 +23,7 @@ Template.ViewProcDescVersion.events({
     window.open(Router.url('generatePDF', {_id: this._id}));
   },
   'click .xml': function() {
-    Meteor.call('proc_desc_xml', this.content, function(err, res) {
+    Meteor.call('proc_desc_xml', this.content, this._id, function(err, res) {
       if (res) {
         var uriContent = "data:text/attachment;charset=UTF-8," + encodeURIComponent(res);
         var myWindow = window.open(uriContent, 'testdocument.xml');

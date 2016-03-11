@@ -93,6 +93,9 @@ Router.map(function() {
   this.route('/receive', {
     name: 'serverReceiver',
     controller: 'ReceiveController',
+    waitOn: function(){
+      return Meteor.subscribe('proc_descs');
+    },
     action: 'receiveSigned',
     where: 'server'
   });

@@ -13,6 +13,10 @@ ProcDescArchiveFilesSchema = new SimpleSchema({
     type: String,
     optional: true
   },
+  xmlDocument: {
+    type: String,
+    optional: true
+  },
   timestampResp: {
     type: String,
     optional: true

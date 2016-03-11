@@ -4,23 +4,11 @@
 
 Meteor.methods({
 
-  'proc_desc_xml': function(content) {
-    if (Meteor.userId() && Meteor.isServer && Roles.userIsInRole(Meteor.userId(), ['datenschutzBeauftragter'])) {
-      var XML = Meteor.npmRequire('simplexml');
-      moment.locale('de');
+  'proc_desc_xml': function(content, id) {
+    if (Meteor.userId() && Meteor.isServer && (Roles.userIsInRole(Meteor.userId(), ['datenschutzBeauftragter'])
+      || Roles.userIsInRole(Meteor.userId(), [id]))) {
 
-      var xmlHeader = '<?xml version="1.0" encoding="UTF-8"?>'
-      content.sectionA.creationDate = moment(content.sectionA.creationDate).format('DD.MM.YYYY');
-      if (content.sectionA.documentPurposeOriginalDate) {
-        content.sectionA.documentPurposeOriginalDate = moment(content.sectionA.documentPurposeOriginalDate).format('DD.MM.YYYY');
-      }
-      if (content.approvedAt) {
-        content.approvedAt = moment(content.approvedAt).format('DD.MM.YYYY');
-      }
-      // var xmlDocument = xmlHeader + '<document>' + XML.stringify(content) + '</document>';
-      var xmlDocument = XML.toXML(content, {manifest: true, root: 'document'});
-
-      return xmlDocument;
+      return create_xml(content);
     }
   },
   'proc_desc_pdf': function(userid, token, id) {
@@ -54,67 +42,7 @@ Meteor.methods({
         return "";
       }
 
-      var files = {};
-      if (data.archive && data.archive.files) {
-        files = ProcDescArchiveFiles.find({_id: data.archive.files}).fetch()[0];
-        return files.originalDocument;
-      }
-
-      var webshot = Meteor.npmRequire('webshot');
-      var fs      = Npm.require('fs');
-      var Future = Npm.require('fibers/future');
-
-      var fut = new Future();
-
-      var fileName = "verfahrensbeschreibung.pdf";
-
-      var css = Assets.getText('style.css');
-
-      SSR.compileTemplate('layout', Assets.getText('layout.html'));
-      SSR.compileTemplate('proc_view', Assets.getText('procview.html'));
-
-      Template.layout.helpers({
-        getDocType: function() {
-          return "<!DOCTYPE html>";
-        }
-      });
-
-      Template.proc_view.helpers({
-        dateFormatted: function (date) {
-          return moment(date).format("DD.MM.YYYY");
-        },
-        contactInfo: function() {
-          var contactInfo = ContactInfos.findOne({isDefault: true});
-          return contactInfo && contactInfo.content;
-        }
-      });
-
-      var html_string = SSR.render('layout', {
-        css: css,
-        template: "proc_view",
-        data: data
-      });
-
-      var options = {
-          "paperSize": {
-              "format": "A4",
-              "orientation": "portrait",
-              "margin": "2cm"
-          },
-          siteType: 'html'
-      };
-
-      webshot(html_string, fileName, options, function(err) {
-        fs.readFile(fileName, function (err, data) {
-            fs.unlinkSync(fileName);
-            fut.return(data);
-        });
-      });
-
-      var pdfData = fut.wait();
-      var base64Pdf = new Buffer(pdfData).toString('base64');
-
-      return base64Pdf;
+      return create_pdf(data);
     }
   },
   'proc_desc_archive': function(userid, token, id) {
@@ -142,28 +70,9 @@ Meteor.methods({
       return "";
     }
 
-    var files = ProcDescArchiveFiles.find({_id: doc.archive.files}).fetch()[0];
+    write_archive(doc);
 
-    var XML = Meteor.npmRequire('simplexml');
-    moment.locale('de');
-
-    var xmlHeader = '<?xml version="1.0" encoding="UTF-8"?>'
-    doc.archive.metaData.creationDate = moment(doc.archive.metaData.creationDate).format('DD.MM.YYYY');
-
-    var JSZip = Meteor.npmRequire('jszip');
-    var zip = new JSZip();
-
-    // var metaXML = xmlHeader + '<metaData>' + XML.stringify(doc.archive.metaData) + '</metaData>';
-    var metaXML = XML.toXML(doc.archive.metaData, {manifest: true, root: 'metaData'});
-
-    zip.file(doc.archive.metaData.documentFileName, files.originalDocument, {base64: true});
-    zip.file(doc.archive.metaData.signatureFileName, files.signature, {base64: true});
-    zip.file(doc.archive.metaData.timestampFileName, files.timestampResp, {base64: true});
-    zip.file('MetaDaten.xml', metaXML);
-
-    var base64Zip = zip.generate({type: 'base64'});
-
-    return base64Zip;
+    return create_archive(doc);
   },
   'sigReq': function(content, userId, token) {
     var user = Meteor.users.findOne({

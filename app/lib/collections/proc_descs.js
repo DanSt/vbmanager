@@ -505,6 +505,28 @@ ProcDescArchiveMetaDataSchema = new SimpleSchema({
     optional: true,
     defaultValue: "SHA256"
   },
+  xmlFileName: {
+    type: String,
+    max: 300,
+    optional: true
+  },
+  xmlFormat: {
+    type: String,
+    max: 20,
+    optional: true,
+    defaultValue: 'base64'
+  },
+  xmlDigest: {
+    type: String,
+    max: 200,
+    optional: true,
+  },
+  xmlDigestAlgorithm: {
+    type: String,
+    max: 200,
+    optional: true,
+    defaultValue: "SHA256"
+  },
   timestampFileName: {
     type: String,
     max: 300,

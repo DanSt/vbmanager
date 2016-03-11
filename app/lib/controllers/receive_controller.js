@@ -29,8 +29,11 @@
       'services.resume.loginTokens.hashedToken' : Accounts._hashLoginToken(userToken)
     });
 
-    //If they're not logged in tell them
-    if (!user || Roles.userIsInRole('datenschutzBeauftragter')) {
+    var doc = ProcDescs.find({_id: documentId}).fetch()[0];
+
+    // if no logged in user can be found or if the document has been changed since starting the approval
+    // stop here
+    if (typeof doc === "undefined" || !user || Roles.userIsInRole('datenschutzBeauftragter')) {
       this.response.writeHead(401);
       this.response.end();
       return;
@@ -43,27 +46,31 @@
     var merkle = Meteor.npmRequire('merkle');
     var merkle_mod = Meteor.npmRequire('merkle-tree');
 
-    var documentDigest = hash_file(new Buffer(originalDocument, 'base64'), 'sha256');
-    var signatureDigest = hash_file(new Buffer(signature, 'base64'), 'sha256');
+    var xmlDocument = new Buffer(create_xml(doc.content), 'utf-8').toString('base64');
 
-    var timestamp = Meteor.call('sigReq', documentDigest, userId, userToken);
-    var timestampDigest = hash_file(new Buffer(timestamp, 'base64'), 'sha256');
+    var documentDigest = hash_file(new Buffer(originalDocument, 'base64'), 'sha256').toUpperCase();
+    var signatureDigest = hash_file(new Buffer(signature, 'base64'), 'sha256').toUpperCase();
+    var xmlDigest = hash_file(new Buffer(xmlDocument, "base64"), 'sha256').toUpperCase();
 
-    var archiveFiles = {
-      signature: signature,
-      originalDocument: originalDocument,
-      timestampResp: timestamp
-    };
-
-    var filesId = ProcDescArchiveFiles.insert(archiveFiles);
-
-    var arr = [documentDigest, signatureDigest, timestampDigest];
-    var tree = merkle('sha256').sync(arr);
+    var arr = [documentDigest, signatureDigest, xmlDigest];
+    var tree = merkle('sha256', true).sync(arr);
 
     var treeStructure = [];
     for (var i=0; i<tree.levels(); i++) {
       treeStructure.push(tree.level(i));
     }
+
+    var timestamp = Meteor.call('sigReq', treeStructure[0][0], userId, userToken);
+    var timestampDigest = hash_file(new Buffer(timestamp, 'base64'), 'sha256');
+
+    var archiveFiles = {
+      signature: signature,
+      originalDocument: originalDocument,
+      xmlDocument: xmlDocument,
+      timestampResp: timestamp
+    };
+
+    var filesId = ProcDescArchiveFiles.insert(archiveFiles);
 
     var archive = {
       metaData: {
@@ -82,6 +89,10 @@
         signatureCertFormat: "binary",
         signatureCertDigest: "",
         signatureCertDigestAlgorithm: "SHA256",
+        xmlFileName: "Verfahrensbeschreibung.xml",
+        xmlFormat: "utf-8",
+        xmlDigest: xmlDigest,
+        xmlDigestAlgorithm: "SHA256",
         timestampFileName: "Verfahrensbeschreibung-zeitstempel.tsr",
         timestampFormat: "DER",
         timestampDigest: timestampDigest,
