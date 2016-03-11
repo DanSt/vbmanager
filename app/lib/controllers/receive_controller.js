@@ -139,14 +139,21 @@
       "archive": archive
     }
 
+    var futAnswer = new Future();
+
     ProcDescs.update({_id: documentId}, {$set: updateSet}, {getAutoValues: false, filter: false, validate: false}, function(error) {
       if (error) {
         console.log(error);
-      }
-      if (typeof error === "undefined") {
-        write_archive(doc);
+      } else {
+        futAnswer.return("success");
       }
     });
+
+    var result = futAnswer.wait();
+
+    if (result == "success") {
+      write_archive(archive);
+    }
   }
 
 });

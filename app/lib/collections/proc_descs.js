@@ -589,12 +589,6 @@ ProcDescSchema = new SimpleSchema({
     type: Boolean,
     defaultValue: false
   }
-  // ,
-  // modifierId: {
-  //   type: String,
-  //   max: 200,
-  //   optional: true
-  // }
 });
 
 ProcDescs.attachSchema(ProcDescSchema);

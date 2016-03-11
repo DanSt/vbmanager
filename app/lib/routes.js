@@ -189,7 +189,7 @@ Router.route('/proc_desc_pdf/:_id', {
     var currentDate = moment(new Date()).format('YYYY-MM-DD');
     this.response.writeHead(200, {
       'Content-Type': 'application/pdf',
-      'Content-Disposition': 'attachment; filename="vb-'+this.params._id+'-'+currentDate+'.pdf"',
+      'Content-Disposition': 'attachment; filename="vba-'+this.params._id+'-'+currentDate+'.pdf"',
       'Content-Length': pdfData.length
     });
 

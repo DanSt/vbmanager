@@ -68,7 +68,7 @@ Meteor.methods({
       return "";
     }
 
-    return create_archive(doc);
+    return create_archive(doc.archive);
   },
   'sigReq': function(content, userId, token) {
     var user = Meteor.users.findOne({
