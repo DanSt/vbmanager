@@ -31,11 +31,9 @@ Meteor.methods({
       // PREPARE DATA
       var mainId = id;
       var data = ProcDescs.find({_id: id}).fetch()[0];
-      var collection = ProcDescs;
       if (typeof data === 'undefined') {
         data = ProcDescsVermongo.find({_id: id}).fetch()[0];
         mainId = data.ref;
-        collection = ProcDescsVermongo;
       }
 
       if (!user || !Roles.userIsInRole(user._id, ['datenschutzBeauftragter']) && !Roles.userIsInRole(user._id, mainId)) {
@@ -80,9 +78,8 @@ Meteor.methods({
 
     if (user && Meteor.isServer && Roles.userIsInRole(user._id, ['datenschutzBeauftragter'])) {
       var jsrsasign = Meteor.npmRequire('jsrsasign');
+      var fut     = new Future();
       var fs      = Npm.require('fs');
-      var Future = Npm.require('fibers/future');
-      var fut = new Future();
       var httpreq = Meteor.npmRequire('httpreq');
 
       var hashValue = CryptoJS.SHA256(content).toString();
@@ -181,6 +178,26 @@ Meteor.methods({
       }
 
       return output;
+    }
+  },
+  'insertProcDesc': function(doc) {
+    if (Meteor.userId()) {
+      ProcDescSchema.clean(doc);
+      ProcDescSchema.validate(doc);
+      ProcDescs.insert(doc);
+    }
+  },
+  'updateProcDesc': function(modifier, _id) {
+    if (Meteor.userId() && (Roles.userIsInRole(Meteor.userId(), ['datenschutzBeauftragter'])
+      || Roles.userIsInRole(Meteor.userId(), [_id]))) {
+      ProcDescSchema.clean(modifier, {isModifier: true});
+      ProcDescSchema.validate(modifier, {modifier: true});
+      ProcDescs.update({_id: _id}, modifier);
+    }
+  },
+  'deleteProcDesc': function(_id) {
+    if (Meteor.userId() && Roles.userIsInRole(Meteor.userId(), ['datenschutzBeauftragter'])) {
+      ProcDescs.remove({_id: _id});
     }
   }
 });

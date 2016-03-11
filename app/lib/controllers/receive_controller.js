@@ -29,30 +29,58 @@
       'services.resume.loginTokens.hashedToken' : Accounts._hashLoginToken(userToken)
     });
 
-    var doc = ProcDescs.find({_id: documentId}).fetch()[0];
-
-    // if no logged in user can be found or if the document has been changed since starting the approval
-    // stop here
-    if (typeof doc === "undefined" || !user || Roles.userIsInRole('datenschutzBeauftragter')) {
-      this.response.writeHead(401);
-      this.response.end();
-      return;
-    } else {
-      this.response.writeHead(200);
-      this.response.end();
-    }
-
     var hash_file = Meteor.npmRequire('hash_file');
     var merkle = Meteor.npmRequire('merkle');
     var merkle_mod = Meteor.npmRequire('merkle-tree');
 
+    var doc = ProcDescs.find({_id: documentId}).fetch()[0];
+
+    // if no logged in user can be found or if the document has been changed since starting the approval
+    // stop here
+    if (typeof doc === "undefined" || doc._version != version
+    // || originalDocumentDigest != sentDocumentDigest
+      || !user || !Roles.userIsInRole(user._id, 'datenschutzBeauftragter')) {
+
+      this.response.writeHead(401);
+      this.response.end();
+      return;
+
+    } else {
+
+      this.response.writeHead(200);
+      this.response.end();
+
+    }
+
+    // var fut3 = new Future();
+    // var spawn = Npm.require('child_process').spawn;
+    // //
+    // var command = spawn('/bin/sh', ['-c', 'echo ' + signature.toString('base64') + ' | base64 --decode | openssl pkcs7 -in /dev/stdin -text -inform DER -print_certs']);
+    //
+    // command.stdout.on('data', function (data) {
+    //   fut3.return(data.toString());
+    // });
+    //
+    // command.stderr.on('data', function (data) {
+    //   console.log('stderr: ' + data);
+    // });
+    //
+    // var certInfo = fut3.wait();
+    // console.log(certInfo);
+
+    /**
+     *
+     * ToDo: Verify signature with: http://qistoph.blogspot.de/2012/01/manual-verify-pkcs7-signed-data-with.html
+     *
+     */
+
     var xmlDocument = new Buffer(create_xml(doc.content), 'utf-8').toString('base64');
 
-    var documentDigest = hash_file(new Buffer(originalDocument, 'base64'), 'sha256').toUpperCase();
+    var originalDocumentDigest = hash_file(new Buffer(originalDocument, 'base64'), 'sha256').toUpperCase();
     var signatureDigest = hash_file(new Buffer(signature, 'base64'), 'sha256').toUpperCase();
     var xmlDigest = hash_file(new Buffer(xmlDocument, "base64"), 'sha256').toUpperCase();
 
-    var arr = [documentDigest, signatureDigest, xmlDigest];
+    var arr = [originalDocumentDigest, signatureDigest, xmlDigest];
     var tree = merkle('sha256', true).sync(arr);
 
     var treeStructure = [];
@@ -76,7 +104,7 @@
       metaData: {
         documentId: documentId,
         documentTitle: serviceShortTitle,
-        documentDigest: documentDigest,
+        documentDigest: originalDocumentDigest,
         documentFileName: "Verfahrensbeschreibung.pdf",
         documentFormat: "binary",
         creator: createdBy,
@@ -111,7 +139,10 @@
       "archive": archive
     }
 
-    ProcDescs.update({_id: documentId}, {$set: updateSet}, {getAutoValues: false, filter: false}, function(error) {
+    ProcDescs.update({_id: documentId}, {$set: updateSet}, {getAutoValues: false, filter: false, validate: false}, function(error) {
+      if (error) {
+        console.log(error);
+      }
       if (typeof error === "undefined") {
         write_archive(doc);
       }

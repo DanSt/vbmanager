@@ -1,4 +1,4 @@
-Future = Npm.require('fibers/future');
+// Future = Npm.require('fibers/future');
 
 // At a minimum, set up LDAP_DEFAULTS.url and .dn according to
 // your needs. url should appear as 'ldap://your.url.here'

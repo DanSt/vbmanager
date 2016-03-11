@@ -9,3 +9,5 @@ Accounts.config({
 // Accounts.validateNewUser(function (user) {
 //   return false
 // });
+
+Future = Npm.require('fibers/future');

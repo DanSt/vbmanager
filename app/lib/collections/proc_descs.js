@@ -135,15 +135,11 @@ ProcDescBSchema = new SimpleSchema({
   },
   furtherInfo: {
     type: String,
-    defaultValue: "Service-Desk des Leibniz-Rechenzentrums",
-    denyInsert: true,
-    denyUpdate: true
+    defaultValue: "Service-Desk des Leibniz-Rechenzentrums"
   },
   furtherInfoDomain: {
     type: String,
-    defaultValue: "https://servicedesk.lrz.de",
-    denyInsert: true,
-    denyUpdate: true
+    defaultValue: "https://servicedesk.lrz.de"
   },
   furtherInfoText: {
     type: String,
@@ -592,11 +588,13 @@ ProcDescSchema = new SimpleSchema({
   waitingForApproval: {
     type: Boolean,
     defaultValue: false
-  },
-  modifierId: {
-    type: String,
-    max: 200
   }
+  // ,
+  // modifierId: {
+  //   type: String,
+  //   max: 200,
+  //   optional: true
+  // }
 });
 
 ProcDescs.attachSchema(ProcDescSchema);
@@ -604,17 +602,31 @@ ProcDescs.attachSchema(ProcDescSchema);
 if (Meteor.isServer) {
   ProcDescs.allow({
     insert: function (userId, doc) {
-      return true;
+      return false;
     },
 
     update: function (userId, doc, fieldNames, modifier) {
-      return true;
+      return false;
     },
 
     remove: function (userId, doc) {
-      return true;
+      return false;
     }
   });
+
+  ProcDescsVermongo.allow({
+    insert: function (userId, doc) {
+      return false;
+    },
+
+    update: function (userId, doc, fieldNames, modifier) {
+      return false;
+    },
+
+    remove: function (userId, doc) {
+      return false;
+    }
+  })
 
   ProcDescs.before.update(function(userId, doc, fieldNames, modifier, hook_options) {
     if (fieldNames.indexOf('content') > -1 && !modifier.$set['content.approved']) {

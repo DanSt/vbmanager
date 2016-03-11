@@ -1,7 +1,7 @@
 <template name="InsertProcDesc">
   <div class="insert-proc-desc">
 
-    {{#autoForm collection="ProcDescs" doc=this id="insertProcDescForm" type="insert"}}
+    {{#autoForm collection="ProcDescs" doc=this id="insertProcDescForm" type="method" meteormethod="insertProcDesc"}}
       <fieldset>
         <legend>Neue Verfahrensbeschreibung erstellen</legend>
         <img src="/images/lrzLogo.png" alt="LRZ logo">

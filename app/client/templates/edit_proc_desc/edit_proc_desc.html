@@ -6,7 +6,7 @@
        - Freigegeben: <i class="fa fa-check"></i>
       {{/if}}
     </p>
-    {{#autoForm id="editForm" collection="ProcDescs" doc=this id="updateProcDescForm" type="update"}}
+    {{#autoForm id="editForm" collection="ProcDescs" doc=this id="updateProcDescForm" type="method-update" meteormethod="updateProcDesc"}}
       <fieldset>
         <!--<legend>Verfahrensbeschreibung bearbeiten</legend>-->
         <img src="/images/lrzLogo.png" alt="LRZ Logo">

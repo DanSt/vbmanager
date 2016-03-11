@@ -43,14 +43,16 @@ Template.ProcDescList.events({
 /*****************************************************************************/
 Template.ProcDescListSingle.events({
   'click .delete': function () {
-    var doc = ProcDescs.findOne(this._id);
-    var id = this._id
-    if (typeof doc === "undefined") {
-      doc = ProcDescsVermongo.findOne(this._id);
-      id = doc.ref;
-    }
-    if (confirm('Wollen Sie wirklich die Verfahrensbeschreibung für "' + doc.content.serviceShortTitle + '" löschen?')) {
-      ProcDescs.remove(id);
+    if (Roles.userIsInRole(Meteor.user()._id, ['datenschutzBeauftragter'])) {
+      var doc = ProcDescs.findOne(this._id);
+      var id = this._id
+      if (typeof doc === "undefined") {
+        doc = ProcDescsVermongo.findOne(this._id);
+        id = doc.ref;
+      }
+      if (confirm('Wollen Sie wirklich die Verfahrensbeschreibung für "' + doc.content.serviceShortTitle + '" löschen?')) {
+        Meteor.call('deleteProcDesc', id);
+      }
     }
   },
   'click .pdf': function () {

@@ -79,9 +79,11 @@
       <a href="#" class="xml">
         <i class="fa fa-file-code-o" title="XML herunterladen"></i>
       </a>&#160;
-      <a href="#" class="delete">
-        <i class="fa fa-trash-o" title="Löschen"></i>
-      </a>
+      {{#if isInRole 'datenschutzBeauftragter'}}
+        <a href="#" class="delete">
+          <i class="fa fa-trash-o" title="Löschen"></i>
+        </a>
+      {{/if}}
     </td>
   </tr>
 </template>
