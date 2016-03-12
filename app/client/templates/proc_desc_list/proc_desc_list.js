@@ -59,7 +59,7 @@ Template.ProcDescListSingle.events({
     window.open(Router.url('generatePDF', {_id: this._id}));
   },
   'click .xml': function() {
-    Meteor.call('proc_desc_xml', this.content, function(err, res) {
+    Meteor.call('proc_desc_xml', this.content, this._id, function(err, res) {
       if (err) {
         console.error(err);
       } else if (res) {
