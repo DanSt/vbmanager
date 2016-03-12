@@ -81,8 +81,10 @@ Meteor.Collection.prototype.vermongo = function(op) {
         doc[options.userId] = userId;
 
       // ProcDescContentSchema.clean(doc.content);
-      var hash = CryptoJS.SHA512(JSON.stringify(doc.content)).toString();
-      doc.documentHash = hash;
+      if (typeof doc.content !== "undefined") {
+        var hash = CryptoJS.SHA512(JSON.stringify(doc.content)).toString();
+        doc.documentHash = hash;
+      }
 
       copyDoc(doc);
 
@@ -132,12 +134,13 @@ Meteor.Collection.prototype.vermongo = function(op) {
       // in case of doc not already versionned
       if(!doc._version) doc._version = 1;
 
-      var hash = CryptoJS.SHA512(JSON.stringify(doc.content)).toString();
-      if (Meteor.isServer) {
-        collection.direct.update({_id: doc._id}, {$set: {documentHash: hash}}, {validate: false, getAutoValues: false});
+      if (typeof doc.content !== "undefined") {
+        var hash = CryptoJS.SHA512(JSON.stringify(doc.content)).toString();
+        if (Meteor.isServer) {
+          collection.direct.update({_id: doc._id}, {$set: {documentHash: hash}}, {validate: false, getAutoValues: false});
+        }
+        doc.documentHash = hash;
       }
-
-      doc.documentHash = hash;
 
       copyDoc(doc);
 

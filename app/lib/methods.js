@@ -156,9 +156,6 @@ Meteor.methods({
   },
   'createMerkle': function() {
     if(Meteor.userId() && Meteor.isServer) {
-      var merkle = Meteor.npmRequire('merkle');
-      var merkle_mod = Meteor.npmRequire('merkle-tree');
-
       // var proc_descs2 = ProcDescsVermongo.find({"modifiedAt" : { $lte : new Date("2016-01-23T20:15:31Z") }}, {sort: {'modifiedAt': -1}});
       var proc_descs2 = ProcDescsVermongo.find({}, {fields: {'archive.files': 0}, sort: {'modifiedAt': -1}}).fetch();
 
@@ -170,14 +167,7 @@ Meteor.methods({
         }
       });
 
-      var tree = merkle('sha256').sync(arr);
-
-      var output = [];
-      for (var i=0; i<tree.levels(); i++) {
-        output.push(tree.level(i));
-      }
-
-      return output;
+      return create_merkle(arr);
     }
   },
   'insertProcDesc': function(doc) {

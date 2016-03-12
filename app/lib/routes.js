@@ -42,9 +42,6 @@ Router.route('/approve_proc_desc/:_id', {
     if (!Roles.userIsInRole(Meteor.user(), ['datenschutzBeauftragter'])) {
       this.redirect('home');
     } else {
-      // if (!this.states) {
-      //   this.states = new ReactiveDict(null);
-      // }
       this.next();
     }
   },

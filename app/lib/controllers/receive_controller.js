@@ -139,20 +139,17 @@
       "archive": archive
     }
 
-    var futAnswer = new Future();
+    var success = write_archive(archive);
 
-    ProcDescs.update({_id: documentId}, {$set: updateSet}, {getAutoValues: false, filter: false, validate: false}, function(error) {
-      if (error) {
-        console.log(error);
-      } else {
-        futAnswer.return("success");
-      }
-    });
-
-    var result = futAnswer.wait();
-
-    if (result == "success") {
-      write_archive(archive);
+    if (success) {
+      ProcDescs.update({_id: documentId}, {$set: updateSet}, {getAutoValues: false, filter: false, validate: false}, function(error, result) {
+        if (error) {
+          console.log(error);
+        }
+        if (result) {
+          update_tree();
+        }
+      });
     }
   }
 
