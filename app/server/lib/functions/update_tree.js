@@ -5,7 +5,7 @@ update_tree = function() {
 
   var metaDatas = _.pluck(_.pluck(approvedDocs, "archive"), "metaData");
 
-  var ids = _.pluck(metaDatas, "documentId");
+  var ids = _.map(metaDatas, function(doc) {return doc.documentId + "-" + doc.versionNumber});
   var rootHashes = _.pluck(metaDatas, "merkleRootHash");
 
   if (typeof currentTree !== "undefined") {
