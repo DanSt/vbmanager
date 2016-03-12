@@ -40,7 +40,13 @@ Meteor.methods({
         return "";
       }
 
-      return create_pdf(data);
+      var base64PDF = create_pdf(data);
+
+      var hash_file = Meteor.npmRequire('hash_file');
+      var documentDigest = hash_file(new Buffer(base64PDF, 'base64'), 'sha256').toUpperCase();
+      ProcDescs.direct.update({_id: id}, {$set: {"archive.metaData.documentDigest": documentDigest}}, {validate: false, getAutoValues: false});
+
+      return base64PDF;
     }
   },
   'proc_desc_archive': function(userid, token, id) {

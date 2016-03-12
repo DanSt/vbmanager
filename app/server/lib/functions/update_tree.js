@@ -27,4 +27,6 @@ update_tree = function() {
   } else {
     MerkleTree.update({_id: currentTree._id}, {$set: newTree});
   }
+
+  // write out into log-file with http://stackoverflow.com/a/11267583
 }

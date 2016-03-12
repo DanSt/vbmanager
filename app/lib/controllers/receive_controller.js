@@ -18,7 +18,7 @@
     var userToken = this.request.body.userToken;
     var userId = this.request.body.userId;
     var documentId = this.request.body.documentId;
-    var originalDocument = this.request.body.SignedData;
+    var sentDocument = this.request.body.SignedData;
     var signature = this.request.body.Signature;
     var serviceShortTitle = this.request.body.serviceShortTitle;
     var createdBy = this.request.body.createdBy;
@@ -35,11 +35,13 @@
 
     var doc = ProcDescs.find({_id: documentId}).fetch()[0];
 
+    var sentDocumentDigest = hash_file(new Buffer(sentDocument, 'base64'), 'sha256').toUpperCase();
+
     // if no logged in user can be found or if the document has been changed since starting the approval
     // stop here
-    if (typeof doc === "undefined" || doc._version != version
-    // || originalDocumentDigest != sentDocumentDigest
-      || !user || !Roles.userIsInRole(user._id, 'datenschutzBeauftragter')) {
+    if (typeof doc === "undefined" || typeof doc.archive === "undefined" ||
+      typeof doc.archive.metaData === "undefined" || doc.archive.metaData.documentDigest != sentDocumentDigest ||
+      doc._version != version || !user || !Roles.userIsInRole(user._id, 'datenschutzBeauftragter')) {
 
       this.response.writeHead(401);
       this.response.end();
@@ -76,11 +78,10 @@
 
     var xmlDocument = new Buffer(create_xml(doc.content), 'utf-8').toString('base64');
 
-    var originalDocumentDigest = hash_file(new Buffer(originalDocument, 'base64'), 'sha256').toUpperCase();
     var signatureDigest = hash_file(new Buffer(signature, 'base64'), 'sha256').toUpperCase();
     var xmlDigest = hash_file(new Buffer(xmlDocument, "base64"), 'sha256').toUpperCase();
 
-    var arr = [originalDocumentDigest, signatureDigest, xmlDigest];
+    var arr = [sentDocumentDigest, signatureDigest, xmlDigest];
     var tree = merkle('sha256', true).sync(arr);
 
     var treeStructure = [];
@@ -93,7 +94,7 @@
 
     var archiveFiles = {
       signature: signature,
-      originalDocument: originalDocument,
+      originalDocument: sentDocument,
       xmlDocument: xmlDocument,
       timestampResp: timestamp
     };
@@ -104,7 +105,7 @@
       metaData: {
         documentId: documentId,
         documentTitle: serviceShortTitle,
-        documentDigest: originalDocumentDigest,
+        documentDigest: sentDocumentDigest,
         documentFileName: "Verfahrensbeschreibung.pdf",
         documentFormat: "binary",
         creator: createdBy,
