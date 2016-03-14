@@ -319,6 +319,9 @@ Accounts.registerLoginHandler('ldap', function (loginRequest) {
                     'services.resume.loginTokens': hashStampedToken
                 }
             });
+
+            var user = Meteor.users.findOne(userId);
+            log.info("User %s logged in.", user.username);
         }
         // Otherwise create user if option is set
         else if (ldapObj.options.createNewUser) {
@@ -350,6 +353,9 @@ Accounts.registerLoginHandler('ldap', function (loginRequest) {
 
 
             userId = Accounts.createUser(userObject);
+
+            var user = Meteor.users.find(userId).fetch();
+            log.info("New user created for %s and logged in.", user.username);
         } else {
             // Ldap success, but no user created
             console.log('LDAP Authentication succeeded for ' + ldapResponse.username + ', but no user exists in Meteor. Either create the user manually or set LDAP_DEFAULTS.createNewUser to true');

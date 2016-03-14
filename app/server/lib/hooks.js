@@ -11,4 +11,9 @@ if (Meteor.isServer) {
       Roles.addUsersToRoles(userId, doc._id);
     }
   });
+
+  Accounts.afterLogout(function(userId) {
+    var user = Meteor.users.findOne(userId);
+    log.info("User %s logged out.", user.username);
+  });
 }

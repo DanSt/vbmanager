@@ -9,7 +9,6 @@ log_merkle = function() {
 
   var merkle_tree = MerkleTree.find({name: "System Baum"}).fetch()[0];
 
-  
   // block merkleTreeLog lock
   /**
   *   check current log file if at newest merkle tree
