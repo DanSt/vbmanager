@@ -80,7 +80,7 @@ Meteor.Collection.prototype.vermongo = function(op) {
       if(!doc[options.userId] && options.userId && userId) {
         var user = Meteor.users.findOne(userId);
         doc[options.userId] = user.username;
-        doc["changes"] = {'created': 1};
+        doc["changes"] = {'created': 1, 'added': doc.content};
       }
 
       // ProcDescContentSchema.clean(doc.content);
