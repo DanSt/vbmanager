@@ -39,8 +39,9 @@
         {{> afQuickField name="content.sectionA.documentPurpose3"}}
 
         <h4>A.2 Autor bzw. Hauptansprechpartner für den Datenschutzbeauftragten</h4>
-        <p>Die Beschreibung wurde von {{currentUser.profile.lastName}}, {{currentUser.profile.firstName}} am
-          {{currentDate}}<!--{{> afQuickField name='creatorName' style="color: #FF0000" label-style="display: none"}} {{> afQuickField name='creatorSurname' style="color: #FF0000" label-style="display: none"}}--> <!--{{> afQuickField name="creationDate" style="color: #FF0000" label-style="display: none" type="bootstrap-datepicker"}}--> erstellt.</p>
+        <p>Die Beschreibung wurde von {{> afQuickField name="content.sectionA.creatorName" value=currentUser.profile.firstName label-style="display: none"}} {{> afQuickField name="content.sectionA.creatorSurname" value=currentUser.profile.lastName label-style="display: none"}} am {{> afQuickField name="content.sectionA.creationDate" value=currentDate label-style="display: none"}} erstellt.
+          <!-- {{currentUser.profile.lastName}}, {{currentUser.profile.firstName}} am {{currentDate}} -->
+          <!--{{> afQuickField name='creatorName' style="color: #FF0000" label-style="display: none"}} {{> afQuickField name='creatorSurname' style="color: #FF0000" label-style="display: none"}}--> <!--{{> afQuickField name="creationDate" style="color: #FF0000" label-style="display: none" type="bootstrap-datepicker"}} erstellt.--></p>
 
         <div class="contactInfo">
           <p>&#160;</p>

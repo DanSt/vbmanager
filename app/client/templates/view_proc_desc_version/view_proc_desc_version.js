@@ -85,7 +85,7 @@ Template.ViewProcDescVersion.helpers({
     return moment(date).format("DD.MM.YYYY HH:mm");
   },
   modifierName: function () {
-    var user = Meteor.users.findOne(this.modifierId);
+    var user = Meteor.users.findOne({'username': this.modifierId}, {fields: {profile: 1}});
     return user && user.profile.lastName + ", " + user.profile.firstName;
   },
   dateFormatted: function (date) {

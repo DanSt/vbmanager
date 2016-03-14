@@ -64,17 +64,11 @@ ProcDescASchema = new SimpleSchema({
   creatorName: {
     type: String,
     label: "Vorname",
-    autoValue: function() {
-      return Meteor.user().profile.firstName;
-    },
     max: 200
   },
   creatorSurname: {
     type: String,
     label: "Nachname",
-    autoValue: function() {
-      return Meteor.user().profile.lastName;
-    },
     max: 200
   },
   createdBy: {
@@ -426,7 +420,7 @@ ProcDescArchiveMetaDataSchema = new SimpleSchema({
     max: 400,
     optional: true
   },
-  creator: {
+  author: {
     type: String,
     max: 300,
     optional: true
@@ -444,7 +438,7 @@ ProcDescArchiveMetaDataSchema = new SimpleSchema({
     type: String,
     max: 20,
     optional: true,
-    defaultValue: 'base64'
+    defaultValue: 'PDF'
   },
   documentDigest: {
     type: String,
@@ -452,6 +446,28 @@ ProcDescArchiveMetaDataSchema = new SimpleSchema({
     optional: true
   },
   documentDigestAlgorithm: {
+    type: String,
+    max: 200,
+    defaultValue: "SHA256",
+    optional: true
+  },
+  changesFileName: {
+    type: String,
+    max: 300,
+    optional: true
+  },
+  changesFormat: {
+    type: String,
+    max: 20,
+    optional: true,
+    defaultValue: 'XML'
+  },
+  changesDigest: {
+    type: String,
+    max: 200,
+    optional: true
+  },
+  changesDigestAlgorithm: {
     type: String,
     max: 200,
     defaultValue: "SHA256",
@@ -466,7 +482,7 @@ ProcDescArchiveMetaDataSchema = new SimpleSchema({
     type: String,
     max: 20,
     optional: true,
-    defaultValue: 'base64'
+    defaultValue: 'DER'
   },
   signatureDigest: {
     type: String,
@@ -479,23 +495,23 @@ ProcDescArchiveMetaDataSchema = new SimpleSchema({
     defaultValue: "SHA256",
     optional: true
   },
-  signatureCertFileName: {
+  signatureRootCertFileName: {
     type: String,
     max: 300,
     optional: true
   },
-  signatureCertFormat: {
+  signatureRootCertFormat: {
     type: String,
     max: 20,
     optional: true,
-    defaultValue: 'base64'
+    defaultValue: 'DER'
   },
-  signatureCertDigest: {
+  signatureRootCertDigest: {
     type: String,
     max: 200,
     optional: true,
   },
-  signatureCertDigestAlgorithm: {
+  signatureRootCertDigestAlgorithm: {
     type: String,
     max: 200,
     optional: true,
@@ -510,7 +526,7 @@ ProcDescArchiveMetaDataSchema = new SimpleSchema({
     type: String,
     max: 20,
     optional: true,
-    defaultValue: 'base64'
+    defaultValue: 'utf-8'
   },
   xmlDigest: {
     type: String,
@@ -532,7 +548,7 @@ ProcDescArchiveMetaDataSchema = new SimpleSchema({
     type: String,
     max: 20,
     optional: true,
-    defaultValue: 'base64'
+    defaultValue: 'DER'
   },
   timestampDigest: {
     type: String,
@@ -540,6 +556,28 @@ ProcDescArchiveMetaDataSchema = new SimpleSchema({
     optional: true,
   },
   timestampDigestAlgorithm: {
+    type: String,
+    max: 200,
+    optional: true,
+    defaultValue: "SHA256"
+  },
+  timestampRootCertFileName: {
+    type: String,
+    max: 300,
+    optional: true
+  },
+  timestampRootCertFormat: {
+    type: String,
+    max: 20,
+    optional: true,
+    defaultValue: 'DER'
+  },
+  timestampRootCertDigest: {
+    type: String,
+    max: 200,
+    optional: true,
+  },
+  timestampRootCertDigestAlgorithm: {
     type: String,
     max: 200,
     optional: true,

@@ -1,7 +1,11 @@
 <template name="EditProcDesc">
   <div class="edit_proc_desc">
     <p>
-      ID: {{_id}} - Erstellt: {{longDateFormatted modifiedAt}} - Bearbeiter: {{modifierName}} - Version: {{_version}}
+      ID: {{_id}} - Erstellt: {{longDateFormatted modifiedAt}}
+      {{#if isInRole 'datenschutzBeauftragter'}}
+       - Bearbeiter: {{modifierName}}
+      {{/if}}
+       - Version: {{_version}}
       {{#if content.approved}}
        - Freigegeben: <i class="fa fa-check"></i>
       {{/if}}
@@ -161,7 +165,11 @@
       {{/linkTo}} -->
       {{#each versions}}
       {{#linkTo route='viewProcDescVersion'}}
-        <li>{{content.serviceShortTitle}} - {{longDateFormatted modifiedAt}} - version: {{_version}} - {{isVerified}}
+        <li>{{content.serviceShortTitle}} - {{longDateFormatted modifiedAt}}
+          {{#if isInRole 'datenschutzBeauftragter'}}
+           - Bearbeiter: {{modifierName}}
+          {{/if}}
+           - version: {{_version}} - {{isVerified}}
           {{#if content.approved}}
            - Freigegeben: <i class="fa fa-check"></i>
           {{/if}}</li>

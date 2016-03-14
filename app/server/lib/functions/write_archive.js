@@ -7,7 +7,14 @@ write_archive = function(archive) {
 
   var archivePath = process.env.ARCHIVE_PATH;
   var versionString = String(Number(10000000) + Number(archive.metaData.versionNumber)).substring(1,8);
-  var filePath = path.join(archivePath, 'vba-' + archive.metaData.documentId + "-" + versionString + ".zip" );
+  var fileDirectory = path.join(archivePath, archive.metaData.documentId);
+  var fileName = versionString + "-" + archive.metaData.merkleRootHash + ".zip";
+  var filePath = path.join(fileDirectory, fileName);
+
+  // check for and perhaps and create folder
+  if (!fs.existsSync(fileDirectory)){
+    fs.mkdirSync(fileDirectory);
+  }
 
   try {
     var stats = fs.statSync(filePath);

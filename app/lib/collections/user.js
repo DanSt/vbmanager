@@ -17,6 +17,12 @@ UserProfileSchema = new SimpleSchema({
     regEx: /^[a-z0-9A-Z_, ]{2,25}$/,
     optional: true
   },
+  cn: {
+    type: String,
+    label: "Common Name",
+    regEx: /^[a-z0-9A-Z_]{2,25}$/,
+    optional: true
+  },
   birthday: {
     type: Date,
     optional: true

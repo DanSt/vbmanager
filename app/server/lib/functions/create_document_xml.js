@@ -1,4 +1,4 @@
-create_xml = function(content) {
+create_document_xml = function(content) {
   var XML = Meteor.npmRequire('simplexml');
   moment.locale('de');
 

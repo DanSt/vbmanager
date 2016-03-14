@@ -10,11 +10,14 @@ create_archive = function(archive) {
 
   var metaXML = XML.toXML(archive.metaData, {manifest: true, root: 'metaData'});
 
-  zip.file(archive.metaData.documentFileName, files.originalDocument, {base64: true});
-  zip.file(archive.metaData.signatureFileName, files.signature, {base64: true});
-  zip.file(archive.metaData.timestampFileName, files.timestampResp, {base64: true});
-  zip.file(archive.metaData.xmlFileName, files.xmlDocument, {base64: true});
-  zip.file('MetaDaten.xml', metaXML);
+  var versionString = String(Number(10000000) + Number(archive.metaData.versionNumber)).substring(1,8);
+
+  zip.folder(versionString + "-" + archive.metaData.merkleRootHash).file(archive.metaData.documentFileName, files.originalDocument, {base64: true});
+  zip.folder(versionString + "-" + archive.metaData.merkleRootHash).file(archive.metaData.changesFileName, files.changes, {base64: true});
+  zip.folder(versionString + "-" + archive.metaData.merkleRootHash).file(archive.metaData.signatureFileName, files.signature, {base64: true});
+  zip.folder(versionString + "-" + archive.metaData.merkleRootHash).file(archive.metaData.timestampFileName, files.timestampResp, {base64: true});
+  zip.folder(versionString + "-" + archive.metaData.merkleRootHash).file(archive.metaData.xmlFileName, files.xmlDocument, {base64: true});
+  zip.folder(versionString + "-" + archive.metaData.merkleRootHash).file('MetaDaten.xml', metaXML);
 
   var base64Zip = zip.generate({type: 'base64'});
 

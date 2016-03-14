@@ -43,7 +43,8 @@ Template.ProcDescList.events({
 /*****************************************************************************/
 Template.ProcDescListSingle.events({
   'click .delete': function () {
-    if (Roles.userIsInRole(Meteor.user()._id, ['datenschutzBeauftragter'])) {
+    if (Roles.userIsInRole(Meteor.user()._id, ['datenschutzBeauftragter']) ||
+      Roles.userIsInRole(Meteor.user()._id, [this._id]) && (typeof this.content.approved === 'undefined' || !this.content.approved)) {
       var doc = ProcDescs.findOne(this._id);
       var id = this._id
       if (typeof doc === "undefined") {
@@ -53,6 +54,8 @@ Template.ProcDescListSingle.events({
       if (confirm('Wollen Sie wirklich die Verfahrensbeschreibung für "' + doc.content.serviceShortTitle + '" löschen?')) {
         Meteor.call('deleteProcDesc', id);
       }
+    } else {
+      confirm('Sie haben nicht die Berechtigung diese Verfahrensbeschreibung zu löschen.');
     }
   },
   'click .pdf': function () {

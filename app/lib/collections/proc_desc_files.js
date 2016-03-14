@@ -17,6 +17,10 @@ ProcDescArchiveFilesSchema = new SimpleSchema({
     type: String,
     optional: true
   },
+  changes: {
+    type: String,
+    optional: true
+  },
   timestampResp: {
     type: String,
     optional: true

@@ -77,8 +77,11 @@ Meteor.Collection.prototype.vermongo = function(op) {
         if(!doc.modifiedAt) doc.modifiedAt = now;
       }
 
-      if(!doc[options.userId] && options.userId && userId)
-        doc[options.userId] = userId;
+      if(!doc[options.userId] && options.userId && userId) {
+        var user = Meteor.users.findOne(userId);
+        doc[options.userId] = user.username;
+        doc["changes"] = {'created': 1};
+      }
 
       // ProcDescContentSchema.clean(doc.content);
       if (typeof doc.content !== "undefined") {
@@ -104,6 +107,7 @@ Meteor.Collection.prototype.vermongo = function(op) {
 
       // incrementing version
       modifier.$set = modifier.$set || {};
+      var originalSet = _.extend({}, modifier.$set);
 
       // in case of doc not already versionned
       if(!doc._version) doc._version = 1;
@@ -114,8 +118,27 @@ Meteor.Collection.prototype.vermongo = function(op) {
 
       if(options['timestamps'])
         modifier.$set.modifiedAt = new Date();
-      if(doc[options.userId] && options.userId && userId)
-        modifier.$set[options.userId] = userId;
+      if(doc[options.userId] && options.userId && userId) {
+        var user = Meteor.users.findOne(userId);
+        modifier.$set[options.userId] = user.username;
+
+        var changes = new Array();
+        for (var key in originalSet) {
+          var value = doc[key];
+          if (key.indexOf('.') > -1) {
+            var subkeys = key.split('.');
+            var value = doc;
+            for (var i=0; i<subkeys.length; i=i+1) {
+              value = value[subkeys[i]];
+            }
+          }
+          if (originalSet[key] != value) {
+            changes.push(key + ": " + originalSet[key]);
+          }
+        }
+
+        modifier.$set.changes = {'modified': 1, 'modifications': changes};
+      }
 
     });
 
@@ -164,8 +187,14 @@ Meteor.Collection.prototype.vermongo = function(op) {
       doc._version = doc._version + 1;
       if(options['timestamps'])
         doc.modifiedAt = new Date();
-      if(!doc[options.userId] && options.userId && userId)
-        doc[options.userId] = userId;
+
+      if(doc[options.userId] && options.userId && userId) {
+        var user = Meteor.users.findOne(userId);
+        doc[options.userId] = user.username;
+
+        doc["changes"] = {'deleted': 1};
+      }
+
       doc._deleted = true;
       copyDoc(doc);
     });
@@ -176,6 +205,18 @@ Meteor.Collection.prototype.vermongo = function(op) {
     collection.helpers({
       versions: function() {
         return _versions_collection.find({ref: this._id}, {sort: {_version: -1}});
+      },
+      getChanges: function() {
+        var changes = new Array();
+        versions = _versions_collection.find({ref: this._id}, {sort: {_version: 1}}).fetch();
+        for (var version in versions) {
+          changes.push({
+            'author': versions[version][options.userId],
+            'changes': versions[version].changes,
+            'modifiedAt': versions[version].modifiedAt
+          });
+        }
+        return changes;
       }
     });
 

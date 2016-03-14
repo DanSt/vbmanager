@@ -11,3 +11,4 @@ Accounts.config({
 // });
 
 Future = Npm.require('fibers/future');
+writingMerkleLog = false;

@@ -39,7 +39,7 @@ Router.route('/approve_proc_desc/:_id', {
     return Meteor.subscribe('proc_descs');
   },
   onBeforeAction: function() {
-    if (!Roles.userIsInRole(Meteor.user(), ['datenschutzBeauftragter'])) {
+    if (!Roles.userIsInRole(Meteor.userId(), ['datenschutzBeauftragter'])) {
       this.redirect('home');
     } else {
       this.next();

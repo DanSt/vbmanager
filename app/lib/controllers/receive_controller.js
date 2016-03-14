@@ -54,21 +54,8 @@
 
     }
 
-    // var fut3 = new Future();
-    // var spawn = Npm.require('child_process').spawn;
-    // //
-    // var command = spawn('/bin/sh', ['-c', 'echo ' + signature.toString('base64') + ' | base64 --decode | openssl pkcs7 -in /dev/stdin -text -inform DER -print_certs']);
-    //
-    // command.stdout.on('data', function (data) {
-    //   fut3.return(data.toString());
-    // });
-    //
-    // command.stderr.on('data', function (data) {
-    //   console.log('stderr: ' + data);
-    // });
-    //
-    // var certInfo = fut3.wait();
-    // console.log(certInfo);
+    // var certs = print_certs(signature);
+    // console.log(certs);
 
     /**
      *
@@ -76,12 +63,31 @@
      *
      */
 
-    var xmlDocument = new Buffer(create_xml(doc.content), 'utf-8').toString('base64');
+    var docChanges = doc.getChanges();
+    var newChanges = {
+      modified: 1,
+      modifications: {
+        content: {
+          approved: true,
+          approvedAt: new Date()
+        }
+      }
+    };
+    docChanges.push({
+      author: user.username,
+      changes: newChanges,
+      modifiedAt: new Date()
+    });
+
+    var changesFile = new Buffer(create_changes_xml(docChanges), 'utf-8').toString('base64');
+
+    var xmlDocument = new Buffer(create_document_xml(doc.content), 'utf-8').toString('base64');
 
     var signatureDigest = hash_file(new Buffer(signature, 'base64'), 'sha256').toUpperCase();
+    var changesDigest = hash_file(new Buffer(changesFile, 'base64'), 'sha256').toUpperCase();
     var xmlDigest = hash_file(new Buffer(xmlDocument, "base64"), 'sha256').toUpperCase();
 
-    var arr = [sentDocumentDigest, signatureDigest, xmlDigest];
+    var arr = [sentDocumentDigest, changesDigest, signatureDigest, xmlDigest];
     var tree = merkle('sha256', true).sync(arr);
 
     var treeStructure = [];
@@ -96,6 +102,7 @@
       signature: signature,
       originalDocument: sentDocument,
       xmlDocument: xmlDocument,
+      changes: changesFile,
       timestampResp: timestamp
     };
 
@@ -105,19 +112,24 @@
       metaData: {
         documentId: documentId,
         documentTitle: serviceShortTitle,
-        documentDigest: sentDocumentDigest,
         documentFileName: "Verfahrensbeschreibung.pdf",
         documentFormat: "binary",
-        creator: createdBy,
+        documentDigest: sentDocumentDigest,
+        documentDigestAlgorithm: "SHA256",
+        changesFileName: "Verfahrensbeschreibung-modifikationen.xml",
+        changesFormat: "XML",
+        changesDigest: changesDigest,
+        changesDigestAlgorithm: "SHA256",
+        author: createdBy,
         creationDate: new Date(),
         signatureFileName: "Verfahrensbeschreibung-signatur.pkcs7",
         signatureFormat: "binary",
         signatureDigest: signatureDigest,
         signatureDigestAlgorithm: "SHA256",
-        signatureCertFileName: "",
-        signatureCertFormat: "binary",
-        signatureCertDigest: "",
-        signatureCertDigestAlgorithm: "SHA256",
+        signatureRootCertFileName: "",
+        signatureRootCertFormat: "DER",
+        signatureRootCertDigest: "",
+        signatureRootCertDigestAlgorithm: "SHA256",
         xmlFileName: "Verfahrensbeschreibung.xml",
         xmlFormat: "utf-8",
         xmlDigest: xmlDigest,
@@ -126,6 +138,10 @@
         timestampFormat: "DER",
         timestampDigest: timestampDigest,
         timestampDigestAlgorithm: "SHA256",
+        timestampRootCertFileName: "",
+        timestampRootCertFormat: "DER",
+        timestampRootCertDigest: "",
+        timestampRootCertDigestAlgorithm: "SHA256",
         versionNumber: version,
         merkleTree: JSON.stringify(treeStructure),
         merkleRootHash: treeStructure[0][0]
@@ -135,10 +151,18 @@
 
     var updateSet = {
       "content.approved": true,
-      "content.approvedAt": new Date(),
-      "modifierId": userId,
+      "content.approvedAt": newChanges.modifications.content.approvedAt,
+      "modifierId": user.username,
       "archive": archive
     }
+
+    // add changes for approval
+    updateSet["changes"] = {
+      content: {
+        approved: updateSet["content.approved"],
+        approvedAt: updateSet["content.approvedAt"]
+      }
+    };
 
     var success = write_archive(archive);
 
