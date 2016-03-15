@@ -212,7 +212,7 @@ Meteor.Collection.prototype.vermongo = function(op) {
         for (var version in versions) {
           changes.push({
             'author': versions[version][options.userId],
-            'modifications': versions[version].changes,
+            'changeset': versions[version].changes,
             'version': versions[version]._version,
             'modifiedAt': versions[version].modifiedAt
           });

@@ -75,7 +75,7 @@
     };
     docChanges.push({
       author: user.username,
-      modifications: newChanges,
+      changeset: newChanges,
       version: Number(doc._version) + 1,
       modifiedAt: new Date()
     });

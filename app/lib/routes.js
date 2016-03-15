@@ -28,6 +28,9 @@ Router.route('/insert_proc_desc', {
 Router.route('/proc_desc_list', {
   name: 'procDescList',
   controller: 'ProcedureDescriptionsController',
+  waitOn: function() {
+    return Meteor.subscribe('proc_descs');
+  },
   action: 'list',
   where: 'client'
 });
