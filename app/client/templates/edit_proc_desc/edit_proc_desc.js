@@ -41,7 +41,7 @@ Template.EditProcDesc.helpers({
     return moment(date).format("DD.MM.YYYY HH:mm");
   },
   modifierName: function () {
-    var user = Meteor.users.findOne({'user.username': this.modifierId}, {fields: {'profile': 1}});
+    var user = Meteor.users.findOne({'username': this.modifierId}, {fields: {'profile': 1}});
     return user && user.profile.lastName + ", " + user.profile.firstName;
   },
   currentDate: function () {

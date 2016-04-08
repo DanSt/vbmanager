@@ -82,7 +82,7 @@ Meteor.methods({
 
     return create_archive(doc.archive);
   },
-  'sigReq': function(content, userId, token) {
+  'sigReq': function(hashValue, userId, token) {
     var user = Meteor.users.findOne({
       _id: userId,
       'services.resume.loginTokens.hashedToken' : Accounts._hashLoginToken(token)
@@ -91,10 +91,7 @@ Meteor.methods({
     if (user && Meteor.isServer && Roles.userIsInRole(user._id, ['datenschutzBeauftragter'])) {
       var jsrsasign = Meteor.npmRequire('jsrsasign');
       var fut     = new Future();
-      var fs      = Npm.require('fs');
       var httpreq = Meteor.npmRequire('httpreq');
-
-      var hashValue = CryptoJS.SHA256(content).toString();
 
       var json = {
         mi: { hashAlg: 'sha256',

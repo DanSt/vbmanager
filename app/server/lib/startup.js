@@ -1,5 +1,5 @@
 Meteor.startup(function () {
-  LDAP_DEFAULTS.ldapsCertificate = Assets.getText('ldaps/ssl.pem');
+  LDAP_DEFAULTS.ldapsCertificate = Assets.getText('ldaps/ldapserver.pem');
   LDAP_DEFAULTS.port = 636;
   LDAP_DEFAULTS.url = "ldaps://auth.sim.lrz.de";
 
@@ -13,7 +13,7 @@ Meteor.startup(function () {
     resultKey: 'mwnAnzeigename',
     profileProperty: 'name'
   }];
-  process.env.NODE_TLS_REJECT_UNAUTHORIZED=0;
+  // process.env.NODE_TLS_REJECT_UNAUTHORIZED=0;
 
   /**
   *    Configure Autoform localized validation messages
