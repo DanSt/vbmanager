@@ -4,6 +4,7 @@
  "jsrsasign":"5.0.5",
  "httpreq":"0.4.16",
  "merkle":"0.5.1",
+ "merkle-tree":"0.0.14",
  "jszip":"2.5.0",
  "hash_file":"0.1.1",
  "bunyan":"1.7.1"
