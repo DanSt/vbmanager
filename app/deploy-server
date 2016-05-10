@@ -1,0 +1,11 @@
+#!/bin/bash
+
+own_home="/home/dstool"
+
+export PATH=${own_home}/local/bin:${own_home}/.meteor:$PATH
+cd ${own_home}/pdmanager-src
+${own_home}/.meteor/meteor build --directory /var/dstool
+cd /var/dstool/bundle/programs/server
+${own_home}/local/bin/npm install
+chown -R dstool:dstool /var/dstool
+sudo systemctl restart dstool

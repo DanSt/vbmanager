@@ -1,0 +1,5 @@
+#!/bin/bash
+
+rsync -avz --exclude=".meteor/local" --exclude="packages/npm-container/.npm" -e "ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null" --progress . dstool@pd:pdmanager-src
+#tar czvf --exclude ".meteor/local/.*" --exclude "packages/npm-container/.npm.*" .
+ssh dstool@pd /home/dstool/pdmanager-src/deploy-server
