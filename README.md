@@ -14,6 +14,8 @@ Diese Applikation ermöglicht es schnell und einfach Verfahrensbeschreibungen, s
 
 Die Führung und Verwaltung von Verfahrensbeschreibungen und des zugehörigen Verfahrensverzeichnis werden laut dem Bayerischen Datenschutzgesetzes (BayDSG) verlangt und sind konkret in Artikel [26](http://gesetze-bayern.de/Content/Document/BayDSG-26) und [27](http://gesetze-bayern.de/Content/Document/BayDSG-27) definiert.
 
+Artikel 26 verlangt explizit die schriftliche Form bei der Freigabe von Verfahrensbeschreibungen. Diese kann zu Gunsten einer voll-digitalen Verwaltung im Zusammenhang mit BGB §126a durch eine qualifizierte elektronische Signatur ersetzt werden. Diese ermöglicht es im Zusammenhang mit verschiedenen anderen Methoden wie chained Merkle-Trees und Logging die Integrität und Authentizität der Dokumente zu wahren.
+
 ## Abhängigkeiten zur Entwicklung
 
 * [Meteor](https://www.meteor.com/install)
